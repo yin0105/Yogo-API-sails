@@ -1,0 +1,33 @@
+image: python:3.7
+
+options:
+  max-time: 20
+
+pipelines:
+  default:
+    - step:
+        script:
+          - echo Ok
+          #- npm install
+          #- npm test
+  branches:
+    staging:
+      - step:
+          caches:
+            - pip
+          script:
+            # - yarn
+            # - npm test TODO
+            - pip install awsebcli --upgrade
+            - eb init "Yogo API" -r eu-central-1 -p node.js
+            - eb deploy "YogoApi-STAGING" --timeout 20
+    production:
+       - step:
+          caches:
+            - pip
+          script:
+            # - yarn
+            # - npm test TODO
+            - pip install awsebcli --upgrade
+            - eb init "Yogo API" -r eu-central-1 -p node.js
+            - eb deploy "YogoApi-PRODUCTION" --timeout 20

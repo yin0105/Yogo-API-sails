@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Faktura <%= order.invoice_id %></title>
+
+    <style>
+
+        a {
+            color: #555;
+            text-decoration: none;
+        }
+
+        .space2 {
+            height: 30px;
+        }
+
+        .nowrap {
+            white-space: nowrap;
+        }
+
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+            font-size: 12px;
+            line-height: 16px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
+        }
+
+        .invoice-box table {
+            width: 100%;
+            line-height: inherit;
+            text-align: left;
+        }
+
+        .invoice-box table td {
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        .invoice-box table tr td:nth-child(2) {
+            text-align: right;
+        }
+
+        .invoice-box table tr.top table td {
+            padding-bottom: 20px;
+        }
+
+        .invoice-box table tr.top table td.title {
+            font-size: 30px;
+            line-height: 30px;
+            color: #333;
+        }
+
+        .invoice-box table tr.information table td {
+            padding-bottom: 40px;
+        }
+
+        .invoice-box table tr.heading td {
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+        }
+
+        .invoice-box table tr.details td {
+            padding-bottom: 20px;
+        }
+
+        .invoice-box table tr.item.last td {
+            border-bottom: none;
+        }
+
+        .invoice-box table tr.total td:nth-child(2) {
+            border-top: 2px solid #eee;
+            font-weight: bold;
+        }
+
+
+    </style>
+</head>
+
+<body>
+<div class="invoice-box">
+    <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+            <td colspan="2">
+                <table>
+                    <tr>
+                        <td class="title">
+                          <% if (clientLogoUrl) { %>
+                            <img src="<%= clientLogoUrl %>"
+                                 style="width:100%; max-width:200px;">
+                          <% } %>
+                        </td>
+
+                        <td>
+                            <%= translatedStrings.invoice_id %>: <%= order.invoice_id %><br>
+                            <%= translatedStrings.date %>: <%= invoiceDate %><br>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr class="information">
+            <td colspan="2">
+                <table>
+                    <tr>
+                        <td>
+                            <%= order.client.name %><br/>
+                            <%= order.client.address_1 %><br/>
+                            <% if ( order.client.address_2 && order.client.address_2.trim() ) { %>
+                            <%= order.client.address_2 %><br/>
+                            <% } %>
+                            <%= order.client.zip_code + ' ' + order.client.city %><br/>
+                            <% if ( order.client.phone.trim() ) { %>
+                            +45 <%= order.client.phone %><br/>
+                            <% } %>
+                            <a href="mailto:<%= order.client.email %>"><%= order.client.email %></a><br/>
+                            CVR: <%= order.client.vat_number %>
+                        </td>
+
+
+                        <td>
+                            <% if(order.user) { %>
+                                <%= order.user.first_name %> <%= order.user.last_name %><br/>
+                                <%= order.user.address_1 %><br/>
+                                <% if ( order.user.address_2 && order.user.address_2.trim() )  { %>
+                                <%= order.user.address_2 %><br/>
+                                <% } %>
+                                <%= order.user.zip_code + ' ' + order.user.city %><br/>
+                                <a href="mailto:<%= order.user.email %>"><%= order.user.email %></a><br/>
+                            <% } else { %>
+                                <%= order.non_user_name %><br/>
+                                <a href="mailto:<%= order.non_user_email %>"><%= order.non_user_email %></a><br/>
+                            <% } %>
+                        </td>
+
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr class="heading">
+            <td>
+                <%= translatedStrings.product %>
+            </td>
+
+            <td>
+                <%= translatedStrings.price %>
+            </td>
+        </tr>
+
+        <% for (var i = 0; i < order.order_items.length; i++) { %>
+        <tr class="item">
+            <td>
+                <%= order.order_items[i].name %>
+            </td>
+
+            <td class="nowrap">
+                <%= currencyDkk(order.order_items[i].total_price) %> kr.
+            </td>
+        </tr>
+        <% } %>
+
+        <tr class="space2"></tr>
+
+        <tr class="total">
+            <td>
+                <%= translatedStrings.total %>:
+            </td>
+
+            <td class="nowrap">
+                DKK <%= currencyDkk(order.total) %>
+            </td>
+        </tr>
+        <tr>
+            <td><%= translatedStrings.included_vat %>:</td>
+            <td class="nowrap">
+                DKK <%= currencyDkk(order.vat_amount) %>
+            </td>
+        </tr>
+
+        <tr class="space2"></tr>
+
+        <tr class="heading">
+            <td>
+                <%= translatedStrings.payment_method %>
+            </td>
+
+            <td>
+            </td>
+        </tr>
+
+        <tr class="details">
+            <td>
+                <%= payTypeFilter(order.pay_type) %>: <%= order.card_prefix.substr(0, 4) + '-' + order.card_prefix.substr(4, 2) %>XX-XXXX-<%= order.card_last_4_digits %>
+            </td>
+
+            <td>
+
+            </td>
+        </tr>
+
+
+    </table>
+</div>
+</body>
+</html>

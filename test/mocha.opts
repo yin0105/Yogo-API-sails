@@ -1,0 +1,6 @@
+--timeout 40000
+--require test/setup.js
+--reporter dot
+test/lifecycle.test.js
+test/integration/**/*.test.js
+#test/integration/controllers/Users/find.test.js
