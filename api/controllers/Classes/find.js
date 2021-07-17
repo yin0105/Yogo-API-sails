@@ -36,7 +36,7 @@ const VALID_EAGER_POPULATE_FIELDS = [
 ];
 
 const VALID_MANUAL_POPULATE_FIELDS = [
-  'signup_count',
+  'signup_count',  
   'capacity_text',
   'ics_url',
   'user_has_access_to_class',
