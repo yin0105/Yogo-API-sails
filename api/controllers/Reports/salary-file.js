@@ -36,33 +36,55 @@ module.exports = async (req, res) => {
 
   switch (format) {
     case 'csv':
+      const fileName = 'Salary Reports ' + moment(salaryData.fromDate).format('DD.MM.YYYY') + '-' + moment(salaryData.endDate).format('DD.MM.YYYY') + '.' + format
       const csvContentString = stringify(salaryData.items, {
         header: true,
         columns: [
           {
-            key: 'item_type',
-            header: 'Type',
+            key: 'id',
+            header: sails.helpers.t('global.ID'),
           },
           {
-            key: 'item_id',
-            header: 'ID',
+            key: 'date',
+            header: sails.helpers.t('global.Date'),
           },
           {
-            key: 'name',
-            header: 'Navn',
+            key: 'time',
+            header: sails.helpers.t('global.Time'),
           },
           {
-            key: 'item_count',
-            header: 'Antal betalinger',
+            key: 'class',
+            header: sails.helpers.t('global.Class'),
           },
           {
-            key: 'salary',
-            header: 'Omsætning',
+            key: 'duration',
+            header: sails.helpers.t('global.Duration'),
           },
           {
-            key: 'vat_amount',
-            header: 'Heraf moms',
+            key: 'signups_count',
+            header: sails.helpers.t('global.SignUps'),
           },
+          {
+            key: 'checkedin_count',
+            header: sails.helpers.t('global.CheckedIn'),
+          },
+          {
+            key: 'livestream_signups_count',
+            header: sails.helpers.t('global.LivestreamSignups'),
+          },
+          {
+            key: 'room',
+            header: sails.helpers.t('global.Room'),
+          },
+          {
+            key: 'teacher_id',
+            header: sails.helpers.t('global.TeacherID'),
+          },
+          {
+            key: 'teacher_name',
+            header: sails.helpers.t('global.TeacherName'),
+          }
+          
         ],
       })
       res.attachment(fileName)

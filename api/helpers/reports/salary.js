@@ -306,8 +306,9 @@ module.exports = {
 
   fn: async (inputs, exits) => {
 
-    const date = moment(inputs.fromDate, 'YYYY-MM-DD');
-    if (!date) throw new Error('Salary report: date is invalid.');
+    const fromDate = moment(inputs.fromDate, 'YYYY-MM-DD');
+    const endDate = moment(inputs.endDate, 'YYYY-MM-DD');
+    if (!fromDate || !endDate) throw new Error('Salary report: date is invalid.');
 
     let salaryData = [];
     // switch (inputs.periodType) {
