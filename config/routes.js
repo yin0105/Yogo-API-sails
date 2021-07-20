@@ -224,6 +224,8 @@ module.exports.routes = {
   'POST /reports/make-report-token': 'ReportsController.make-report-token',
   'POST /reports/turnover': 'ReportsController.turnover',
   'GET /reports/turnover': 'ReportsController.turnover',
+  'POST /reports/salary': 'ReportsController.salary',
+  'GET /reports/salary': 'ReportsController.Salary',
   'POST /reports/livestream': 'ReportsController.livestream',
   'GET /reports/livestream': 'ReportsController.livestream',
   'GET /reports/livestream/class/:id': 'ReportsController.livestream-single-class',
