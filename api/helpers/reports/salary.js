@@ -252,26 +252,37 @@ const summarizeGiftCards = (salaryRows) => {
 };
 
 
-const getSalaryForPeriod = async (client, fromDate, endDate) => {
+const getSalaryData = async (client, teachers, fromDate, endDate) => {
+  console.log("fromDate = ", fromDate);
+  fromDate = fromDate.format("YYYY-MM-DD");
+  endDate = endDate.format("YYYY-MM-DD");
+  console.log("fromDate = ", fromDate);
+  return await 
+    knex({cs: 'class'})
+      .where("date", ">=", fromDate)
+      .andWhere("date", "<=", endDate)
+      .andWhere("client", client)
+      .select('cs.id', 'cs.start_time', 'cs.end_time');
+  
 
-  const directSalesSalary = await getDirectSaleSalaryForPeriod(client, fromDate, endDate);
+  // const directSalesSalary = await getDirectSaleSalaryForPeriod(client, fromDate, endDate);
 
-  const membershipRenewalSalary = await getMembershipRenewalSalaryForPeriod(client, fromDate, endDate);
+  // const membershipRenewalSalary = await getMembershipRenewalSalaryForPeriod(client, fromDate, endDate);
 
-  let salaryRows = [].concat(
-    directSalesSalary,
-    membershipRenewalSalary,
-  );
+  // let salaryRows = [].concat(
+  //   directSalesSalary,
+  //   membershipRenewalSalary,
+  // );
 
-  salaryRows = await summarizeMembershipData(salaryRows);
+  // salaryRows = await summarizeMembershipData(salaryRows);
 
-  salaryRows = await addDatesToEventNames(salaryRows);
+  // salaryRows = await addDatesToEventNames(salaryRows);
 
-  salaryRows = await summarizeNoShowFeeRows(salaryRows);
+  // salaryRows = await summarizeNoShowFeeRows(salaryRows);
 
-  salaryRows = await summarizeGiftCards(salaryRows);
+  // salaryRows = await summarizeGiftCards(salaryRows);
 
-  return salaryRows;
+  // return salaryRows;
 
 };
 
@@ -310,7 +321,15 @@ module.exports = {
     const endDate = moment(inputs.endDate, 'YYYY-MM-DD');
     if (!fromDate || !endDate) throw new Error('Salary report: date is invalid.');
 
-    let salaryData = [];
+    let salaryDataItems = await getSalaryData(
+      inputs.clientId,
+      inputs.teachers,
+      fromDate,
+      endDate,
+    );
+
+    console.log("salary data = ", salaryDataItems);
+    
     // switch (inputs.periodType) {
     //   case 'year':
     //     if (date.month() !== 0 || date.date() !== 1) throw new Error('Salary report: date is not the beginning of a year');
@@ -351,17 +370,17 @@ module.exports = {
 
     //   case 'day':
 
-      const dayData = await getSalaryForPeriod(
-        inputs.clientId,
-        date.format('YYYY-MM-DD'),
-        date.format('YYYY-MM-DD'),
-      );
+      // const dayData = await getSalaryForPeriod(
+      //   inputs.clientId,
+      //   date.format('YYYY-MM-DD'),
+      //   date.format('YYYY-MM-DD'),
+      // );
 
       salaryData = {
-        label: date.format('DD.MM.YYYY'),
-        fromDate: date.format('YYYY-MM-DD'),
-        endDate: date.format('YYYY-MM-DD'),
-        items: dayData,
+        label: fromDate.format('DD.MM.YYYY'),
+        fromDate: fromDate.format('YYYY-MM-DD'),
+        endDate: endDate.format('YYYY-MM-DD'),
+        items: salaryDataItems,
       };
 
       return exits.success(salaryData);

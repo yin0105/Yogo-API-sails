@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
 
   const format = req.query.format
 
-  const fileName = 'Omsætning ' + moment(salaryData.fromDate).format('DD.MM.YYYY') + '-' + moment(salaryData.endDate).format('DD.MM.YYYY') + '.' + format
+  const fileName = 'Omsætning ' + moment(reportParams.fromDate).format('DD.MM.YYYY') + '-' + moment(reportParams.endDate).format('DD.MM.YYYY') + '.' + format
 
   switch (format) {
     case 'csv':
