@@ -8,6 +8,7 @@ const currencyDkk = require('../../filters/currency_dkk')
 
 const {promisify} = require('util')
 const fs = require('fs')
+const excel = require('node-excel-export');
 
 const readFile = promisify(fs.readFile)
 
@@ -15,12 +16,10 @@ module.exports = async (req, res) => {
 
   let reportParams = await sails.helpers.reports.unpackReportToken(req.query.reportToken, req)
   if (!reportParams) return res.forbidden()
-  console.log("reportParams = ", reportParams);
   reportParams.fromDate = moment(reportParams.fromDate).format("YYYY-MM-DD");
   reportParams.endDate = moment(reportParams.endDate).format("YYYY-MM-DD");
 
   const salaryData = await sails.helpers.reports.salary.with(reportParams)
-  console.log("salaryData = ", salaryData);
 
   // Temporary filter until we can remove membership_type and membership_renewal on json requests also
   salaryData.items = _.chain(salaryData.items)
@@ -33,12 +32,11 @@ module.exports = async (req, res) => {
 
   const format = req.query.format
 
-  const fileName = 'Omsætning ' + moment(reportParams.fromDate).format('DD.MM.YYYY') + '-' + moment(reportParams.endDate).format('DD.MM.YYYY') + '.' + format
+  // const fileName = 'Omsætning ' + moment(reportParams.fromDate).format('DD.MM.YYYY') + '-' + moment(reportParams.endDate).format('DD.MM.YYYY') + '.' + format
+  const fileName = 'Salary Reports ' + moment(salaryData.fromDate).format('DD.MM.YYYY') + '-' + moment(salaryData.endDate).format('DD.MM.YYYY') + '.' + format
 
   switch (format) {
     case 'csv':
-      const fileName = 'Salary Reports ' + moment(salaryData.fromDate).format('DD.MM.YYYY') + '-' + moment(salaryData.endDate).format('DD.MM.YYYY') + '.' + format
-      console.log(salaryData.items);
       const csvContentString = stringify(salaryData.items, {
         header: true,
         columns: [
@@ -89,9 +87,123 @@ module.exports = async (req, res) => {
           
         ],
       })
-      // console.log(" == res == ", res);
       res.attachment(fileName)
       return res.end(csvContentString, 'UTF-8')
+
+    case 'xlsx':
+      const styles = {
+        headerDark: {
+          // fill: {
+          //   fgColor: {
+          //     rgb: 'FF000000'
+          //   }
+          // },
+          font: {
+            color: {
+              rgb: 'FF000000'
+            },
+            sz: 14,
+            bold: true,
+            // underline: true
+          }
+        },
+        cellPink: {
+          fill: {
+            fgColor: {
+              rgb: 'FFFFCCFF'
+            }
+          }
+        },
+        cellGreen: {
+          fill: {
+            fgColor: {
+              rgb: 'FF00FF00'
+            }
+          }
+        }
+      };
+      
+      const heading = [
+        [
+          sails.helpers.t('global.ID'),
+          sails.helpers.t('global.Date'),
+          sails.helpers.t('global.Time'),
+          sails.helpers.t('global.Class'),
+          sails.helpers.t('global.Duration'),
+          sails.helpers.t('global.SignUps'),
+          sails.helpers.t('global.CheckedIn'),
+          sails.helpers.t('global.LivestreamSignups'),
+          sails.helpers.t('global.Room')
+        ],
+      ];
+      
+      const specification = {
+        id: { 
+          displayName: sails.helpers.t('global.ID'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        date: { 
+          displayName: sails.helpers.t('global.Date'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        time: { 
+          displayName: sails.helpers.t('global.Time'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        class: {
+          displayName: sails.helpers.t('global.Class'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        duration: { 
+          displayName: sails.helpers.t('global.Duration'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        signup_count: {
+          displayName: sails.helpers.t('global.SignUps'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        checkedin_count: { 
+          displayName: sails.helpers.t('global.CheckedIn'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        livestream_signup_count: {
+          displayName: sails.helpers.t('global.LivestreamSignups'),
+          headerStyle: styles.headerDark, 
+          width: 150 
+        },
+        room: {
+          displayName: sails.helpers.t('global.Room'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        }
+      }
+     
+      const reportData = reportParams.teachers.map(teacher => {
+        let subItems = [];
+        salaryData.items.map(item => {
+          if (item.teacher_id == teacher.id) {
+            subItems.push(item);
+          }
+        })
+        return {
+          name: teacher.name, 
+          specification: specification, 
+          data: subItems 
+        };
+      })
+      const report = excel.buildExport(
+        reportData
+      );
+      
+      res.attachment(fileName)
+      return res.end(report, 'UTF-8')
 
     case 'pdf':
 
