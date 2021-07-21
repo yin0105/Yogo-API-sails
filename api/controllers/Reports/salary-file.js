@@ -61,7 +61,7 @@ module.exports = async (req, res) => {
             header: sails.helpers.t('global.Duration'),
           },
           {
-            key: 'signups_count',
+            key: 'signup_count',
             header: sails.helpers.t('global.SignUps'),
           },
           {
@@ -69,7 +69,7 @@ module.exports = async (req, res) => {
             header: sails.helpers.t('global.CheckedIn'),
           },
           {
-            key: 'livestream_signups_count',
+            key: 'livestream_signup_count',
             header: sails.helpers.t('global.LivestreamSignups'),
           },
           {
