@@ -13,10 +13,11 @@ const readFile = promisify(fs.readFile)
 
 module.exports = async (req, res) => {
 
-  const reportParams = await sails.helpers.reports.unpackReportToken(req.query.reportToken, req)
+  let reportParams = await sails.helpers.reports.unpackReportToken(req.query.reportToken, req)
   if (!reportParams) return res.forbidden()
   console.log("reportParams = ", reportParams);
-
+  reportParams.fromDate = moment(reportParams.fromDate).format("YYYY-MM-DD");
+  reportParams.endDate = moment(reportParams.endDate).format("YYYY-MM-DD");
 
   const salaryData = await sails.helpers.reports.salary.with(reportParams)
   console.log("salaryData = ", salaryData);
@@ -37,6 +38,7 @@ module.exports = async (req, res) => {
   switch (format) {
     case 'csv':
       const fileName = 'Salary Reports ' + moment(salaryData.fromDate).format('DD.MM.YYYY') + '-' + moment(salaryData.endDate).format('DD.MM.YYYY') + '.' + format
+      console.log(salaryData.items);
       const csvContentString = stringify(salaryData.items, {
         header: true,
         columns: [
@@ -87,6 +89,7 @@ module.exports = async (req, res) => {
           
         ],
       })
+      // console.log(" == res == ", res);
       res.attachment(fileName)
       return res.end(csvContentString, 'UTF-8')
 

@@ -311,7 +311,7 @@ const getSalaryData = async (client, teachers, fromDate, endDate) => {
   console.log("signups = ", signups);
   console.log("checked_ins = ", checked_ins);
   for (var i in classes) {
-    console.log(classes[i]['id']);
+    classes[i]['date'] = moment(classes[i]['date']).format("YYYY-MM-DD");
     classes[i]['signup_count'] = 0;
     classes[i]['checkedin_count'] = 0;
     classes[i]['livestream_signup_count'] = 0;
@@ -328,8 +328,7 @@ const getSalaryData = async (client, teachers, fromDate, endDate) => {
         break;
       }
     } 
-    for (var j in signups) {
-      console.log(classes[i]['id'], " , ", livestream_signups[j]['class']);
+    for (var j in livestream_signups) {
       if (classes[i]['id'] == livestream_signups[j]['class']) {
         classes[i]['livestream_signup_count'] = livestream_signups[j]['livestream_signups'];
         break;
