@@ -39,6 +39,8 @@
   "classSignup.privateClassSignoffDeadlineHasBeenExceededWarningFixedCountClassPass": "Der er mindre end %s til din aftale starter, og du vil derfor ikke få refunderet det klip, du har brugt til at tilmelde dig.\n\nVi sætter naturligvis pris på at du afmelder dig hvis du er forhindret, så en anden kan få pladsen.\n\nVil du afmelde dig?",
   "time.minute": "minut",
   "time.minutes": "minutter",
+  "time.second": "sekund",
+	"time.seconds": "sekunder",
   "time.hour": "time",
   "time.hours": "timer",
   "time.day": "dag",

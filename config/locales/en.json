@@ -39,6 +39,8 @@
 	"classSignup.privateClassSignoffDeadlineHasBeenExceededWarningFixedCountClassPass": "There is less than %s before your private class starts, so the class will not be refunded.\n\nOf course, we would appreciate that you cancel if you can not attend.\n\nDo you want to cancel your booking?",
 	"time.minute": "minute",
 	"time.minutes": "minutes",
+	"time.second": "second",
+	"time.seconds": "seconds",
 	"time.hour": "hour",
 	"time.hours": "hours",
 	"time.day": "day",

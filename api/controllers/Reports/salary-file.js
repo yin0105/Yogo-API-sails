@@ -12,6 +12,30 @@ const excel = require('node-excel-export');
 
 const readFile = promisify(fs.readFile)
 
+function strToMins(strTime) {
+  const tt = strTime.split(":");
+  return parseInt(tt[0]) * 60 + parseInt(tt[1]);
+}
+
+function minsToStr(mins) {
+  const hh = Math.floor(mins / 60);
+  const mm = Math.floor(mins % 60);
+
+  let val =_.padStart(hh, 2, '0') + (hh > 1 ? sails.helpers.t('time.hours') : sails.helpers.t('time.hour'));
+  if (mm > 0) {
+    val += " " + _.padStart(mm, 2, '0') + (mm > 1 ? sails.helpers.t('time.minutes') : sails.helpers.t('time.minute'));
+  }
+  return val;
+}
+// function secToStr(sec) {
+//   return [_.padStart(Math.floor(sec / 3600), 2, '0') +
+//           sails.helpers.t('time.hours') ,
+//           _.padStart(Math.floor((sec % 3600) / 60), 2, '0') +
+//           sails.helpers.t('time.minutes') ,
+//           _.padStart(sec % 60, 2, '0') +
+//           sails.helpers.t('time.seconds')].join(" ");
+// }
+
 module.exports = async (req, res) => {
 
   let reportParams = await sails.helpers.reports.unpackReportToken(req.query.reportToken, req)
@@ -184,18 +208,52 @@ module.exports = async (req, res) => {
           width: 120 
         }
       }
+
+      // const merges = [
+      //   { start: { row: 1, column: 1 }, end: { row: 1, column: 10 } },
+      //   { start: { row: 2, column: 1 }, end: { row: 2, column: 5 } },
+      //   { start: { row: 2, column: 6 }, end: { row: 2, column: 10 } }
+      // ]
      
       const reportData = reportParams.teachers.map(teacher => {
         let subItems = [];
-        salaryData.items.map(item => {
-          if (item.teacher_id == teacher.id) {
+        let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0
+        salaryData.items.map(item => {          
+          if (item.teacher_id == teacher.id) {                        
+            total_classes++;
+            total_duration += strToMins(item.duration);
+            total_signup_count += item.signup_count;
+            total_checkedin_count += item.checkedin_count;
+            total_livestream_signup_count += item.livestream_signup_count;
+
             subItems.push(item);
+            item.duration = minsToStr(strToMins(item.duration));
           }
         })
+        if (subItems.length > 0) {
+          subItems.push({
+            "id": "total: " + subItems.length + " classes",
+            "duration": minsToStr(total_duration),
+            "signup_count": total_signup_count,
+            "checkedin_count": total_checkedin_count,
+            "livestream_signup_count": total_livestream_signup_count,
+            "room": "",
+          })
+        } else {
+          subItems.push({
+            "id": "total:",
+            "duration": "",
+            "signup_count": "",
+            "checkedin_count": "",
+            "livestream_signup_count": "",
+            "room": "",
+          })
+        }
         return {
           name: teacher.name, 
           specification: specification, 
-          data: subItems 
+          data: subItems,
+          merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
         };
       })
       const report = excel.buildExport(
