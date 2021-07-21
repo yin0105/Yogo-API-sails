@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Omsætning <%= startDateFormatted %>-<%= endDateFormatted %></title>
+  <title>Salary Reports <%= fromDateFormatted %>-<%= endDateFormatted %></title>
 
   <style>
 
@@ -57,7 +57,7 @@
       page-break-inside: avoid;
     }
 
-    table.data td:nth-of-type(1),
+    /* table.data td:nth-of-type(1),
     table.total td:nth-of-type(1) {
       width: 50%;
     }
@@ -74,7 +74,7 @@
 
     table.data tr:nth-of-type(2n) {
       background: #f8f8f8;
-    }
+    } */
 
     td.amount,
     td.item-count {
@@ -99,91 +99,66 @@
       font-size: 10pt;
     }
 
+    h1 {
+      text-align: center;
+    }
+
 
   </style>
 </head>
 
 <body>
 
-<table cellpadding="0" cellspacing="0" class="title-table">
-  <tr>
-    <% if (clientLogoUrl) { %>
-    <td class="logo">
-      <img src="<%= clientLogoUrl %>" class="<%= clientLogoImgTagClass %>">
-    </td>
-    <% } %>
-    <td class="title">
-      Omsætning <%= startDateFormatted %> - <%= endDateFormatted %>
-    </td>
-  </tr>
-</table>
+
 
 <%
-for (let i = 0; i < rows.length; i++) {
-  const row = rows[i]
+for (let i = 0; i < reportData.length; i++) {
 %>
-
-<% if (row.isCategoryTitle) { %>
+<h1 class="text-center">Salary Report of <%= reportData[i].name %></h1>
 <table class="data">
-  <tr class="category-title">
+  <tr>
+    <% for (let j = 0; j < heading[0].length; j++) { %>
+      <th><%= heading[0][j]%></th>
+    <% } %>
+  </tr>
+  <%
+  for (let j = 0; j < reportData[i].data.length; j++) {
+    const row = reportData[i].data[j]
+  %>
+  <tr>
     <td>
-      <%= row.name %>
+      <%= row.id %>
     </td>
-    <td class="item-count">Antal salg</td>
-    <td class="amount">Totalbeløb&nbsp;</td>
-  </tr>
-  <% } else if (row.isSubtotal) { %>
-  <tr class="sub-total">
-    <td><%= row.name %></td>
-    <td class="item-count">
-      <%= row.item_count %>
+    <td>
+      <%= row.date %>
     </td>
-    <td class="amount">
-      <%= currencyDkk(row.turnover) %> kr
-      <% if (row.item_type === 'product') { %>
-        <br>(inkl moms <%= currencyDkk(row.vat_amount) %> kr)
-      <% } %>
+    <td>
+      <%= row.time %>
     </td>
-  </tr>
-</table>
-<% } else if (row.isTotal) { %>
-<table class="total">
-  <tr class="total">
-    <td><%= row.name %></td>
-    <td class="item-count">
-      <%= row.item_count %>
+    <td>
+      <%= row.class %>
     </td>
-    <td class="amount">
-      <%= currencyDkk(row.turnover) %> kr
-      <br>
-      (inkl moms <%= currencyDkk(row.vat_amount) %> kr)
-
+    <td>
+      <%= row.duration %>
+    </td>
+    <td>
+      <%= row.signup_count %>
+    </td>
+    <td>
+      <%= row.checkedin_count %>
+    </td>
+    <td>
+      <%= row.livestream_signup_count %>
+    </td>
+    <td>
+      <%= row.room %>
     </td>
   </tr>
-</table>
-<% } else { %>
-<tr class="item">
-  <td>
-    <%= row.name %>
-    <% if (row.subText) {%>
-    <br><span class="subtext"><%= row.subText %></span>
-    <% } %>
-  </td>
-  <td class="item-count">
-    <%= row.item_count %>
-  </td>
-  <td class="amount">
-    <%= currencyDkk(row.turnover) %> kr
-    <% if (row.item_type === 'product') { %>
-    <br>(inkl moms <%= currencyDkk(row.vat_amount) %> kr)
-    <% } %>
-  </td>
-</tr>
-<% } %>
-</tr>
+  
 
 <% } %>
 </table>
+<% } %>
 
 </body>
 </html>

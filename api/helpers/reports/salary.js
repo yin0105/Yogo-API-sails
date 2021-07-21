@@ -253,10 +253,8 @@ const summarizeGiftCards = (salaryRows) => {
 
 
 const getSalaryData = async (client, teachers, fromDate, endDate) => {
-  console.log("fromDate = ", fromDate);
   fromDate = fromDate.format("YYYY-MM-DD");
   endDate = endDate.format("YYYY-MM-DD");
-  console.log("fromDate = ", fromDate);
   let classes = await 
     knex({cs: 'class'})
     .innerJoin({ct: 'class_teachers__user_teaching_classes'}, 'cs.id', 'ct.class_teachers')
@@ -307,16 +305,12 @@ const getSalaryData = async (client, teachers, fromDate, endDate) => {
       knex.raw("COUNT(id) as livestream_signups"))
     .groupBy('class');
   
-  console.log("classes = ", classes);
-  console.log("signups = ", signups);
-  console.log("checked_ins = ", checked_ins);
   for (var i in classes) {
     classes[i]['date'] = moment(classes[i]['date']).format("YYYY-MM-DD");
     classes[i]['signup_count'] = 0;
     classes[i]['checkedin_count'] = 0;
     classes[i]['livestream_signup_count'] = 0;
     for (var j in signups) {
-      console.log(classes[i]['id'], " , ", signups[j]['class']);
       if (classes[i]['id'] == signups[j]['class']) {
         classes[i]['signup_count'] = signups[j]['signups'];
         break;
@@ -402,7 +396,6 @@ module.exports = {
       endDate,
     );
 
-    console.log("salary data = ", salaryDataItems);
     
     // switch (inputs.periodType) {
     //   case 'year':

@@ -59,6 +59,20 @@ module.exports = async (req, res) => {
   // const fileName = 'Omsætning ' + moment(reportParams.fromDate).format('DD.MM.YYYY') + '-' + moment(reportParams.endDate).format('DD.MM.YYYY') + '.' + format
   const fileName = 'Salary Reports ' + moment(salaryData.fromDate).format('DD.MM.YYYY') + '-' + moment(salaryData.endDate).format('DD.MM.YYYY') + '.' + format
 
+  const heading = [
+    [
+      sails.helpers.t('global.ID'),
+      sails.helpers.t('global.Date'),
+      sails.helpers.t('global.Time'),
+      sails.helpers.t('global.Class'),
+      sails.helpers.t('global.Duration'),
+      sails.helpers.t('global.SignUps'),
+      sails.helpers.t('global.CheckedIn'),
+      sails.helpers.t('global.LivestreamSignups'),
+      sails.helpers.t('global.Room')
+    ],
+  ];
+
   switch (format) {
     case 'csv':
       const csvContentString = stringify(salaryData.items, {
@@ -146,21 +160,7 @@ module.exports = async (req, res) => {
           }
         }
       };
-      
-      const heading = [
-        [
-          sails.helpers.t('global.ID'),
-          sails.helpers.t('global.Date'),
-          sails.helpers.t('global.Time'),
-          sails.helpers.t('global.Class'),
-          sails.helpers.t('global.Duration'),
-          sails.helpers.t('global.SignUps'),
-          sails.helpers.t('global.CheckedIn'),
-          sails.helpers.t('global.LivestreamSignups'),
-          sails.helpers.t('global.Room')
-        ],
-      ];
-      
+                  
       const specification = {
         id: { 
           displayName: sails.helpers.t('global.ID'),
@@ -265,28 +265,72 @@ module.exports = async (req, res) => {
 
     case 'pdf':
 
-      const rows = await sails.helpers.reports.buildPdfDataRows(salaryData.items)
+      // const rows = await sails.helpers.reports.buildPdfDataRows(salaryData.items)
 
       let receiptTemplatePath = path.resolve(__dirname, '../../../assets/templates/report-salary.ejs')
 
       const receiptTemplateContent = await readFile(receiptTemplatePath, 'utf-8')
 
-      const clientLogoUrl = req.client.logo ?
-        await sails.helpers.images.url.with({
-          image: req.client.logo,
-          width: 200,
-          height: 200,
-        }) :
-        null
+      // const clientLogoUrl = req.client.logo ?
+      //   await sails.helpers.images.url.with({
+      //     image: req.client.logo,
+      //     width: 200,
+      //     height: 200,
+      //   }) :
+      //   null
 
-      const clientLogoImgTagClass = clientLogoUrl.indexOf('.svg') > -1 ? 'svg' : 'bitmap'
+      // const clientLogoImgTagClass = clientLogoUrl.indexOf('.svg') > -1 ? 'svg' : 'bitmap'
 
+      const reportDataPDF = reportParams.teachers.map(teacher => {
+        let subItems = [];
+        let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0
+        salaryData.items.map(item => {          
+          if (item.teacher_id == teacher.id) {                        
+            total_classes++;
+            total_duration += strToMins(item.duration);
+            total_signup_count += item.signup_count;
+            total_checkedin_count += item.checkedin_count;
+            total_livestream_signup_count += item.livestream_signup_count;
+
+            subItems.push(item);
+            item.duration = minsToStr(strToMins(item.duration));
+          }
+        })
+        if (subItems.length > 0) {
+          subItems.push({
+            "id": "total: " + subItems.length + " classes",
+            "duration": minsToStr(total_duration),
+            "signup_count": total_signup_count,
+            "checkedin_count": total_checkedin_count,
+            "livestream_signup_count": total_livestream_signup_count,
+            "room": "",
+          })
+        } else {
+          subItems.push({
+            "id": "total:",
+            "duration": "",
+            "signup_count": "",
+            "checkedin_count": "",
+            "livestream_signup_count": "",
+            "room": "",
+          })
+        }
+        return {
+          name: teacher.name, 
+          data: subItems,
+          merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }],
+          margin: 1000
+        };
+      });
+
+      console.log("reportData = ", reportDataPDF);
       let html = ejs.render(receiptTemplateContent, {
         fromDateFormatted: moment(salaryData.fromDate).format('DD.MM.YYYY'),
         endDateFormatted: moment(salaryData.endDate).format('DD.MM.YYYY'),
-        rows: rows,
-        clientLogoUrl: clientLogoUrl,
-        clientLogoImgTagClass: clientLogoImgTagClass,
+        heading: heading,
+        reportData: reportDataPDF,
+        // clientLogoUrl: clientLogoUrl,
+        // clientLogoImgTagClass: clientLogoImgTagClass,
         currencyDkk: currencyDkk,
       })
 
