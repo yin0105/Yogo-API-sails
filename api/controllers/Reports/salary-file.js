@@ -319,11 +319,10 @@ module.exports = async (req, res) => {
           name: teacher.name, 
           data: subItems,
           merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }],
-          margin: 1000
+          margin: (960 - subItems.length * 16) +  "px"
         };
       });
 
-      console.log("reportData = ", reportDataPDF);
       let html = ejs.render(receiptTemplateContent, {
         fromDateFormatted: moment(salaryData.fromDate).format('DD.MM.YYYY'),
         endDateFormatted: moment(salaryData.endDate).format('DD.MM.YYYY'),
@@ -333,6 +332,7 @@ module.exports = async (req, res) => {
         // clientLogoImgTagClass: clientLogoImgTagClass,
         currencyDkk: currencyDkk,
       })
+
 
       const pdf = await new Promise((resolve, reject) => {
         htmlToPdf.create(
