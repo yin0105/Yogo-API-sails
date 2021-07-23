@@ -17,7 +17,7 @@
  */
 
 
-module.exports.policies = {
+ module.exports.policies = {
 
   // - Always check for client. There is always a client context.
   // - Check for valid token. Ok if not.
@@ -64,6 +64,9 @@ module.exports.policies = {
 
   ClientsController: {
     logo: [],
+    'find-one': [],
+    'update-settings': [],
+    'create': []
   },
 
   AuthController: {

@@ -103,6 +103,7 @@ module.exports.routes = {
   'GET /clients/:id/settings': 'ClientsController.get-settings',
   'PUT /clients/:id/settings': 'ClientsController.update-settings',
   'GET /clients/:id/logo': 'ClientsController.logo',
+  'PUT /clients/:id/create': 'ClientsController.create',
 
   'POST /cron/tick': 'CronController.tick',
   'POST /cron/log': 'CronController.log',

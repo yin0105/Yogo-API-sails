@@ -5,7 +5,7 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
-module.exports = {
+ module.exports = {
 
   tableName: 'client_settings',
 
@@ -24,6 +24,7 @@ module.exports = {
 
     secret: 'boolean',
 
+    sms_sender_name: 'string',
   },
 
 }
