@@ -328,10 +328,10 @@ module.exports = async (req, res) => {
           name: teacher.name, 
           data: subItems,
           merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }],
-          margin: (960 - subItems.length * 16) +  "px"
+          // margin: (960 - subItems.length * 16) +  "px"
         };
       });
-      reportDataPDF[reportDataPDF.length - 1].margin = "0px";
+      // reportDataPDF[reportDataPDF.length - 1].margin = "0px";
 
       let html = ejs.render(receiptTemplateContent, {
         fromDateFormatted: moment(salaryData.fromDate).format('DD.MM.YYYY'),
@@ -339,6 +339,7 @@ module.exports = async (req, res) => {
         heading: heading,
         reportData: reportDataPDF,
         currencyDkk: currencyDkk,
+        title: sails.helpers.t('global.SalaryReport'),
       })
 
       const pdf = await new Promise((resolve, reject) => {

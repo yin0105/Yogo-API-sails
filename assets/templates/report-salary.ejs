@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Salary Reports <%= fromDateFormatted %>-<%= endDateFormatted %></title>
+  <title><%= title %> <%= fromDateFormatted %> - <%= endDateFormatted %></title>
 
   <style>
 
@@ -111,21 +111,17 @@
       }
     }
 
-
-
   </style>
 </head>
 
 <body>
-
-
 
 <%
 for (let i = 0; i < reportData.length; i++) {
 %>
 <div class="page" style="page-break-after:always;">
   <div class="bottom">
-    <h1 class="text-center">Salary Report of <%= reportData[i].name %></h1>
+    <h1 class="text-center"><%= reportData[i].name %></h1>
     <table class="data">
       <tr>
         <% for (let j = 0; j < heading[0].length; j++) { %>
