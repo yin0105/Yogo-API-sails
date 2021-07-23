@@ -75,7 +75,16 @@ module.exports = async (req, res) => {
 
   switch (format) {
     case 'csv':
-      const csvContentString = stringify(salaryData.items, {
+      let reportDataCSV = [];
+      salaryData.items.map(item => {
+        let subItems = [];
+        reportParams.teachers.map(teacher => {          
+          if (item.teacher_id == teacher.id) {                        
+            reportDataCSV.push(item);
+          }
+        })
+      })
+      const csvContentString = stringify(reportDataCSV, {
         header: true,
         columns: [
           {
@@ -281,7 +290,7 @@ module.exports = async (req, res) => {
 
       // const clientLogoImgTagClass = clientLogoUrl.indexOf('.svg') > -1 ? 'svg' : 'bitmap'
 
-      const reportDataPDF = reportParams.teachers.map(teacher => {
+      let reportDataPDF = reportParams.teachers.map(teacher => {
         let subItems = [];
         let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0
         salaryData.items.map(item => {          
@@ -322,6 +331,7 @@ module.exports = async (req, res) => {
           margin: (960 - subItems.length * 16) +  "px"
         };
       });
+      reportDataPDF[reportDataPDF.length - 1].margin = "0px";
 
       let html = ejs.render(receiptTemplateContent, {
         fromDateFormatted: moment(salaryData.fromDate).format('DD.MM.YYYY'),
