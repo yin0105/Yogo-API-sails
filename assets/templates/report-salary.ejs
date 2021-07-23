@@ -103,6 +103,15 @@
       text-align: center;
     }
 
+    @media print {
+      .page {
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+
 
   </style>
 </head>
@@ -114,51 +123,55 @@
 <%
 for (let i = 0; i < reportData.length; i++) {
 %>
-<h1 class="text-center">Salary Report of <%= reportData[i].name %></h1>
-<table class="data">
-  <tr>
-    <% for (let j = 0; j < heading[0].length; j++) { %>
-      <th><%= heading[0][j]%></th>
+<div class="page" style="page-break-after:always;">
+  <div class="bottom">
+    <h1 class="text-center">Salary Report of <%= reportData[i].name %></h1>
+    <table class="data">
+      <tr>
+        <% for (let j = 0; j < heading[0].length; j++) { %>
+          <th><%= heading[0][j]%></th>
+        <% } %>
+      </tr>
+      <%
+      for (let j = 0; j < reportData[i].data.length; j++) {
+        const row = reportData[i].data[j]
+      %>
+      <tr>
+        <td>
+          <%= row.id %>
+        </td>
+        <td>
+          <%= row.date %>
+        </td>
+        <td>
+          <%= row.time %>
+        </td>
+        <td>
+          <%= row.class %>
+        </td>
+        <td>
+          <%= row.duration %>
+        </td>
+        <td>
+          <%= row.signup_count %>
+        </td>
+        <td>
+          <%= row.checkedin_count %>
+        </td>
+        <td>
+          <%= row.livestream_signup_count %>
+        </td>
+        <td>
+          <%= row.room %>
+        </td>
+      </tr>
+      
+    
     <% } %>
-  </tr>
-  <%
-  for (let j = 0; j < reportData[i].data.length; j++) {
-    const row = reportData[i].data[j]
-  %>
-  <tr>
-    <td>
-      <%= row.id %>
-    </td>
-    <td>
-      <%= row.date %>
-    </td>
-    <td>
-      <%= row.time %>
-    </td>
-    <td>
-      <%= row.class %>
-    </td>
-    <td>
-      <%= row.duration %>
-    </td>
-    <td>
-      <%= row.signup_count %>
-    </td>
-    <td>
-      <%= row.checkedin_count %>
-    </td>
-    <td>
-      <%= row.livestream_signup_count %>
-    </td>
-    <td>
-      <%= row.room %>
-    </td>
-  </tr>
-  
-
-<% } %>
-</table>
-<div style="height: <%= reportData[i].margin %>;"></div>
+    </table>
+    <!-- <div style="height: <%= reportData[i].margin %>;"></div> -->
+  </div>
+</div>
 <% } %>
 
 </body>

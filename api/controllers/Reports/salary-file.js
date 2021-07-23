@@ -338,17 +338,15 @@ module.exports = async (req, res) => {
         endDateFormatted: moment(salaryData.endDate).format('DD.MM.YYYY'),
         heading: heading,
         reportData: reportDataPDF,
-        // clientLogoUrl: clientLogoUrl,
-        // clientLogoImgTagClass: clientLogoImgTagClass,
         currencyDkk: currencyDkk,
       })
-
 
       const pdf = await new Promise((resolve, reject) => {
         htmlToPdf.create(
           html,
           {
             format: 'A4',
+            orientation: "landscape",
             border:0,
             header: {
               "height": "10mm",
