@@ -31,13 +31,16 @@ module.exports = {
   fn: async (inputs, exits) => {
 
     const clientId = sails.helpers.util.idOrObjectIdInteger(inputs.client)
+    console.log("client = ", clientId);
 
     let settingsSchema = sails.helpers.clientSettings.getSchema()
 
     if (inputs.includeSecrets) {
+      console.log("== includeSecrets");
       const secretSettingsSchema = sails.helpers.clientSettings.getSecretsSchema()
       Object.assign(settingsSchema, secretSettingsSchema)
     }
+    
 
     const allSettingsKeys = _.keys(settingsSchema)
 
