@@ -1804,7 +1804,7 @@ YOGO
       locale: {
         type: 'string',
         isIn: ['da', 'en'],
-        defaultsTo: 'da',
+        defaultsTo: 'en',
       },
 
     });

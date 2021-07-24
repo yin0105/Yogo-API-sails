@@ -14,8 +14,8 @@ module.exports = async function (req, res, next) {
     req.query.client = req.body.client;
   }
 
+  
   if (req.query.client) {
-
     req.client = await Client.findOne({id: req.query.client, archived: false});
 
     if (!req.client) {
@@ -23,7 +23,6 @@ module.exports = async function (req, res, next) {
     }
 
   } else if (req.header('X-Yogo-Client-ID')) {
-
     req.client = await Client.findOne({id: req.header('X-Yogo-Client-ID'), archived: false});
 
     if (!req.client) {
@@ -31,7 +30,6 @@ module.exports = async function (req, res, next) {
     }
 
   } else if (req.query.reportToken) {
-
     const reportParams = await sails.helpers.reports.unpackReportToken(req.query.reportToken, req);
 
     if (!reportParams || !reportParams.clientId) return res.badRequest('Invalid reportToken');

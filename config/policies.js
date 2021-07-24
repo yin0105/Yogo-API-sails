@@ -66,7 +66,8 @@
     logo: [],
     'find-one': [],
     'update-settings': [],
-    'create': []
+    'create': [],
+    'update': [],
   },
 
   AuthController: {

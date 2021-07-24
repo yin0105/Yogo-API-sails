@@ -100,6 +100,7 @@ module.exports.routes = {
 
   'GET /clients/current': 'ClientsController.find-current',
   'GET /clients/:id': 'ClientsController.find-one',
+  'PUT /clients/:id': 'ClientsController.update',
   'GET /clients/:id/settings': 'ClientsController.get-settings',
   'PUT /clients/:id/settings': 'ClientsController.update-settings',
   'GET /clients/:id/logo': 'ClientsController.logo',
