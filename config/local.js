@@ -82,17 +82,29 @@ module.exports = {
   AWS_S3_IMAGE_UPLOAD_ACCESS_KEY_SECRET: 'L10W3cAqf7WETbD1UnQbqMukzw++a5g14ZgOal1a',
   AWS_S3_IMAGE_UPLOAD_BUCKET: 'yogo-original-images-test',
   IMAGE_SERVER: 'http://yogo-resized-images-test.s3-website.eu-central-1.amazonaws.com',
+  // email: {
+  //   sendRealEmails: false,
+  //   sendAllEmailsTo: 'anders@yogo.dk',
+  //   mailgun: {
+  //     apiKey: 'key-4044fc886f1b0aeed4bdd526c85bc5b6',
+  //     domain: 'sandboxd1e3ba7962a94be2a635dabf86ce538f.mailgun.org',
+  //     // domain: 'mg-eu.yogo.dk',
+  //     host: 'api.mailgun.net', // 'api.eu.mailgun.net' in production
+  //     webhookSigningKey: 'key-4044fc886f1b0aeed4bdd526c85bc5b6',
+  //   },
+  //   sendBlindCopyOfAllEmailsTo: 'anders@yogo.dk'
+  // },
+
   email: {
     sendRealEmails: false,
-    sendAllEmailsTo: 'anders@yogo.dk',
+    sendAllEmailsTo: 'oleksandrdeinekait@gmail.com',
     mailgun: {
-      apiKey: 'key-4044fc886f1b0aeed4bdd526c85bc5b6',
-      domain: 'sandboxd1e3ba7962a94be2a635dabf86ce538f.mailgun.org',
-      //domain: 'mg-eu.yogo.dk',
-      host: 'api.mailgun.net', // 'api.eu.mailgun.net' in production
-      webhookSigningKey: 'key-4044fc886f1b0aeed4bdd526c85bc5b6',
+      apiKey: 'ce6f12722a4e03c7428f26b905ece8be-c485922e-be1c6b2b',
+      domain: 'sandbox98a0199db5dc4b74afbd27218cbfea42.mailgun.org',
+      host: 'api.mailgun.net',
+      webhookSigningKey: 'ce6f12722a4e03c7428f26b905ece8be-c485922e-be1c6b2b',
     },
-    sendBlindCopyOfAllEmailsTo: 'anders@yogo.dk'
+    sendBlindCopyOfAllEmailsTo: 'oleksandrdeinekait@gmail.com'
   },
   // ALSO UPDATE bootstrap.js WHEN ADDING REQUIRED PARAMS IN THIS FILE
   sms: {

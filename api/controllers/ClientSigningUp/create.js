@@ -24,6 +24,10 @@ module.exports = {
     password: {
       type: 'string',
       required: true,
+    },
+    locale: {
+      type: 'string',
+      required: true,
     }
   },
 
@@ -43,7 +47,6 @@ module.exports = {
       return exits.forbidden()
     }
 
-
     const logger = sails.helpers.logger('client-signing-up');
 
     logger.info('About to create user from yogo-onboarding');
@@ -56,7 +59,6 @@ module.exports = {
 
     if (client) {
       logger.error('Email "' + inputs.email + '" was already used. Aborting.');
-      console.log("No client");
       return exits.emailAlreadyInUse({
         message: 'Oops :) an error occurred',
         error: 'This email address already exits',
@@ -71,6 +73,7 @@ module.exports = {
         'last_name',
         'email',
         'password',
+        'locale', 
       ],
     );
     
@@ -95,6 +98,59 @@ module.exports = {
     });
 
     console.log("clientData = ", clientData);
+
+    const newClient = await ClientSigningUp.create(clientData).fetch();
+    
+    // const mailgun = require("mailgun-js");
+    // const DOMAIN = 'YOUR_DOMAIN_NAME';
+    // const mg = mailgun({apiKey: api_key, domain: DOMAIN});
+    // const data = {
+    //   from: 'Excited User <me@samples.mailgun.org>',
+    //   to: 'bar@example.com, YOU@YOUR_DOMAIN_NAME',
+    //   subject: 'Hello',
+    //   text: 'Testing some Mailgun awesomness!'
+    // };
+    // mg.messages().send(data, function (error, body) {
+    //   console.log(body);
+    // });
+
+    // const dbEmail = await EmailLog.create(dbEmailData).fetch();
+
+    const emailTransport = sails.helpers.email.getTransport();
+    const emailLogger = sails.helpers.logger('email');
+    const messageParams = {};
+    messageParams.from = sails.config.email.sendAllEmailsTo;
+    messageParams.to = inputs.email;
+    messageParams.html = "<h3>Subject:</h3>\
+    Welcome to YOGO! Please confirm your email.\
+    <h3>Text:</h3>\
+    <p>Dear " + inputs.first_name + ".</p>\
+    Thank you for requesting a YOGO demo. In order to create the demo, we just need to confirm your email. \
+    Please click this link to confirm your email and to get started with YOGO: " + confirmLink;
+    
+    console.log("html = ", messageParams.html);
+
+
+    try {
+      emailTransport.sendMail(
+        messageParams,
+        async function (err, info) {
+          if (err) {
+            console.log("send mail error : ", err);
+            emailLogger.error('Mailgun error: ' + JSON.stringify(err));
+          } else {
+            console.log("send mail success");
+            emailLogger.info('Mailgun response: ' + JSON.stringify(info));
+            const mailgunId = info.id;
+          }
+          return exits.success();
+        },
+      );
+    } catch (e) {
+      emailLogger.error('Mailgun threw error: ' + e.message);
+    }
+
+
 
   //   const sendAtDateTime = moment.tz(inputs.send_at_datetime, 'YYYY-MM-DD HH:mm:ss', 'Europe/Copenhagen');
 
