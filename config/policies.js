@@ -63,11 +63,15 @@
   },
 
   ClientsController: {
-    logo: [],
+    'logo': [],
     'find-one': [],
     'update-settings': [],
     'create': [],
     'update': [],
+  },
+
+  ClientSigningUpController: {
+    'create': [],
   },
 
   AuthController: {

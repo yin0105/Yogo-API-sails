@@ -106,6 +106,9 @@ module.exports.routes = {
   'GET /clients/:id/logo': 'ClientsController.logo',
   'PUT /clients/:id/create': 'ClientsController.create',
 
+  'POST /client-signing-up/': 'ClientSigningUpController.create',
+
+
   'POST /cron/tick': 'CronController.tick',
   'POST /cron/log': 'CronController.log',
   'POST /cron/cancel-class-waiting-lists': 'CronController.cancel-class-waiting-lists',
