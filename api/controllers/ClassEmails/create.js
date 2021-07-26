@@ -36,7 +36,7 @@ module.exports = {
 
   exits: {
     classNotFound: {
-      responseType: 'badRequest',
+      responseType: 'badRequest', 
     },
     forbidden: {
       responseType: 'forbidden'

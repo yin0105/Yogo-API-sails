@@ -43,10 +43,11 @@ module.exports = {
     try {
       acl = require('../acl/' + policyFilePath);
     } catch (e) {
-      throw 'noPolicyFile';
+      throw 'noPolicyFile'; 
     }
 
     const aclPublicPermission = acl.public;
+    console.log("aclPublicPermission= ", aclPublicPermission);
 
     if (aclPublicPermission === true) return exits.success(true);
 
