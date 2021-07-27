@@ -107,6 +107,7 @@ module.exports.routes = {
   'PUT /clients/:id/create': 'ClientsController.create',
 
   'POST /client-signing-up/': 'ClientSigningUpController.create',
+  'GET /client-signing-up/confirm': 'ClientSigningUpController.confirm',
 
 
   'POST /cron/tick': 'CronController.tick',
@@ -249,6 +250,7 @@ module.exports.routes = {
   'PUT /users/:id': 'UsersController.update',
   'DELETE /users/:id': 'UsersController.destroy',
   'GET /users/:id/history': 'UsersController.history',
+  
 
   'POST /user-video-favorites/:user': 'UsersController.create-favorite-video',
   'DELETE /user-video-favorites/:user/:video': 'UsersController.destroy-favorite-video',

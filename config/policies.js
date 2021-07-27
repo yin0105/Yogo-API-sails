@@ -72,6 +72,7 @@
 
   ClientSigningUpController: {
     'create': [],
+    'confirm': [],
   },
 
   AuthController: {

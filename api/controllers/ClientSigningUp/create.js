@@ -80,7 +80,7 @@ module.exports = {
     const nowTimestamp = (new Date()).getTime();
     const encryptedPassword = await User.getEncryptedPassword(inputs.password);
     const token = await sails.helpers.strings.random('url-friendly');
-    const confirmLink = `${sails.config.baseUrl}/user/confirm?token=${token}`;
+    const confirmLink = `${sails.config.baseUrl}/client-signing-up/confirm?token=${token}`;
 
     // const hashedPassword = await sails.helpers.passwords.hashPassword(
     //   inputs.password
@@ -126,10 +126,9 @@ module.exports = {
     <h3>Text:</h3>\
     <p>Dear " + inputs.first_name + ".</p>\
     Thank you for requesting a YOGO demo. In order to create the demo, we just need to confirm your email. \
-    Please click this link to confirm your email and to get started with YOGO: " + confirmLink;
+    Please click this link to confirm your email and to get started with YOGO: <a href='" + confirmLink + "'>" + confirmLink + "</a>";
     
     console.log("html = ", messageParams.html);
-
 
     try {
       emailTransport.sendMail(
