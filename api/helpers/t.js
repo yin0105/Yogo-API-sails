@@ -24,7 +24,8 @@ module.exports = {
   sync: true,
 
   fn: (inputs, exits) => {
-
+    // console.log("inputs = ", inputs);
+    // console.log("locale = ", inputs.locale);
     const locale = inputs.locale
       || (
         (sails.yogo && sails.yogo.locale) ? sails.yogo.locale : 'en'

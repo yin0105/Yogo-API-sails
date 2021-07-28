@@ -241,5 +241,13 @@
 	"giftCardLog.GiftCardUpdatedByAminWithAmountLeftAndUser": "Gift card updated by admin. Remaining value: %s. Valid until %s. User: %s.",
 	"giftCardLog.GiftCardDeletedByAdminWithUser": "Gift card deleted by admin. User: %s.",
 	"giftCardLog.GiftCardRegisteredAsNotSentWithUser": "Gift card registered as not sent. User: %s.",
-	"giftCardLog.GiftCardRegisteredAsSentWithUser": "Gift card registered as sent. User: %s."
+	"giftCardLog.GiftCardRegisteredAsSentWithUser": "Gift card registered as sent. User: %s.",
+	"email.Subject": "Subject",
+	"email.WelcomeToYogo": "Welcome to YOGO",
+	"email.PleaseConfirmEmail": "Please confirm your email",
+	"email.Text": "Text",
+	"email.Dear": "Dear",
+	"email.ThanksForRequesting": "Thank you for requesting a YOGO demo",
+	"email.ConfirmYourEmail": "In order to create the demo, we just need to confirm your email",
+	"email.GetStartedWithYogo": "Please click this link to confirm your email and to get started with YOGO"
 }

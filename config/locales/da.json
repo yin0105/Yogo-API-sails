@@ -241,5 +241,13 @@
   "giftCardLog.GiftCardUpdatedByAminWithAmountLeftAndUser": "Gavekort opdateret af admin. Resterende værdi: %s. Gyldigt t.o.m. %s. Bruger: %s.",
   "giftCardLog.GiftCardDeletedByAdminWithUser": "Gavekort slettet af admin. Bruger: %s.",
   "giftCardLog.GiftCardRegisteredAsNotSentWithUser": "Gavekort registreret som ikke sendt. Bruger: %s.",
-  "giftCardLog.GiftCardRegisteredAsSentWithUser": "Gavekort registreret som sendt. Bruger: %s."
+  "giftCardLog.GiftCardRegisteredAsSentWithUser": "Gavekort registreret som sendt. Bruger: %s.",
+  "email.Subject": "Emne",
+	"email.WelcomeToYogo": "Velkommen til YOGO",
+	"email.PleaseConfirmEmail": "Bekræft din e-mail",
+	"email.Text": "Tekst",
+	"email.Dear": "Kære",
+	"email.ThanksForRequesting": "Tak for din anmodning om en YOGO-demo",
+	"email.ConfirmYourEmail": "For at oprette demoen skal vi bare bekræfte din e-mail",
+	"email.GetStartedWithYogo": "Klik på dette link for at bekræfte din e-mail og komme i gang med YOGA"
 }
