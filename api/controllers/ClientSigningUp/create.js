@@ -121,7 +121,7 @@ module.exports = {
     const messageParams = {};
     messageParams.from = sails.config.email.sendAllEmailsTo;
     messageParams.to = inputs.email;
-    // console.log("lang: ", sails.helpers.t('email.PleaseConfirmEmail', '', inputs.locale));
+
     messageParams.html = "<h3>" + sails.helpers.t('email.Subject', '', inputs.locale) + ":</h3>" + 
       sails.helpers.t('email.WelcomeToYogo', '', inputs.locale) + "! " + 
       sails.helpers.t('email.PleaseConfirmEmail', '', inputs.locale) + ".<h3>" + 
