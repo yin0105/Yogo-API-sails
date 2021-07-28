@@ -110,6 +110,9 @@ module.exports = {
       const newUser = await User.create(userData).fetch();
       console.log("a record of User table is created.");
 
+      await ClientSigningUp.update({email: client.email}, {archived: true}).fetch();
+      console.log("all records with the email are archived.");
+
 
       // await User.updateOne({ id: user.id }).set({
       //   emailStatus: "confirmed",
