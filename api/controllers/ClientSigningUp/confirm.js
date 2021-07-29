@@ -26,6 +26,10 @@ module.exports = {
       statusCode: 400,
       description: 'Email address already in use',
     },
+    sendingMailFailed: {
+      statusCode: 400,
+      description: 'Sending mail failed',
+    },
     error: {
       statusCode: 400,
       description: 'Something went wrong',
@@ -175,6 +179,10 @@ module.exports = {
             if (err) {
               console.log("send mail error : ", err);
               emailLogger.error('Mailgun error: ' + JSON.stringify(err));
+              return exits.sendingMailFailed({
+                message: 'Oops :) an error occurred',
+                error: 'Sending mail failed',
+              });
             } else {
               console.log("send mail success");
               emailLogger.info('Mailgun response: ' + JSON.stringify(info));
@@ -184,9 +192,9 @@ module.exports = {
         );
       } catch (e) {
         emailLogger.error('Mailgun threw error: ' + e.message);
-        return exits.error({
+        return exits.sendingMailFailed({
           message: 'Oops :) an error occurred',
-          error: 'Something went wrong',
+          error: 'Sending mail failed',
         });
       }
 
@@ -209,6 +217,10 @@ module.exports = {
             if (err) {
               console.log("send mail error : ", err);
               emailLogger.error('Mailgun error: ' + JSON.stringify(err));
+              return exits.sendingMailFailed({
+                message: 'Oops :) an error occurred',
+                error: 'Sending mail failed',
+              });
             } else {
               console.log("send mail success");
               emailLogger.info('Mailgun response: ' + JSON.stringify(info));
@@ -218,15 +230,15 @@ module.exports = {
         );
       } catch (e) {
         emailLogger.error('Mailgun threw error: ' + e.message);
-        return exits.error({
+        return exits.sendingMailFailed({
           message: 'Oops :) an error occurred',
-          error: 'Something went wrong',
+          error: 'Sending mail failed',
         });
       }
 
       console.log("signup confirm");
       this.res.location('http://localhost:8086/onboarding/signup-confirm');
-          
+
     } else {
       return exits.emailAlreadyInUse({
         message: 'Oops :) an error occurred',

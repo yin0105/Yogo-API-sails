@@ -50,6 +50,7 @@ module.exports = {
     if (!await sails.helpers.can2('controller.ClientSigningUp.create', this.req, inputs)) {
       return exits.forbidden()
     }
+    console.log("from = ", this.req.query.from);
 
     const logger = sails.helpers.logger('client-signing-up');
 
@@ -84,7 +85,8 @@ module.exports = {
     const nowTimestamp = (new Date()).getTime();
     const encryptedPassword = await User.getEncryptedPassword(inputs.password);
     const token = await sails.helpers.strings.random('url-friendly');
-    const confirmLink = `${sails.config.baseUrl}/client-signing-up/confirm?token=${token}`;
+    const confirmLink = `${this.req.query.from}/onboarding/#/signup-confirm?token=${token}`;
+    http://localhost:8086 HiEpGlRdEtqOy1S1SL6MA
 
     // const hashedPassword = await sails.helpers.passwords.hashPassword(
     //   inputs.password
