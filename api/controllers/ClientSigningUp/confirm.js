@@ -17,10 +17,15 @@ module.exports = {
     success: {
       description: "Email address confirmed.",
     },
-    invalidOrExpiredToken: {
+    invalidToken: {
       statusCode: 400,
       description:
-        "The provided token is expired, invalid, or already used up.",
+        "The provided token is invalid, or already used up.",
+    },
+    expiredToken: {
+      statusCode: 400,
+      description:
+        "The provided token is expired.",
     },
     emailAlreadyInUse: {
       statusCode: 400,
@@ -39,29 +44,34 @@ module.exports = {
   fn: async function (inputs, exits) {
     // if there is not token, then:
     if (!inputs.token) {
-      return exits.invalidOrExpiredToken({
-        error: "The provided token is expired, invalid, or already used up.",
+      return exits.invalidToken({
+        error: "The provided token is invalid, or already used up.",
       });
     }
 
     const client = await ClientSigningUp.findOne({ confirm_email_token: inputs.token });
     
     // if there is not pre-registered client or token is expired then: 
-    if (!client || client.confirm_email_token_expires_at <= Date.now()) {
-      return exits.invalidOrExpiredToken({
-        error: "The provided token is expired, invalid, or already used up.",
+    if (!client) {
+      return exits.invalidToken({
+        error: "The provided token is invalid, or already used up.",
+      });
+    }
+
+    if (client.confirm_email_token_expires_at <= Date.now()) {
+      return exits.expiredToken({
+        error: "The provided token is expired.",
       });
     }
 
     // see if the client exists in client table or user table
     const existingClient = await Client.findOne({email: client.email});
     const existingUser = await User.findOne({email: client.email});
-    console.log("existing client = ", existingClient);
-    console.log("existing user = ", existingUser);
+
     if (existingClient || existingUser) {
       return exits.emailAlreadyInUse({
         message: 'Oops :) an error occurred',
-        error: 'This email address already exits',
+        error: 'This email address already exits.',
       });
     }
 
@@ -242,7 +252,7 @@ module.exports = {
     } else {
       return exits.emailAlreadyInUse({
         message: 'Oops :) an error occurred',
-        error: 'This email address already exits',
+        error: 'This email address already exits.',
       });
     }
 
