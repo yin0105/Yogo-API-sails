@@ -36,6 +36,10 @@ module.exports = {
       statusCode: 400,
       description: 'Email address already in use',
     },
+    sendingMailFailed: {
+      statusCode: 400,
+      description: 'Sending mail failed',
+    },
     error: {
       description: 'Something went wrong',
     },
@@ -52,12 +56,12 @@ module.exports = {
     logger.info('About to create user from yogo-onboarding');
     logger.info(inputs);
 
-    const client = await ClientSigningUp.findOne({
+    const client = await ClientSigningUp.find({
       email: inputs.email,
       archived: true,
     });
 
-    if (client) {
+    if (client.length > 0) {
       logger.error('Email "' + inputs.email + '" was already used. Aborting.');
       return exits.emailAlreadyInUse({
         message: 'Oops :) an error occurred',
@@ -140,6 +144,10 @@ module.exports = {
           if (err) {
             console.log("send mail error : ", err);
             emailLogger.error('Mailgun error: ' + JSON.stringify(err));
+            return exits.sendingMailFailed({
+              message: 'Oops :) an error occurred',
+              error: 'Sending mail failed',
+            });
           } else {
             console.log("send mail success");
             emailLogger.info('Mailgun response: ' + JSON.stringify(info));
@@ -150,48 +158,11 @@ module.exports = {
       );
     } catch (e) {
       emailLogger.error('Mailgun threw error: ' + e.message);
+      return exits.error({
+        message: 'Oops :) an error occurred',
+        error: 'Something went wrong',
+      });
     }
-
-
-
-  //   const sendAtDateTime = moment.tz(inputs.send_at_datetime, 'YYYY-MM-DD HH:mm:ss', 'Europe/Copenhagen');
-
-  //   const sendNow = sendAtDateTime.isSameOrBefore(
-  //     moment.tz('Europe/Copenhagen'),
-  //     'minute',
-  //   );
-
-  //   const classDateString = moment(classObj.date).format('YYYY-MM-DD', 'Europe/Copenhagen');
-  //   const classStart = moment.tz(classDateString + ' ' + classObj.start_time, 'Europe/Copenhagen');
-
-  //   const sendEmailDateTimeIsBeforeClassStart = sendAtDateTime.isBefore(classStart, 'minute');
-
-  //   const sendToSubsequentSignups = inputs.send_to_subsequent_signups && sendEmailDateTimeIsBeforeClassStart;
-
-  //   _.assign(classEmailData, {
-  //     send_to_subsequent_signups: sendToSubsequentSignups,
-  //     email_sent: false,
-  //     auto_send_status: 'off',
-  //   });
-
-  //   const classEmail = await ClassEmail.create(classEmailData).fetch();
-
-  //   logger.info('Email created.');
-
-  //   if (sendNow) {
-  //     logger.info('Now sending email');
-  //     await sails.helpers.classEmail.send(classEmail);
-  //   } else {
-  //     logger.info('Email scheduled for sending later');
-  //   }
-
-  //   await ClassEmail.update({id: classEmail.id}, {
-  //     email_sent: sendNow,
-  //     auto_send_status: sendToSubsequentSignups ? 'active' : 'off',
-  //   });
-
-  //   return exits.success();
-
   },
 
 };
