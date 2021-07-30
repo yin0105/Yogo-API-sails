@@ -94,26 +94,31 @@ module.exports = {
       console.log("a record of client table is created.");
 
       // Save the client into client_settings table.
-      const clientSettingsData = {
-        createdAt: nowTimestamp,
-        updatedAt: nowTimestamp,
-        archived: false,
-        key: 'locale',
-        value: client.locale,
-      }
+      // const clientSettingsData = {
+      //   createdAt: nowTimestamp,
+      //   updatedAt: nowTimestamp,
+      //   archived: false,
+      //   key: 'locale',
+      //   value: client.locale,
+      // }
 
-      const newClientSettings = await ClientSettings.create(clientSettingsData).fetch();
-      console.log("a record of client_settings table is created.");
+      // const newClientSettings = await ClientSettings.create(clientSettingsData).fetch();
+
+      // const clientSettingsData_2 = {
+      //   createdAt: nowTimestamp,
+      //   updatedAt: nowTimestamp,
+      //   archived: false,
+      //   key: 'sms_sender_name',
+      //   value: client.client_name.substr(0, 11),
+      // }
+
+      // const newClientSettings_2 = await ClientSettings.create(clientSettingsData_2).fetch();
+      // console.log("a record of client_settings table is created.");
       
-      const clientSettingsData_2 = {
-        createdAt: nowTimestamp,
-        updatedAt: nowTimestamp,
-        archived: false,
-        key: 'sms_sender_name',
-        value: client.client_name.substr(0, 11),
-      }
+      let response = await sails.helpers.clientSettings.update(newClient.id, {"locale": client.locale});
+      console.log("a record of client_settings table is created.");
 
-      const newClientSettings_2 = await ClientSettings.create(clientSettingsData_2).fetch();
+      response = await sails.helpers.clientSettings.update(newClient.id, {"sms_sender_name": client.client_name.substr(0, 11)});
       console.log("a record of client_settings table is created.");
 
       // Save the client into user table.
@@ -189,31 +194,39 @@ module.exports = {
 
       console.log("YOGO Email = ", messageParams.html);
 
-      try {
-        emailTransport.sendMail(
-          messageParams,
-          async function (err, info) {
-            if (err) {
-              console.log("send mail error : ", err);
-              emailLogger.error('Mailgun error: ' + JSON.stringify(err));
-              return exits.sendingMailFailed({
-                message: 'Oops :) an error occurred',
-                error: 'Sending mail failed',
-              });
-            } else {
-              console.log("send mail success");
-              emailLogger.info('Mailgun response: ' + JSON.stringify(info));
-              const mailgunId = info.id;
-            }
-          },
-        );
-      } catch (e) {
-        emailLogger.error('Mailgun threw error: ' + e.message);
-        return exits.sendingMailFailed({
-          message: 'Oops :) an error occurred',
-          error: 'Sending mail failed',
-        });
-      }
+      logger.info('Sending "Demo is ready" email with subject ' + messageParams.subject + ' to user ' + client.email);
+      await sails.helpers.email.send.with({
+        user: newUser,
+        subject: messageParams.subject,
+        html: messageParams.html,
+        emailType: 'client_email_after_confirm_email',
+      });
+
+      // try {
+      //   emailTransport.sendMail(
+      //     messageParams,
+      //     async function (err, info) {
+      //       if (err) {
+      //         console.log("send mail error : ", err);
+      //         emailLogger.error('Mailgun error: ' + JSON.stringify(err));
+      //         return exits.sendingMailFailed({
+      //           message: 'Oops :) an error occurred',
+      //           error: 'Sending mail failed',
+      //         });
+      //       } else {
+      //         console.log("send mail success");
+      //         emailLogger.info('Mailgun response: ' + JSON.stringify(info));
+      //         const mailgunId = info.id;
+      //       }
+      //     },
+      //   );
+      // } catch (e) {
+      //   emailLogger.error('Mailgun threw error: ' + e.message);
+      //   return exits.sendingMailFailed({
+      //     message: 'Oops :) an error occurred',
+      //     error: 'Sending mail failed',
+      //   });
+      // }
 
       // send YOGO email to kontakt@yogo.dk
       messageParams.to = "kontakt@yogo.dk";
@@ -226,32 +239,39 @@ module.exports = {
       "<p>" + sails.helpers.t('email.Email', '', client.locale) + ": " +  client.email + "</p>"
       
       console.log("Client Email = ", messageParams.html);
+      logger.info('Sending "Demo is ready" email with subject ' + messageParams.subject + ' to user ' + client.email);
+      await sails.helpers.email.send.with({
+        non_user_email: messageParams.to,
+        subject: messageParams.subject,
+        html: messageParams.html,
+        emailType: 'yogo_email_after_confirm_email',
+      });
 
-      try {
-        emailTransport.sendMail(
-          messageParams,
-          async function (err, info) {
-            if (err) {
-              console.log("send mail error : ", err);
-              emailLogger.error('Mailgun error: ' + JSON.stringify(err));
-              return exits.sendingMailFailed({
-                message: 'Oops :) an error occurred',
-                error: 'Sending mail failed',
-              });
-            } else {
-              console.log("send mail success");
-              emailLogger.info('Mailgun response: ' + JSON.stringify(info));
-              const mailgunId = info.id;
-            }
-          },
-        );
-      } catch (e) {
-        emailLogger.error('Mailgun threw error: ' + e.message);
-        return exits.sendingMailFailed({
-          message: 'Oops :) an error occurred',
-          error: 'Sending mail failed',
-        });
-      }
+      // try {
+      //   emailTransport.sendMail(
+      //     messageParams,
+      //     async function (err, info) {
+      //       if (err) {
+      //         console.log("send mail error : ", err);
+      //         emailLogger.error('Mailgun error: ' + JSON.stringify(err));
+      //         return exits.sendingMailFailed({
+      //           message: 'Oops :) an error occurred',
+      //           error: 'Sending mail failed',
+      //         });
+      //       } else {
+      //         console.log("send mail success");
+      //         emailLogger.info('Mailgun response: ' + JSON.stringify(info));
+      //         const mailgunId = info.id;
+      //       }
+      //     },
+      //   );
+      // } catch (e) {
+      //   emailLogger.error('Mailgun threw error: ' + e.message);
+      //   return exits.sendingMailFailed({
+      //     message: 'Oops :) an error occurred',
+      //     error: 'Sending mail failed',
+      //   });
+      // }
 
       console.log("signup confirm: ", client.first_name);
       return exits.success({
