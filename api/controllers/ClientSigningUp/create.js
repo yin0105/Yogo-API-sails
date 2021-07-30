@@ -86,7 +86,6 @@ module.exports = {
     const encryptedPassword = await User.getEncryptedPassword(inputs.password);
     const token = await sails.helpers.strings.random('url-friendly');
     const confirmLink = `${this.req.query.from}/onboarding/#/signup-confirm?token=${token}`;
-    http://localhost:8086 HiEpGlRdEtqOy1S1SL6MA
 
     // const hashedPassword = await sails.helpers.passwords.hashPassword(
     //   inputs.password

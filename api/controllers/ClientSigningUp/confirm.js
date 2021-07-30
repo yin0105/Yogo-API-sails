@@ -49,6 +49,13 @@ module.exports = {
       });
     }
 
+    // let response = await sails.policies.getClient.with({
+    //   non_user_email: messageParams.to,
+    //   subject: messageParams.subject,
+    //   html: messageParams.html,
+    //   emailType: 'yogo_email_after_confirm_email',
+    // });
+
     const client = await ClientSigningUp.findOne({ confirm_email_token: inputs.token });
     
     // if there is not pre-registered client or token is expired then: 
