@@ -149,10 +149,10 @@ module.exports = {
       // send email to client
       messageParams.to = client.email;
       
-      const admin_module_dashboard_link = ""
-      const frontend_my_profile_link = ""
-      const teacher_my_schedule_link = ""
-      const checkin_link = ""
+      const admin_module_dashboard_link = `https://${newClient.id}.yogo.dk/admin/index.html#/dashboard`
+      const frontend_my_profile_link = `https://${newClient.id}.yogo.dk/frontend/index.html#/my-profile`
+      const teacher_my_schedule_link = `https://${newClient.id}.yogo.dk/teacher/index.html#/my-schedule`
+      const checkin_link = `https://${newClient.id}.yogo.dk/checkin/index.html#/checki`
 
       messageParams.subject = sails.helpers.t('email.YourYogoDemoReady', '', client.locale) + "!"
 
@@ -253,8 +253,14 @@ module.exports = {
         });
       }
 
-      console.log("signup confirm");
-      this.res.location('http://localhost:8086/onboarding/signup-confirm');
+      console.log("signup confirm: ", client.first_name);
+      return exits.success({
+        first_name: client.first_name,
+        admin_module_dashboard_link: admin_module_dashboard_link,
+        frontend_my_profile_link: frontend_my_profile_link,
+        teacher_my_schedule_link: teacher_my_schedule_link,
+        checkin_link: checkin_link,
+      })
 
     } else {
       return exits.emailAlreadyInUse({
@@ -262,8 +268,6 @@ module.exports = {
         error: 'This email address already exits.',
       });
     }
-
-
   },
 
 };
