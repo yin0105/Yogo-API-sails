@@ -127,12 +127,9 @@ module.exports = {
     const messageParams = {};
     messageParams.from = sails.config.email.sendAllEmailsTo;
     messageParams.to = inputs.email;
+    messageParams.subject = sails.helpers.t('email.WelcomeToYogo', '', inputs.locale) + "! " + sails.helpers.t('email.PleaseConfirmEmail', '', inputs.locale) + "." 
 
-    messageParams.html = "<h3>" + sails.helpers.t('email.Subject', '', inputs.locale) + ":</h3>" + 
-      sails.helpers.t('email.WelcomeToYogo', '', inputs.locale) + "! " + 
-      sails.helpers.t('email.PleaseConfirmEmail', '', inputs.locale) + ".<h3>" + 
-      sails.helpers.t('email.Text', '', inputs.locale) + ":</h3><p>" + 
-      sails.helpers.t('email.Dear', '', inputs.locale) + " " + inputs.first_name + ".</p>" + 
+    messageParams.html = "<p>" + sails.helpers.t('email.Dear', '', inputs.locale) + " " + inputs.first_name + ".</p>" + 
       sails.helpers.t('email.ThanksForRequesting', '', inputs.locale) + ". " + 
       sails.helpers.t('email.ConfirmYourEmail', '', inputs.locale) + ". " + 
       sails.helpers.t('email.GetStartedWithYogo', '', inputs.locale) + ": <a href='" + confirmLink + "'>" + confirmLink + "</a>";

@@ -130,6 +130,7 @@ module.exports = {
         teacher: true,
         checkin: true,
         customer: true,
+        client: newClient.id,
       }
 
       const newUser = await User.create(userData).fetch();
@@ -153,32 +154,38 @@ module.exports = {
       const teacher_my_schedule_link = ""
       const checkin_link = ""
 
-      messageParams.html = "<h3>" + sails.helpers.t('email.Subject', '', client.locale) + ":</h3>" + 
-      sails.helpers.t('email.YourYogoDemoReady', '', client.locale) + !
-      sails.helpers.t('email.Text', '', client.locale) + ":</h3><p>" + 
-      sails.helpers.t('email.Dear', '', client.locale) + " " + inputs.first_name + ".</p>" + 
-      sails.helpers.t('email.YourYogoDemoReady', '', client.locale) + ". " +
-      sails.helpers.t('email.PleaseAllowIntroduction', '', client.locale) + ". " +
-      sails.helpers.t('email.CanLogWithiEmailPassword', '', client.locale) + ". " +      
-      "<h3>" + sails.helpers.t('email.AdminModule', '', client.locale) + ":</h3><p>" + 
-      admin_module_dashboard_link + "</p>" +
-      sails.helpers.t('email.WhereKeepTrack', '', client.locale) + ". " +
-      sails.helpers.t('email.CustomersClassesEtc', '', client.locale) + ". " +
-      "<h3>" + sails.helpers.t('email.CustomerModule', '', client.locale) + ":</h3><p>" + 
-      frontend_my_profile_link + "</p>" +
-      sails.helpers.t('email.WhereBuyRegister', '', client.locale) + ". " +      
-      "<h3>" + sails.helpers.t('email.WebsiteWidget', '', client.locale) + "</h3>" + 
-      sails.helpers.t('email.ModulesEasilyEmbeded', '', client.locale) + ". " +
-      sails.helpers.t('email.WayYourCustomers', '', client.locale) + ". " +      
-      "<h3>" + sails.helpers.t('email.TeacherModule', '', client.locale) + ":</h3><p>" + 
-      teacher_my_schedule_link + "</p>" +
-      sails.helpers.t('email.WhereYourTeachers', '', client.locale) + ". " +
-      sails.helpers.t('email.AlsoWhereStartLiveStream', '', client.locale) + ". " +
-      "<h3>" + sails.helpers.t('email.CheckinModule', '', client.locale) + ":</h3><p>" + 
-      checkin_link + "</p>" +
-      sails.helpers.t('email.CanRunOnTablet', '', client.locale) + ". " +      
-      "<h3>" + sails.helpers.t('email.NativeApp', '', client.locale) + ":</h3>" + 
-      sails.helpers.t('email.YogoNativeApp', '', client.locale) + ". "
+      messageParams.subject = sails.helpers.t('email.YourYogoDemoReady', '', client.locale) + "!"
+
+      messageParams.html = `<p>${sails.helpers.t('email.Dear', '', client.locale)} ${inputs.first_name} + .</p>` + 
+      `${sails.helpers.t('email.YourYogoDemoReady', '', client.locale)} ` +
+      `${sails.helpers.t('email.PleaseAllowIntroduction', '', client.locale)} ` +
+      `${sails.helpers.t('email.CanLogWithiEmailPassword', '', client.locale)} ` +
+      
+      `<h3>${sails.helpers.t('email.AdminModule', '', client.locale)}:</h3>` +
+      `<p>${admin_module_dashboard_link}:</p>` +
+      `${sails.helpers.t('email.WhereKeepTrack', '', client.locale)} ` +
+      `${sails.helpers.t('email.CustomersClassesEtc', '', client.locale)} ` +
+
+      `<h3>${sails.helpers.t('email.CustomerModule', '', client.locale)}:</h3>` +
+      `<p>${frontend_my_profile_link}:</p>` +
+      `${sails.helpers.t('email.WhereBuyRegister', '', client.locale)} ` +
+
+      `<h3>${sails.helpers.t('email.WebsiteWidget', '', client.locale)}:</h3>` +
+      `${sails.helpers.t('email.ModulesEasilyEmbeded', '', client.locale)} ` +
+      `${sails.helpers.t('email.WayYourCustomers', '', client.locale)} ` +
+
+      `<h3>${sails.helpers.t('email.TeacherModule', '', client.locale)}:</h3>` +
+      `<p>${teacher_my_schedule_link}:</p>` +
+      `${sails.helpers.t('email.WhereYourTeachers', '', client.locale)} ` +
+      `${sails.helpers.t('email.AlsoWhereStartLiveStream', '', client.locale)} ` +
+
+      `<h3>${sails.helpers.t('email.CheckinModule', '', client.locale)}:</h3>` +
+      `<p>${checkin_link}:</p>` +
+      `${sails.helpers.t('email.CanRunOnTablet', '', client.locale)} ` +
+
+      `<h3>${sails.helpers.t('email.NativeApp', '', client.locale)}:</h3>` +
+      `${sails.helpers.t('email.YogoNativeApp', '', client.locale)} `
+
 
       console.log("YOGO Email = ", messageParams.html);
 
