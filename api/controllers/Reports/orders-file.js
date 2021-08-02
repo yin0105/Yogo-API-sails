@@ -38,6 +38,7 @@ module.exports = async (req, res) => {
   console.log("reportParams = ", reportParams);
 
   const ordersData = await sails.helpers.reports.orders.with(reportParams)
+  console.log("ordersData = ", ordersData);
 
   // Temporary filter until we can remove membership_type and membership_renewal on json requests also
 //   ordersData.items = _.chain(ordersData.items)
