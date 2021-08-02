@@ -271,9 +271,21 @@
 	"email.JustSignedForDemo": "This client just signed up for a demo",
 	"email.StudioName": "Studio name",
 	"email.UserName": "User name",
-	"email.Email": "Email"
-
-
-
-
+	"email.Email": "Email",
+	"sales.InvoiceDateTime": "Invoice date/time",
+  	"sales.Invoice#": "Invoice #",
+	"sales.CustomerID": "Customer ID",
+	"sales.CustomerName": "Customer name",
+	"sales.CustomerEmail": "Customer email",
+	"sales.Text": "Text",
+	"sales.ItemType": "Item type",
+	"sales.ItemID": "Item ID",
+	"sales.Quantity": "Quantity",
+	"sales.ItemPrice": "Item price",
+	"sales.TotalPrice": "Total price",
+	"sales.VatAmount": "VAT amount",
+	"sales.PaymentServiceProvider": "Payment service provider",
+	"sales.PaymentMethod": "Payment method",
+	"sales.MaskedCard": "Masked card",
+	"sales.InvoiceTotal": "Invoice total"
 }

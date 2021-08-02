@@ -270,5 +270,21 @@
 	"email.JustSignedForDemo": "Denne klient tilmeldte sig lige en demo",
 	"email.StudioName": "Studio-navn",
 	"email.UserName": "Brugernavn",
-	"email.Email": "E-mail"
+	"email.Email": "E-mail",
+  "sales.InvoiceDateTime": "Fakturadato/-tidspunkt",
+  "sales.Invoice#": "Faktura #",
+  "sales.CustomerID": "Kunde ID",
+  "sales.CustomerName": "Kundenavn",
+  "sales.CustomerEmail": "Kundemail",
+  "sales.Text": "Tekst",
+  "sales.ItemType": "Varetype",
+  "sales.ItemID": "Vare -id",
+  "sales.Quantity": "Antal",
+  "sales.ItemPrice": "Vare pris",
+  "sales.TotalPrice": "Total pris",
+  "sales.VatAmount": "Momsbeløb",
+  "sales.PaymentServiceProvider": "Betalingstjenesteudbyder",
+  "sales.PaymentMethod": "Betalingsmetode",
+  "sales.MaskedCard": "Maskeret kort",
+  "sales.InvoiceTotal": "Faktura i alt"
 }

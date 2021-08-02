@@ -51,22 +51,29 @@ module.exports = async (req, res) => {
 
 //   const format = req.query.format
 
-//   // const fileName = 'Omsætning ' + moment(reportParams.fromDate).format('DD.MM.YYYY') + '-' + moment(reportParams.endDate).format('DD.MM.YYYY') + '.' + format
-//   const fileName = 'Orders Reports ' + moment(ordersData.fromDate).format('DD.MM.YYYY') + '-' + moment(ordersData.endDate).format('DD.MM.YYYY') + '.' + format
+//   // const fileName = 'Omsætning ' + moment(reportParams.startDate).format('DD.MM.YYYY') + '-' + moment(reportParams.endDate).format('DD.MM.YYYY') + '.' + format
+  const fileName = 'Sales Report ' + moment(ordersData.startDate).format('DD.MM.YYYY') + '-' + moment(ordersData.endDate).format('DD.MM.YYYY') + '.' + format
 
-//   const heading = [
-//     [
-//       sails.helpers.t('global.ID'),
-//       sails.helpers.t('global.Date'),
-//       sails.helpers.t('global.Time'),
-//       sails.helpers.t('global.Class'),
-//       sails.helpers.t('global.Duration'),
-//       sails.helpers.t('global.SignUps'),
-//       sails.helpers.t('global.CheckedIn'),
-//       sails.helpers.t('global.LivestreamSignups'),
-//       sails.helpers.t('global.Room')
-//     ],
-//   ];
+  const heading = [
+    [
+      sails.helpers.t('sales.InvoiceDateTime'),
+      sails.helpers.t('sales.Invoice#'),      
+      sails.helpers.t('sales.CustomerID'),
+      sails.helpers.t('sales.CustomerName'),
+      sails.helpers.t('sales.CustomerEmail'),
+      sails.helpers.t('sales.Text'),
+      sails.helpers.t('sales.ItemType'),
+      sails.helpers.t('sales.ItemID'),
+      sails.helpers.t('sales.Quantity'),
+      sails.helpers.t('sales.ItemPrice'),
+      sails.helpers.t('sales.TotalPrice'),
+      sails.helpers.t('sales.VatAmount'),
+      sails.helpers.t('sales.PaymentServiceProvider'),
+      sails.helpers.t('sales.PaymentMethod'),
+      sails.helpers.t('sales.MaskedCard'),
+      sails.helpers.t('sales.InvoiceTotal'),
+    ],
+  ];
 
 //   switch (format) {
 //     case 'xlsx':
