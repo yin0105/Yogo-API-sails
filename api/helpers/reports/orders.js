@@ -1,5 +1,6 @@
 const knex = require('../../services/knex');
 const moment = require('moment-timezone');
+const pay_type = require('../../filters/pay_type');
 
 
 const getOrdersData = async (client, startDate, endDate) => {
@@ -42,6 +43,7 @@ const getOrdersData = async (client, startDate, endDate) => {
             orders[i]['user_id'] = ""            
         }
         orders[i]['payment_service_provider'] = "Reepay"
+        orders[i]['pay_type'] = pay_type(orders[i]['pay_type'])
     }
 
     return orders;
@@ -76,6 +78,7 @@ module.exports = {
 
         const startDate = moment(inputs.startDate, 'YYYY-MM-DD');
         const endDate = moment(inputs.endDate, 'YYYY-MM-DD');
+
         if (!startDate || !endDate) throw new Error('Orders report: date is invalid.');
 
         let ordersDataItems = await getOrdersData(
