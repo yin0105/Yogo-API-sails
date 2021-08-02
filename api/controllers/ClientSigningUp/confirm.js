@@ -73,9 +73,10 @@ module.exports = {
 
     // see if the client exists in client table or user table
     const existingClient = await Client.findOne({email: client.email});
-    const existingUser = await User.findOne({email: client.email});
+    // const existingUser = await User.findOne({email: client.email});
 
-    if (existingClient || existingUser) {
+    // if (existingClient || existingUser) {
+    if (existingClient) {
       return exits.emailAlreadyInUse({
         message: 'Oops :) an error occurred',
         error: 'This email address already exits.',
