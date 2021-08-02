@@ -10,7 +10,8 @@ const getOrdersData = async (client, startDate, endDate) => {
         .leftJoin({u: 'user'}, 'u.id', 'o.user')
         .innerJoin({oi: 'order_item'}, 'o.id', 'oi.order')
         .select(
-            knex.raw('CAST(DATE_ADD("1970-01-01", INTERVAL o.paid/1000 SECOND) AS DATE) AS paid'), 
+            knex.raw('CAST(DATE_ADD("1970-01-01", INTERVAL o.paid/1000 SECOND) AS DATE) AS dd'), 
+            knex.raw('DATE_ADD("1970-01-01", INTERVAL FLOOR(o.paid/1000 SECOND)) AS paid'), 
             knex.raw('o.invoice_id AS invoice_id'),
             knex.raw('o.user AS user_id'),
             knex.raw('o.non_user_name AS non_user_name'),
@@ -38,7 +39,9 @@ const getOrdersData = async (client, startDate, endDate) => {
         if ( !orders[i]['user_id'] ) {
             orders[i]['user_name'] = orders[i]['non_user_name']
             orders[i]['user_email'] = orders[i]['non_user_email']
+            orders[i]['user_id'] = ""            
         }
+        orders[i]['payment_service_provider'] = "Reepay"
     }
 
     return orders;
