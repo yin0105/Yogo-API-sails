@@ -14,46 +14,27 @@ const getOrdersData = async (client, startDate, endDate) => {
     // .andWhere("cs.date", "<=", endDate)
     .andWhere("o.client", client)
     .select(
-      knex.raw("cs.id AS id"), 
-      knex.raw("cs.date AS date"), 
-      knex.raw("CONCAT(LEFT(start_time,5), '-',  LEFT(end_time, 5)) AS time"), 
-      knex.raw("ctype.name as class"),
-      knex.raw("TIMEDIFF(end_time, start_time) AS duration"),
-      knex.raw("r.name as room"),
-      knex.raw("u.id as teacher_id"),
-      knex.raw("CONCAT(u.first_name, ' ', u.last_name) as teacher_name"));
+      knex.raw('CAST(DATE_ADD("1970-01-01", INTERVAL order.updatedAt/1000 SECOND) AS DATE) AS dd'), 
+      knex.raw('order.paid AS paid'),
+      knex.raw('order.invoice_id AS invoice_id'),
+      knex.raw('order.user AS user_id'),
+      knex.raw('order.non_user_name AS non_user_name'),
+      knex.raw('order.non_user_email AS non_user_email'),
+      knex.raw('CONCAT(user.first_name, user.last_name) AS user_name'), 
+      knex.raw('user.email AS user_email'),
+      knex.raw('order_item.name AS item_name'),
+      knex.raw('order_item.item_type AS item_type'),
+      knex.raw('order_item.item_id AS item_id'),
+      knex.raw('order_item.count AS item_count'),
+      knex.raw('order_item.item_price AS item_price'),
+      knex.raw('order_item.total_price AS item_total_price'),
+      knex.raw('order_item.vat_amount AS item_vat_amount'),
+      knex.raw('order.payment_service_provider AS payment_service_provider'),
+      knex.raw('order.pay_type AS pay_type'),
+      knex.raw('order.masked_card AS masked_card'),
+      knex.raw('order.total AS total'))
+    .orderBy('order.paid', 'order.invoice_id');
 
-  let signups = await 
-    knex({cs: 'class_signup'})
-    .where({
-      'cancelled_at': 0,
-    })
-    .select(
-      'class', 
-      knex.raw("COUNT(id) as signups"))
-    .groupBy('class');
-
-  let checked_ins = await 
-    knex({cs: 'class_signup'})
-    .where({
-      'cancelled_at': 0,
-      'checked_in': 1
-    })
-    .select(
-      'class', 
-      knex.raw("COUNT(id) as checked_ins"))
-    .groupBy('class');
-
-  let livestream_signups = await 
-    knex({cs: 'class_livestream_signup'})
-    .where({
-      'cancelled_at': 0,
-    })
-    .select(
-      'class', 
-      knex.raw("COUNT(id) as livestream_signups"))
-    .groupBy('class');
-  
   for (var i in classes) {
     classes[i]['date'] = moment(classes[i]['date']).format("YYYY-MM-DD");
     classes[i]['signup_count'] = 0;
