@@ -272,6 +272,7 @@
 	"email.StudioName": "Studio name",
 	"email.UserName": "User name",
 	"email.Email": "Email",
+	
 	"sales.InvoiceDateTime": "Invoice date/time",
   	"sales.Invoice#": "Invoice #",
 	"sales.CustomerID": "Customer ID",

@@ -75,146 +75,182 @@ module.exports = async (req, res) => {
     ],
   ];
 
-//   switch (format) {
-//     case 'xlsx':
-//       const styles = {
-//         headerDark: {
-//           // fill: {
-//           //   fgColor: {
-//           //     rgb: 'FF000000'
-//           //   }
-//           // },
-//           font: {
-//             color: {
-//               rgb: 'FF000000'
-//             },
-//             sz: 14,
-//             bold: true,
-//             // underline: true
-//           }
-//         },
-//         cellPink: {
-//           fill: {
-//             fgColor: {
-//               rgb: 'FFFFCCFF'
-//             }
-//           }
-//         },
-//         cellGreen: {
-//           fill: {
-//             fgColor: {
-//               rgb: 'FF00FF00'
-//             }
-//           }
-//         }
-//       };
+  switch (format) {
+    case 'xlsx':
+      const styles = {
+        headerDark: {
+          // fill: {
+          //   fgColor: {
+          //     rgb: 'FF000000'
+          //   }
+          // },
+          font: {
+            color: {
+              rgb: 'FF000000'
+            },
+            sz: 14,
+            bold: true,
+            // underline: true
+          }
+        },
+        cellPink: {
+          fill: {
+            fgColor: {
+              rgb: 'FFFFCCFF'
+            }
+          }
+        },
+        cellGreen: {
+          fill: {
+            fgColor: {
+              rgb: 'FF00FF00'
+            }
+          }
+        }
+      };
                   
-//       const specification = {
-//         id: { 
-//           displayName: sails.helpers.t('global.ID'),
-//           headerStyle: styles.headerDark, 
-//           width: 120 
-//         },
-//         date: { 
-//           displayName: sails.helpers.t('global.Date'),
-//           headerStyle: styles.headerDark, 
-//           width: 120 
-//         },
-//         time: { 
-//           displayName: sails.helpers.t('global.Time'),
-//           headerStyle: styles.headerDark, 
-//           width: 120 
-//         },
-//         class: {
-//           displayName: sails.helpers.t('global.Class'),
-//           headerStyle: styles.headerDark, 
-//           width: 120 
-//         },
-//         duration: { 
-//           displayName: sails.helpers.t('global.Duration'),
-//           headerStyle: styles.headerDark, 
-//           width: 120 
-//         },
-//         signup_count: {
-//           displayName: sails.helpers.t('global.SignUps'),
-//           headerStyle: styles.headerDark, 
-//           width: 120 
-//         },
-//         checkedin_count: { 
-//           displayName: sails.helpers.t('global.CheckedIn'),
-//           headerStyle: styles.headerDark, 
-//           width: 120 
-//         },
-//         livestream_signup_count: {
-//           displayName: sails.helpers.t('global.LivestreamSignups'),
-//           headerStyle: styles.headerDark, 
-//           width: 150 
-//         },
-//         room: {
-//           displayName: sails.helpers.t('global.Room'),
-//           headerStyle: styles.headerDark, 
-//           width: 120 
-//         }
-//       }
+      const specification = {
+        paid: { 
+            displayName: sails.helpers.t('sales.InvoiceDateTime'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        invoice_id: { 
+            displayName: sails.helpers.t('sales.Invoice#'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        user_id: { 
+            displayName: sails.helpers.t('sales.CustomerID'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        user_name: { 
+            displayName: sails.helpers.t('sales.CustomerName'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        user_email: { 
+            displayName: sails.helpers.t('sales.CustomerEmail'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        item_name: { 
+            displayName: sails.helpers.t('sales.Text'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        item_type: { 
+            displayName: sails.helpers.t('sales.ItemType'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        item_id: { 
+            displayName: sails.helpers.t('sales.ItemID'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        item_count: { 
+            displayName: sails.helpers.t('sales.Quantity'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        item_price: { 
+            displayName: sails.helpers.t('sales.ItemPrice'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        item_total_price: { 
+            displayName: sails.helpers.t('sales.TotalPrice'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        item_vat_amount: { 
+            displayName: sails.helpers.t('sales.VatAmount'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        payment_service_provider: { 
+            displayName: sails.helpers.t('sales.PaymentServiceProvider'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        pay_type: { 
+            displayName: sails.helpers.t('sales.PaymentMethod'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        masked_card: { 
+            displayName: sails.helpers.t('sales.MaskedCard'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
+        total: { 
+            displayName: sails.helpers.t('sales.InvoiceTotal'),
+            headerStyle: styles.headerDark, 
+            width: 120 
+        },
 
-//       // const merges = [
-//       //   { start: { row: 1, column: 1 }, end: { row: 1, column: 10 } },
-//       //   { start: { row: 2, column: 1 }, end: { row: 2, column: 5 } },
-//       //   { start: { row: 2, column: 6 }, end: { row: 2, column: 10 } }
-//       // ]
+      }
+
+      // const merges = [
+      //   { start: { row: 1, column: 1 }, end: { row: 1, column: 10 } },
+      //   { start: { row: 2, column: 1 }, end: { row: 2, column: 5 } },
+      //   { start: { row: 2, column: 6 }, end: { row: 2, column: 10 } }
+      // ]
      
-//       const reportData = reportParams.teachers.map(teacher => {
-//         let subItems = [];
-//         let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0
-//         ordersData.items.map(item => {          
-//           if (item.teacher_id == teacher.id) {                        
-//             total_classes++;
-//             total_duration += strToMins(item.duration);
-//             total_signup_count += item.signup_count;
-//             total_checkedin_count += item.checkedin_count;
-//             total_livestream_signup_count += item.livestream_signup_count;
+      const reportData = reportParams.teachers.map(teacher => {
+        let subItems = [];
+        let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0
+        ordersData.items.map(item => {          
+          if (item.teacher_id == teacher.id) {                        
+            total_classes++;
+            total_duration += strToMins(item.duration);
+            total_signup_count += item.signup_count;
+            total_checkedin_count += item.checkedin_count;
+            total_livestream_signup_count += item.livestream_signup_count;
 
-//             subItems.push(item);
-//             item.duration = minsToStr(strToMins(item.duration));
-//           }
-//         })
-//         if (subItems.length > 0) {
-//           subItems.push({
-//             "id": "total: " + subItems.length + " classes",
-//             "duration": minsToStr(total_duration),
-//             "signup_count": total_signup_count,
-//             "checkedin_count": total_checkedin_count,
-//             "livestream_signup_count": total_livestream_signup_count,
-//             "room": "",
-//           })
-//         } else {
-//           subItems.push({
-//             "id": "total:",
-//             "duration": "",
-//             "signup_count": "",
-//             "checkedin_count": "",
-//             "livestream_signup_count": "",
-//             "room": "",
-//           })
-//         }
-//         return {
-//           name: teacher.name, 
-//           specification: specification, 
-//           data: subItems,
-//           merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
-//         };
-//       })
-//       const report = excel.buildExport(
-//         reportData
-//       );
+            subItems.push(item);
+            item.duration = minsToStr(strToMins(item.duration));
+          }
+        })
+        if (subItems.length > 0) {
+          subItems.push({
+            "id": "total: " + subItems.length + " classes",
+            "duration": minsToStr(total_duration),
+            "signup_count": total_signup_count,
+            "checkedin_count": total_checkedin_count,
+            "livestream_signup_count": total_livestream_signup_count,
+            "room": "",
+          })
+        } else {
+          subItems.push({
+            "id": "total:",
+            "duration": "",
+            "signup_count": "",
+            "checkedin_count": "",
+            "livestream_signup_count": "",
+            "room": "",
+          })
+        }
+        return {
+          name: teacher.name, 
+          specification: specification, 
+          data: subItems,
+          merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
+        };
+      })
+      const report = excel.buildExport(
+        reportData
+      );
       
-//       res.attachment(fileName)
-//       return res.end(report, 'UTF-8')
+      res.attachment(fileName)
+      return res.end(report, 'UTF-8')
 
-//     default:
-//       throw new Error('Invalid report format')
+    default:
+      throw new Error('Invalid report format')
 
-//   }
+  }
 
 
 }
