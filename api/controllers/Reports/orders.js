@@ -13,7 +13,6 @@ module.exports = async (req, res) => {
 
   const reportParams = {
     clientId: req.client.id,
-    periodType: req.body.periodType || req.query.periodType,
     startDate: req.body.startDate || req.query.startDate,
     endDate: req.body.endDate || req.query.endDate,
   }
