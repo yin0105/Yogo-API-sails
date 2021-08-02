@@ -10,7 +10,6 @@ const knex = require('../services/knex');
 module.exports = async function (req, res, next) {
 
   // Payment gateways might return client in POST body. (But is this still relevant after we switched to Reepay?)
-  console.log("header = ", req.header);
   if (req.body && req.body.client && !req.query.client) {
     req.query.client = req.body.client;
   }

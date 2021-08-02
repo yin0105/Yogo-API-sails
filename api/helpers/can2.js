@@ -47,7 +47,6 @@ module.exports = {
     }
 
     const aclPublicPermission = acl.public;
-    console.log("aclPublicPermission= ", aclPublicPermission);
 
     if (aclPublicPermission === true) return exits.success(true);
 

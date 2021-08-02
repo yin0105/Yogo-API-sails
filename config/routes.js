@@ -232,6 +232,8 @@ module.exports.routes = {
   'GET /reports/turnover': 'ReportsController.turnover',
   'POST /reports/salary': 'ReportsController.salary',
   'GET /reports/salary': 'ReportsController.Salary',
+  'POST /reports/orders': 'ReportsController.orders',
+  'GET /reports/orders': 'ReportsController.orders',
   'POST /reports/livestream': 'ReportsController.livestream',
   'GET /reports/livestream': 'ReportsController.livestream',
   'GET /reports/livestream/class/:id': 'ReportsController.livestream-single-class',
