@@ -5,17 +5,12 @@ const moment = require('moment-timezone');
 const getOrdersData = async (client, startDate, endDate) => {
     startDate = startDate.format("YYYY-MM-DD");
     endDate = endDate.format("YYYY-MM-DD");
-    let classes = await 
+    let orders = await 
         knex({o: 'order'})
         .leftJoin({u: 'user'}, 'u.id', 'o.user')
         .innerJoin({oi: 'order_item'}, 'o.id', 'oi.order')
-        .where("o.invoice_id", ">=", 0)
-        // .andWhere("cs.date", ">=", startDate)
-        // .andWhere("cs.date", "<=", endDate)
-        .andWhere("o.client", client)
         .select(
-            knex.raw('CAST(DATE_ADD("1970-01-01", INTERVAL o.updatedAt/1000 SECOND) AS DATE) AS dd'), 
-            knex.raw('o.paid AS paid'),
+            knex.raw('CAST(DATE_ADD("1970-01-01", INTERVAL o.paid/1000 SECOND) AS DATE) AS paid'), 
             knex.raw('o.invoice_id AS invoice_id'),
             knex.raw('o.user AS user_id'),
             knex.raw('o.non_user_name AS non_user_name'),
@@ -33,34 +28,20 @@ const getOrdersData = async (client, startDate, endDate) => {
             knex.raw('o.pay_type AS pay_type'),
             knex.raw('o.masked_card AS masked_card'),
             knex.raw('o.total AS total'))
+        .where("o.invoice_id", ">", 0)
+        .andWhereRaw('CAST(DATE_ADD("1970-01-01", INTERVAL o.updatedAt/1000 SECOND) AS DATE) >= ?', [startDate])
+        .andWhereRaw('CAST(DATE_ADD("1970-01-01", INTERVAL o.updatedAt/1000 SECOND) AS DATE) <=?', [endDate])
+        .andWhere("o.client", client)        
         .orderBy('o.paid', 'o.invoice_id');
 
-    //   for (var i in classes) {
-    //     classes[i]['date'] = moment(classes[i]['date']).format("YYYY-MM-DD");
-    //     classes[i]['signup_count'] = 0;
-    //     classes[i]['checkedin_count'] = 0;
-    //     classes[i]['livestream_signup_count'] = 0;
-    //     for (var j in signups) {
-    //       if (classes[i]['id'] == signups[j]['class']) {
-    //         classes[i]['signup_count'] = signups[j]['signups'];
-    //         break;
-    //       }
-    //     }
-    //     for (var j in checked_ins) {
-    //       if (classes[i]['id'] == checked_ins[j]['class']) {
-    //         classes[i]['checkedin_count'] = checked_ins[j]['checked_ins'];
-    //         break;
-    //       }
-    //     } 
-    //     for (var j in livestream_signups) {
-    //       if (classes[i]['id'] == livestream_signups[j]['class']) {
-    //         classes[i]['livestream_signup_count'] = livestream_signups[j]['livestream_signups'];
-    //         break;
-    //       }
-    //     }   
-    //   }
+    for (var i in orders) {
+        if ( !orders[i]['user_id'] ) {
+            orders[i]['user_name'] = orders[i]['non_user_name']
+            orders[i]['user_email'] = orders[i]['non_user_email']
+        }
+    }
 
-    return classes;
+    return orders;
 
 };
 
