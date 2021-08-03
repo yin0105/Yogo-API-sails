@@ -1801,6 +1801,21 @@ YOGO
         },
       },
 
+      classpass_com_integration_enabled: {
+        type: 'boolean',
+        defaultsTo: false,
+      },
+
+      classpass_com_release_all_seats_before_class_start: {
+        type: 'boolean',
+        defaultsTo: false,
+      },
+
+      classpass_com_release_all_seats_minutes_before_class_start: {
+        type: 'integer',
+        defaultsTo: 240,
+      },
+
       locale: {
         type: 'string',
         isIn: ['da', 'en'],

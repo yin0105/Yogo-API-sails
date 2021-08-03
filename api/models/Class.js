@@ -86,6 +86,17 @@ module.exports = {
       via: 'class'
     },
 
+    classpass_com_enabled: {
+      type: 'boolean',
+    },
+
+    classpass_com_all_seats_allowed: {
+      type: 'boolean',
+    },
+
+    classpass_com_number_of_seats_allowed: {
+      type: 'number',
+    },
   },
 
   customToJSON() {
