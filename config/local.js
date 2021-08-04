@@ -150,7 +150,11 @@ module.exports = {
       appId: 'asdf',
       apiKey: 'asdf',
       livestreamChatEnabled: true
-    }
+    },
+    classpass_com: {
+      classpass_com_access_token: 'verySecretAccessToken',
+      yogo_access_token: 'verySecretAccessToken'
+    },
   },
   fmLiveswitch: {
     gatewayURL: 'https://cloud.liveswitch.io/',
@@ -159,5 +163,6 @@ module.exports = {
     webhookSecret:'asdf',
     maxConnectionsPerSession: '499'
   },
+  
   // ALSO UPDATE bootstrap.js WHEN ADDING REQUIRED PARAMS IN THIS FILE
 }

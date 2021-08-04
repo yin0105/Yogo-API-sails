@@ -54,6 +54,13 @@
     'update-video-data-from-vimeo': [],
   },
 
+  IntegrationsClasspassComController: {
+    'get-all-partners': [],
+    'get-partner': [],
+    'get-all-venues-of-partner': [],
+    'get-venue-of-partner': [],
+  },
+
   SmsController: {
     'gateway-api-webhook': [],
   },

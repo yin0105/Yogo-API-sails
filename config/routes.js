@@ -165,6 +165,12 @@ module.exports.routes = {
   'GET /integrations/vimeo/auth/callback': 'IntegrationsVimeo.auth-callback',
   'POST /integrations/vimeo/update-video-data-from-vimeo': 'IntegrationsVimeo.update-video-data-from-vimeo',
 
+  'GET /integrations/classpass-com/get-all-partners/:page/:page_size': 'IntegrationsClasspassComController.get-all-partners',
+  'GET /integrations/classpass-com/get-partner/:id': 'IntegrationsClasspassComController.get-partner',
+  'GET /integrations/classpass-com/get-all-venues-of-partner/:id/:page/:page_size': 'IntegrationsClasspassComController.get-all-venues-of-partner',
+  'GET /integrations/classpass-com/get-venue-of-partner/:partner_id/:venue_id': 'IntegrationsClasspassComController.get-venue-of-partner',
+  
+
   'POST /livestream/get-register-client-for-class-auth-token': 'Livestream.get-register-client-for-class-auth-token',
   'POST /livestream/webhook': 'Livestream.webhook',
   'GET /livestream/liveswitch-info': 'Livestream.liveswitch-info',

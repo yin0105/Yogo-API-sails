@@ -40,9 +40,14 @@ module.exports = {
     const policyFilePath = inputs.permission.replace(/\./g, '/');
 
     let acl;
+    console.log("permission = ", inputs.permission);
+    // console.log("req = ", inputs.req);
+    console.log("controllerActionInputs = ", inputs.controllerActionInputs);
+    console.log("policyFilePath = ", policyFilePath);
     try {
       acl = require('../acl/' + policyFilePath);
     } catch (e) {
+      console.log("No policyfile");
       throw 'noPolicyFile'; 
     }
 
