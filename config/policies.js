@@ -35,6 +35,7 @@
     'auto-send-class-emails': [],
     'send-class-type-notification-emails': [],
     'apply-no-show-fees': [],
+    'attendance': [],
   },
 
   WebhooksController: {
@@ -59,6 +60,9 @@
     'get-partner': [],
     'get-all-venues-of-partner': [],
     'get-venue-of-partner': [],
+    'get-upcoming-schedules': [],
+    'reservations': [],
+    'cancel-reservation': [],
   },
 
   SmsController: {

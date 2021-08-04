@@ -1,7 +1,12 @@
 const axios = require('axios').default;
 
 const ClassPassApi = axios.create({
-  baseURL: 'https://classpass.com/cp/v1',
+  baseURL: 'https://sandbox-api.classpass.com/cp/v1',
+  // ClassPass Sandbox URL
+  // https://sandbox-api.classpass.com
+
+  // ClassPass Token
+  // nHB8wffXiFZ4jxaohDwH
 });
 
 ClassPassApi.interceptors.request.use(

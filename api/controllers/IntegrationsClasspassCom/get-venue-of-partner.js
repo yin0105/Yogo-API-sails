@@ -7,11 +7,11 @@ module.exports = {
 
   inputs: {
     partner_id: {
-      type: 'number',
+      type: 'string',
       required: true,
     },
     venue_id: {
-        type: 'number',
+        type: 'string',
         required: true,
     },
   },

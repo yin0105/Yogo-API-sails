@@ -169,7 +169,12 @@ module.exports.routes = {
   'GET /integrations/classpass-com/get-partner/:id': 'IntegrationsClasspassComController.get-partner',
   'GET /integrations/classpass-com/get-all-venues-of-partner/:id/:page/:page_size': 'IntegrationsClasspassComController.get-all-venues-of-partner',
   'GET /integrations/classpass-com/get-venue-of-partner/:partner_id/:venue_id': 'IntegrationsClasspassComController.get-venue-of-partner',
+  'GET /integrations/classpass-com/get-upcoming-schedules/:partner_id/:venue_id/:page/:page_size': 'IntegrationsClasspassComController.get-upcoming-schedules',
+  'POST /integrations/classpass-com/reservations': 'IntegrationsClasspassComController.reservations',
+  'PUT /integrations/classpass-com/cancel-reservation/:reservation_id/:partner_id': 'IntegrationsClasspassComController.cancel-reservation',
+  'GET /integrations/classpass-com/attendance/:partner_id/:venue_id/:schedule_id/:page/:page_size': 'IntegrationsClasspassComController.attendance',
   
+
 
   'POST /livestream/get-register-client-for-class-auth-token': 'Livestream.get-register-client-for-class-auth-token',
   'POST /livestream/webhook': 'Livestream.webhook',
