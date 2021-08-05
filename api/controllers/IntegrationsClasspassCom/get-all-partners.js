@@ -1,4 +1,5 @@
 const moment = require('moment');
+const knex = require('../../services/knex')
 const axios = require('axios').default;
 
 module.exports = async (req, res) => {
@@ -16,7 +17,7 @@ module.exports = async (req, res) => {
       knex.raw("c.updatedAt AS updatedAt"),
       knex.raw("i.original_width AS width"),
       knex.raw("i.original_height AS height"),
-      knex.raw("i.filename AS uri"))
+      knex.raw("i.filename AS uri"));
   const countOfClients = clients.length;
   
   if (!page) return res.badRequest("Missing query 'page'");

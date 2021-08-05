@@ -19,17 +19,7 @@ module.exports = async (req, res) => {
 
   const venue = await Branch.findOne({client: partner_id, id: venue_id});
   if (!venue) return res.badRequest("Invalid venue_id");
-/*
-SELECT , , , ,
- , , , , , 
- , ,   
- 
- FROM ((class LEFT JOIN room ON class.room=room.id) 
- LEFT JOIN branch ON room.branch=branch.id) 
- LEFT JOIN class_type ON class.class_type=class_type.id 
- WHERE 
- c.client=1 AND b.id=1 AND DATE BETWEEN '2021-06-01' AND '2022-01-01'
-*/
+  
   const schedules = await knex({c: 'class'})
   .leftJoin({r: 'room'}, 'r.id', 'c.room')
   .leftJoin({b: 'branch'}, 'b.id', 'r.branch')
@@ -80,12 +70,6 @@ SELECT , , , ,
         description: schedules[i].class_type_description,
         last_updated: moment(schedules[i].class_type_last_updated).format(),
       };
-      /*
-      SELECT class_teachers__user_teaching_classes.id, user.first_name, user.last_name, user.updatedAt 
-      FROM 
-      class_teachers__user_teaching_classes LEFT JOIN `user` ON `user`.id=class_teachers__user_teaching_classes.class_teachers 
-      WHERE class_teachers=203
-      */
 
       teachers = await knex({c: 'class_teachers__user_teaching_classes'})
         .leftJoin({u: 'user'}, 'u.id', 'c.class_teachers')
