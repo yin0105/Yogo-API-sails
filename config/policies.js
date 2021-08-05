@@ -79,6 +79,7 @@
     'update-settings': [],
     'create': [],
     'update': [],
+    'find-all':[],
   },
 
   ClientSigningUpController: {

@@ -153,7 +153,7 @@ module.exports = {
     },
     classpass_com: {
       classpass_com_access_token: 'nHB8wffXiFZ4jxaohDwH',
-      yogo_access_token: 'verySecretAccessToken'
+      yogo_access_token: '12345'
     },
   },
   fmLiveswitch: {
