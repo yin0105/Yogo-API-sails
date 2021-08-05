@@ -40,7 +40,7 @@ SELECT , , , ,
       knex.raw("CONCAT(c.date, 'T', c.`end_time`) AS end_datetime"),
       knex.raw("ct.id AS class_type_id"),
       knex.raw("ct.name AS class_type_name"),
-      knex.raw("ct.description AS class_type_desc"),
+      knex.raw("ct.description AS class_type_description"),
       knex.raw("ct.updatedAt AS class_type_last_updated"),
       knex.raw("r.id AS room_id"),
       knex.raw("r.name AS room_name"),
@@ -64,25 +64,56 @@ SELECT , , , ,
 
   if (page_size * (page - 1) < countOfSchedules) {
     // page number is valid
-    // const numOfLastVenue = (page_size * page < countOfSchedules) ? page_size * page : countOfSchedules;
-    // for (let i = (page_size * (page - 1)); i < numOfLastVenue; i++) {
-    //   let schedule = {};
-    //   venue.partner_id = partner_id;
-    //   venue.venue_id = venues[i].id;
-    //   venue.venue_name = venues[i].name;
-    //   venue.address = {
-    //     address_line1: client.address_1,
-    //     address_line2: client.address_2,
-    //     city: client.city,
-    //     zip: client.zip_code,
-    //     country: client.country,
-    //   };
-    //   venue.phone = client.phone;
-    //   venue.email = client.email;
-    //   venue.website = client.website;
-    //   venue.last_updated = moment(venues[i].updatedAt).format();
-    //   resData.venues.push(venue);
-    // }
+    const numOfLastSchedule = (page_size * page < countOfSchedules) ? page_size * page : countOfSchedules;
+    for (let i = (page_size * (page - 1)); i < numOfLastSchedule; i++) {
+      let schedule = {};
+      schedule.id = schedules[i].schedule_id;
+      schedule.partner_id = partner_id;
+      schedule.venue_id = venue_id;
+      schedule.start_datetime = schedules[i].start_datetime;
+      schedule.end_datetime = schedules[i].end_datetime;
+      schedule.class = {
+        id: schedules[i].class_type_id,
+        name: schedules[i].class_type_name,
+        description: schedules[i].class_type_description,
+        last_updated: schedules[i].class_type_last_updated,
+      };
+      schedule.room = {
+        id: schedules[i].room_id,
+        name: schedules[i].room_name,
+        last_updated: schedules[i].room_last_updated,
+      };
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+      schedule.id = schedules[i].id;
+
+      schedule.partner_id = partner_id;
+      schedule.venue_id = venues[i].id;
+      schedule.venue_name = venues[i].name;
+      schedule.address = {
+        address_line1: client.address_1,
+        address_line2: client.address_2,
+        city: client.city,
+        zip: client.zip_code,
+        country: client.country,
+      };
+      schedule.phone = client.phone;
+      schedule.email = client.email;
+      schedule.website = client.website;
+      schedule.last_updated = moment(venues[i].updatedAt).format();
+      resData.venues.push(venue);
+    }
   } else {
     // page number is invalid
   }
