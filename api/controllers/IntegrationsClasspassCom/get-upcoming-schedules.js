@@ -51,6 +51,8 @@ SELECT , , , ,
   .andWhereRaw("DATE BETWEEN ? AND ?", [start_date, end_date])
   .orderBy('c.id');
 
+  let teachers = [];
+
   console.log(schedules);
   
   const countOfSchedules = schedules.length;
@@ -78,6 +80,32 @@ SELECT , , , ,
         description: schedules[i].class_type_description,
         last_updated: moment(schedules[i].class_type_last_updated).format(),
       };
+      /*
+      SELECT class_teachers__user_teaching_classes.id, user.first_name, user.last_name, user.updatedAt 
+      FROM 
+      class_teachers__user_teaching_classes LEFT JOIN `user` ON `user`.id=class_teachers__user_teaching_classes.class_teachers 
+      WHERE class_teachers=203
+      */
+
+      teachers = await knex({c: 'class_teachers__user_teaching_classes'})
+        .leftJoin({u: 'user'}, 'u.id', 'c.class_teachers')
+        .select(
+            knex.raw("c.id AS id"), 
+            knex.raw("u.first_name AS first_name"),
+            knex.raw("u.last_name AS last_name"),
+            knex.raw("u.updatedAt AS last_updated"))
+        .where("c.class_teachers", schedule.id)
+        .orderBy('c.id');
+
+      schedule.teachers = teachers.map(teacher => {
+        return {
+          id: teacher.id,
+          first_name: teacher.first_name,
+          last_name: teacher.last_name,
+          last_updated: moment(teacher.last_updated).format(),
+        }
+      });
+
       schedule.room = {
         id: schedules[i].room_id,
         name: schedules[i].room_name,
