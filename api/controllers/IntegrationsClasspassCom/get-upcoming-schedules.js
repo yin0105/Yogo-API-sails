@@ -76,43 +76,15 @@ SELECT , , , ,
         id: schedules[i].class_type_id,
         name: schedules[i].class_type_name,
         description: schedules[i].class_type_description,
-        last_updated: schedules[i].class_type_last_updated,
+        last_updated: moment(schedules[i].class_type_last_updated).format(),
       };
       schedule.room = {
         id: schedules[i].room_id,
         name: schedules[i].room_name,
-        last_updated: schedules[i].room_last_updated,
+        last_updated: moment(schedules[i].room_last_updated).format(),
       };
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-      schedule.id = schedules[i].id;
-
-      schedule.partner_id = partner_id;
-      schedule.venue_id = venues[i].id;
-      schedule.venue_name = venues[i].name;
-      schedule.address = {
-        address_line1: client.address_1,
-        address_line2: client.address_2,
-        city: client.city,
-        zip: client.zip_code,
-        country: client.country,
-      };
-      schedule.phone = client.phone;
-      schedule.email = client.email;
-      schedule.website = client.website;
-      schedule.last_updated = moment(venues[i].updatedAt).format();
-      resData.venues.push(venue);
+      schedule.total_spots = schedules[i].total_spots;
+      resData.schedules.push(schedule);
     }
   } else {
     // page number is invalid
