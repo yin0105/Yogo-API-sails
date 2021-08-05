@@ -1,24 +1,37 @@
 const moment = require('moment');
+const knex = require('../../services/knex')
+const axios = require('axios').default;
 
 module.exports = async (req, res) => {
   const partner_id = req.params.id;
   const page = req.query.page;
   const page_size = req.query.page_size; 
   const venues = await Branch.find({client: partner_id});
-  const client = await Client.findOne({id: partner_id});
-
-  console.log(venues);
+  const clients = await knex({c: 'client'})
+  .leftJoin({i: 'image'}, 'i.id', 'c.logo')
+  .select(
+    knex.raw("c.name AS name"),
+    knex.raw("c.address_1 AS address_1"), 
+    knex.raw("c.address_2 AS address_2"),
+    knex.raw("c.city AS city"),
+    knex.raw("c.zip_code AS zip_code"),
+    knex.raw("c.country AS country"),
+    knex.raw("c.phone AS phone"),
+    knex.raw("c.email AS email"),
+    knex.raw("c.website AS website"),
+    knex.raw("i.original_width AS width"),
+    knex.raw("i.original_height AS height"),
+    knex.raw("i.filename AS uri"));
   
   if (!page) return res.badRequest("Missing query 'page'");
   if (!page_size) return res.badRequest("Missing query 'page_size'");
-  if (!client) return res.badRequest("Invalid partner_id");  
+  if (clients.length == 0) return res.badRequest("Invalid partner_id");  
   
-  console.log(venues.length, venues);
   if (venues.length == 0) {
     let fakeVenue = {};
     fakeVenue.id = `client_${partner_id}_default_branch`;
-    fakeVenue.name = client.name;
-    fakeVenue.updatedAt = client.updatedAt;
+    fakeVenue.name = clients[0].name;
+    fakeVenue.updatedAt = clients[0].updatedAt;
     venues.push(fakeVenue);
   }
 
@@ -40,16 +53,37 @@ module.exports = async (req, res) => {
       venue.venue_id = venues[i].id;
       venue.venue_name = venues[i].name;
       venue.address = {
-        address_line1: client.address_1,
-        address_line2: client.address_2,
-        city: client.city,
-        zip: client.zip_code,
-        country: client.country,
+        address_line1: clients[0].address_1,
+        address_line2: clients[0].address_2,
+        city: clients[0].city,
+        zip: clients[0].zip_code,
+        country: clients[0].country,
       };
-      venue.phone = client.phone;
-      venue.email = client.email;
-      venue.website = client.website;
+      venue.phone = clients[0].phone;
+      venue.email = clients[0].email;
+      venue.website = clients[0].website;
       venue.last_updated = moment(venues[i].updatedAt).format();
+
+      venue.images = [];
+      if (clients[i].uri) {
+        if (clients[i].width) {
+          venue.images.push({
+            width: clients[i].width,
+            height: clients[i].height,
+            url: `${sails.config.imgixServer}/${clients[i].uri}`,
+          });
+        } else {
+          await axios.get(`${sails.config.imgixServer}/${clients[i].uri}?fm=json`)
+          .then(result => {
+            venue.images.push({
+              width: result.data.PixelWidth,
+              height: result.data.PixelHeight,
+              url: `${sails.config.imgixServer}/${clients[i].uri}`,
+            });
+          })
+        }
+      }
+
       resData.venues.push(venue);
     }
   } else {

@@ -1,5 +1,6 @@
 const moment = require('moment');
 const knex = require('../../services/knex')
+const axios = require('axios').default;
 
 module.exports = async (req, res) => {
   const partner_id = req.params.partner_id;
@@ -19,11 +20,13 @@ module.exports = async (req, res) => {
 
   const venue = await Branch.findOne({client: partner_id, id: venue_id});
   if (!venue) return res.badRequest("Invalid venue_id");
-  
+
   const schedules = await knex({c: 'class'})
   .leftJoin({r: 'room'}, 'r.id', 'c.room')
   .leftJoin({b: 'branch'}, 'b.id', 'r.branch')
   .leftJoin({ct: 'class_type'}, 'ct.id', 'c.class_type')
+  .leftJoin({cl: 'client'}, 'cl.id', partner_id)
+  .leftJoin({i: 'image'}, 'i.id', 'cl.logo')
   .select(
       knex.raw("c.id AS schedule_id"), 
       knex.raw("CONCAT(c.date, 'T', c.`start_time`) AS start_datetime"),
@@ -35,7 +38,10 @@ module.exports = async (req, res) => {
       knex.raw("r.id AS room_id"),
       knex.raw("r.name AS room_name"),
       knex.raw("r.updatedAt AS room_last_updated"),
-      knex.raw("c.seats AS total_spots"))
+      knex.raw("c.seats AS total_spots"),
+      knex.raw("i.original_width AS width"),
+      knex.raw("i.original_height AS height"),
+      knex.raw("i.filename AS uri"))
   .where("c.client", partner_id)
   .andWhere("b.id", venue_id)
   .andWhereRaw("DATE BETWEEN ? AND ?", [start_date, end_date])

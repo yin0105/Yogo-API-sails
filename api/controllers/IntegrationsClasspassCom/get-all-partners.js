@@ -39,6 +39,7 @@ module.exports = async (req, res) => {
       partner.id = clients[i].id;
       partner.name = clients[i].name;
       partner.last_updated = moment(clients[i].updatedAt).format();
+      
       partner.images = [];
       if (clients[i].uri) {
         if (clients[i].width) {
@@ -56,9 +57,9 @@ module.exports = async (req, res) => {
               url: `${sails.config.imgixServer}/${clients[i].uri}`,
             });
           })
-
         }
       }
+
       resData.partners.push(partner);
     }
   } else {
