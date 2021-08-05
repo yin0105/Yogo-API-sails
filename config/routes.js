@@ -98,7 +98,6 @@ module.exports.routes = {
   'PUT /classes/:id/cancel': 'ClassesController.cancel',
   'DELETE /classes/:id': 'ClassesController.destroy',
 
-  'GET /clients': 'ClientsController.find-all',
   'GET /clients/current': 'ClientsController.find-current',
   'GET /clients/:id': 'ClientsController.find-one',
   'PUT /clients/:id': 'ClientsController.update',
@@ -111,13 +110,13 @@ module.exports.routes = {
   'GET /client-signing-up/confirm': 'ClientSigningUpController.confirm',
 
   'GET /cp/v1/partners': 'IntegrationsClasspassComController.get-all-partners',
-  'GET /integrations/classpass-com/get-partner/:id': 'IntegrationsClasspassComController.get-partner',
-  'GET /integrations/classpass-com/get-all-venues-of-partner/:id/:page/:page_size': 'IntegrationsClasspassComController.get-all-venues-of-partner',
-  'GET /integrations/classpass-com/get-venue-of-partner/:partner_id/:venue_id': 'IntegrationsClasspassComController.get-venue-of-partner',
-  'GET /integrations/classpass-com/get-upcoming-schedules/:partner_id/:venue_id/:page/:page_size': 'IntegrationsClasspassComController.get-upcoming-schedules',
-  'POST /integrations/classpass-com/reservations': 'IntegrationsClasspassComController.reservations',
-  'PUT /integrations/classpass-com/cancel-reservation/:reservation_id/:partner_id': 'IntegrationsClasspassComController.cancel-reservation',
-  'GET /integrations/classpass-com/attendance/:partner_id/:venue_id/:schedule_id/:page/:page_size': 'IntegrationsClasspassComController.attendance',
+  'GET /cp/v1/partners/:id': 'IntegrationsClasspassComController.get-partner',
+  'GET /cp/v1/partners/:id/venues': 'IntegrationsClasspassComController.get-all-venues-of-partner',
+  'GET /cp/v1/partners/:partner_id/venues/:venue_id': 'IntegrationsClasspassComController.get-venue-of-partner',
+  'GET /cp/v1/partners/:partner_id/venues/:venue_id/schedules': 'IntegrationsClasspassComController.get-upcoming-schedules',
+  'POST /cp/v1/reservations': 'IntegrationsClasspassComController.reservations',
+  'PUT  /cp/v1/reservations/:id': 'IntegrationsClasspassComController.cancel-reservation',
+  'GET /cp/v1/partners/:partner_id/venues/:venue_id/schedules/:schedule_id/attendance': 'IntegrationsClasspassComController.attendance',
 
   'POST /cron/tick': 'CronController.tick',
   'POST /cron/log': 'CronController.log',
