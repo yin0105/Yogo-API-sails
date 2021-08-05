@@ -135,19 +135,23 @@ module.exports = async (req, res) => {
       const actual_number_of_available_seats = schedules[i].seats - classSignups[0].signups;
       const classpass_com_all_seats_allowed = schedules[i].classpass_com_all_seats_allowed;
       const classpass_com_number_of_seats_allowed = schedules[i].classpass_com_number_of_seats_allowed;
-      const class_start = new Date(`${schedules[i].start_datetime}`);
+      const class_start = moment(schedules[i].start_datetime); // new Date(schedules[i].start_datetime);
+      const minsDiff = class_start.diff(new Date(), 'minutes');
       console.log(class_start);
+      console.log(moment(schedules[i].start_datetime));
+      console.log(minsDiff);
 
       schedule.available_spots = actual_number_of_available_seats;
       if (!classpass_com_all_seats_allowed) {
         schedule.available_spots = Math.min(actual_number_of_available_seats, classpass_com_number_of_seats_allowed);
 
         if (classpass_com_release_all_seats_before_class_start) {
-
+          if (minsDiff > 0 && minsDiff < classpass_com_release_all_seats_minutes_before_class_start) {
+            schedule.available_spots = actual_number_of_available_seats;
+          }
         }
-      } else {
-
-      }
+      } 
+      
       schedule.late_cancel_window = "";
       schedule.bookable_window_starts = "";
       schedule.bookable_window_ends = "";
