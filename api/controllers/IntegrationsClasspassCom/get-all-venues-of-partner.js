@@ -37,7 +37,10 @@ module.exports = async (req, res) => {
         city: client.city,
         zip: client.zip_code,
         country: client.country,
-      }
+      };
+      venue.phone = client.phone;
+      venue.email = client.email;
+      venue.website = client.website;
       venue.last_updated = moment(venues[i].updatedAt).format();
       resData.venues.push(venue);
     }
