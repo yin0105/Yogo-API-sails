@@ -8,13 +8,21 @@ module.exports = async (req, res) => {
   const client = await Client.findOne({id: partner_id});
 
   console.log(venues);
-
-  const countOfVenues = venues.length;
   
   if (!page) return res.badRequest("Missing query 'page'");
   if (!page_size) return res.badRequest("Missing query 'page_size'");
-  if (!client) return res.badRequest("Invalid partner_id");
+  if (!client) return res.badRequest("Invalid partner_id");  
+  
+  console.log(venues.length, venues);
+  if (venues.length == 0) {
+    let fakeVenue = {};
+    fakeVenue.id = `client_${partner_id}_default_branch`;
+    fakeVenue.name = client.name;
+    fakeVenue.updatedAt = client.updatedAt;
+    venues.push(fakeVenue);
+  }
 
+  const countOfVenues = venues.length;
   let resData = {};
   resData.venues = [];
   resData.pagination = {
@@ -22,7 +30,7 @@ module.exports = async (req, res) => {
     page_size: page_size,
     total_pages: Math.ceil(countOfVenues / page_size)
   };
-  
+
   if (page_size * (page - 1) < countOfVenues) {
     // page number is valid
     const numOfLastVenue = (page_size * page < countOfVenues) ? page_size * page : countOfVenues;

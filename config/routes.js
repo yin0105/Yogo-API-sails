@@ -111,8 +111,8 @@ module.exports.routes = {
 
   'GET /cp/v1/partners': 'IntegrationsClasspassComController.get-all-partners',
   'GET /cp/v1/partners/:id': 'IntegrationsClasspassComController.get-partner',
-  
   'GET /cp/v1/partners/:id/venues': 'IntegrationsClasspassComController.get-all-venues-of-partner',
+  
   'GET /cp/v1/partners/:partner_id/venues/:venue_id': 'IntegrationsClasspassComController.get-venue-of-partner',
   'GET /cp/v1/partners/:partner_id/venues/:venue_id/schedules': 'IntegrationsClasspassComController.get-upcoming-schedules',
   'POST /cp/v1/reservations': 'IntegrationsClasspassComController.reservations',
