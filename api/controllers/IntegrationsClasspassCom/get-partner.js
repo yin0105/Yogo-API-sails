@@ -1,41 +1,20 @@
-const ClassPassApi = require('../../services/ClassPassApi');
+const moment = require('moment');
 
-module.exports = {
-  friendlyName: 'Get a Partner',
+module.exports = async (req, res) => {
+  const client = await Client.findOne({id: req.params.id});
+  let resData = {};
+  
+  if (client) {
+    // client exists
+    let partner = {};
+    partner.id = client.id;
+    partner.name = client.name;
+    partner.last_updated = moment(client.updatedAt).format();
+    
+    resData.partner = partner;
+  } else {
+    // client doesn't exist
+  }
 
-  description: 'Get a Partner',
-
-  inputs: {
-    id: {
-      type: 'string',
-      required: true,
-    },
-  },
-
-  exits: {
-    forbidden: {
-      responseType: 'forbidden',
-    },
-    partnerNotFound: {
-      responseType: 'badRequest',
-    },
-  },
-
-  fn: async function (inputs, exits) {
-
-    if (!await sails.helpers.can2('controller.IntegrationsClasspassCom.get-partner', this.req)) {
-      return exits.forbidden();
-    }
-    const partner_id = inputs.id;
-
-    const response = await ClassPassApi.get(`/partners/${partner_id}`);
-
-    if (response) {
-        return exits.success({
-            partner: response.partner,
-        });
-    } else {
-        return exits.partnerNotFound('Partner not found');
-    }
-  },
-};
+  return res.json(resData);
+}

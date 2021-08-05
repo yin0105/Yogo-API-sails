@@ -1,6 +1,4 @@
-const { count } = require('console');
-const ClassPassApi = require('../../services/ClassPassApi');
-
+const moment = require('moment');
 
 module.exports = async (req, res) => {
   const page = req.query.page;
@@ -11,8 +9,6 @@ module.exports = async (req, res) => {
   if (!page) return res.badRequest("missing query 'page'");
   if (!page_size) return res.badRequest("missing query 'page_size'");
 
-  console.log("number of clients = ", countOfClients);
-  
   let resData = {};
   resData.partners = [];
   resData.pagination = {
@@ -28,7 +24,7 @@ module.exports = async (req, res) => {
       let partner = {};
       partner.id = clients[i].id;
       partner.name = clients[i].name;
-      partner.last_updated = clients[i].updatedAt;
+      partner.last_updated = moment(clients[i].updatedAt).format();
       resData.partners.push(partner);
     }
   } else {
