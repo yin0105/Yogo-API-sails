@@ -21,27 +21,22 @@ module.exports = async (req, res) => {
   const venue = await Branch.findOne({client: partner_id, id: venue_id});
   if (!venue) return res.badRequest("Invalid venue_id");
 
-  const schedules = await knex({c: 'class'})
+  const schedules = await knex.from({c: 'class'})
   .leftJoin({r: 'room'}, 'r.id', 'c.room')
   .leftJoin({b: 'branch'}, 'b.id', 'r.branch')
   .leftJoin({ct: 'class_type'}, 'ct.id', 'c.class_type')
-  .leftJoin({cl: 'client'}, 'cl.id', partner_id)
-  .leftJoin({i: 'image'}, 'i.id', 'cl.logo')
   .select(
-      knex.raw("c.id AS schedule_id"), 
-      knex.raw("CONCAT(c.date, 'T', c.`start_time`) AS start_datetime"),
-      knex.raw("CONCAT(c.date, 'T', c.`end_time`) AS end_datetime"),
-      knex.raw("ct.id AS class_type_id"),
-      knex.raw("ct.name AS class_type_name"),
-      knex.raw("ct.description AS class_type_description"),
-      knex.raw("ct.updatedAt AS class_type_last_updated"),
-      knex.raw("r.id AS room_id"),
-      knex.raw("r.name AS room_name"),
-      knex.raw("r.updatedAt AS room_last_updated"),
-      knex.raw("c.seats AS total_spots"),
-      knex.raw("i.original_width AS width"),
-      knex.raw("i.original_height AS height"),
-      knex.raw("i.filename AS uri"))
+    knex.raw("c.id AS schedule_id"), 
+    knex.raw("CONCAT(c.date, 'T', c.`start_time`) AS start_datetime"),
+    knex.raw("CONCAT(c.date, 'T', c.`end_time`) AS end_datetime"),
+    knex.raw("ct.id AS class_type_id"),
+    knex.raw("ct.name AS class_type_name"),
+    knex.raw("ct.description AS class_type_description"),
+    knex.raw("ct.updatedAt AS class_type_last_updated"),
+    knex.raw("r.id AS room_id"),
+    knex.raw("r.name AS room_name"),
+    knex.raw("r.updatedAt AS room_last_updated"),
+    knex.raw("c.seats AS total_spots"))
   .where("c.client", partner_id)
   .andWhere("b.id", venue_id)
   .andWhereRaw("DATE BETWEEN ? AND ?", [start_date, end_date])
@@ -49,8 +44,6 @@ module.exports = async (req, res) => {
 
   let teachers = [];
 
-  console.log(schedules);
-  
   const countOfSchedules = schedules.length;
   let resData = {};
   resData.schedules = [];
@@ -78,23 +71,60 @@ module.exports = async (req, res) => {
       };
 
       teachers = await knex({c: 'class_teachers__user_teaching_classes'})
-        .leftJoin({u: 'user'}, 'u.id', 'c.class_teachers')
+        .leftJoin({u: 'user'}, 'u.id', 'c.user_teaching_classes')
+        .leftJoin({i: 'image'}, 'i.id', 'u.image')
         .select(
-            knex.raw("c.id AS id"), 
-            knex.raw("u.first_name AS first_name"),
-            knex.raw("u.last_name AS last_name"),
-            knex.raw("u.updatedAt AS last_updated"))
+          knex.raw("c.id AS id"), 
+          knex.raw("u.first_name AS first_name"),
+          knex.raw("u.last_name AS last_name"),
+          knex.raw("u.updatedAt AS last_updated"),
+          knex.raw("i.original_width AS width"),
+          knex.raw("i.original_height AS height"),
+          knex.raw("i.filename AS uri"))
         .where("c.class_teachers", schedule.id)
         .orderBy('c.id');
 
-      schedule.teachers = teachers.map(teacher => {
+      console.log("teachers = ", teachers);
+
+      schedule.teachers = await Promise.all(teachers.map( async(teacher) => {
+        let images = [];
+        if (teacher.uri) {
+          if (teacher.width) {
+            images.push({
+              width: teacher.width,
+              height: teacher.height,
+              url: `${sails.config.imgixServer}/${teacher.uri}`,
+            });
+            
+          } else {
+            const result = await axios.get(`${sails.config.imgixServer}/${teacher.uri}?fm=json`).catch(error => {console.log(error)})
+            images.push({
+              width: result.data.PixelWidth,
+              height: result.data.PixelHeight,
+              url: `${sails.config.imgixServer}/${teacher.uri}`,
+            });
+          }
+        } else {
+          console.log("elase");
+          return {
+            id: teacher.id,
+            first_name: teacher.first_name,
+            last_name: teacher.last_name,
+            last_updated: moment(teacher.last_updated).format(),
+            images: images,
+          };
+        }
+
         return {
           id: teacher.id,
           first_name: teacher.first_name,
           last_name: teacher.last_name,
           last_updated: moment(teacher.last_updated).format(),
+          images: images,
         }
-      });
+        
+      }));
+      console.log("schedule.teacher = ", schedule.teachers);
 
       schedule.room = {
         id: schedules[i].room_id,

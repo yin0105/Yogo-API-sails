@@ -52,14 +52,12 @@ module.exports = async (req, res) => {
           url: `${sails.config.imgixServer}/${clients[0].uri}`,
         });
       } else {
-        await axios.get(`${sails.config.imgixServer}/${clients[0].uri}?fm=json`)
-        .then(result => {
-          resData.venue.images.push({
-            width: result.data.PixelWidth,
-            height: result.data.PixelHeight,
-            url: `${sails.config.imgixServer}/${clients[0].uri}`,
-          });
-        })
+        let result = await axios.get(`${sails.config.imgixServer}/${clients[0].uri}?fm=json`)
+        resData.venue.images.push({
+          width: result.data.PixelWidth,
+          height: result.data.PixelHeight,
+          url: `${sails.config.imgixServer}/${clients[0].uri}`,
+        });
       }
     }
 
