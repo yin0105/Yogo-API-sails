@@ -1,57 +1,71 @@
-const ClassPassApi = require('../../services/ClassPassApi');
+const moment = require('moment');
 
-module.exports = {
-  friendlyName: 'Upcoming Schedules',
+module.exports = async (req, res) => {
+  const partner_id = req.params.partner_id;
+  const venue_id = req.params.venue_id;
+  const page = req.query.page;
+  const page_size = req.query.page_size; 
+  const start_date = req.query.start_date;
+  const end_date = req.query.end_date;
+  
+  if (!page) return res.badRequest("Missing query 'page'");
+  if (!page_size) return res.badRequest("Missing query 'page_size'");
+  if (!start_date) return res.badRequest("Missing query 'start_date'");
+  if (!end_date) return res.badRequest("Missing query 'end_date'");
+  if (!client) return res.badRequest("Invalid partner_id"); 
 
-  description: 'Get upcoming schedules',
+  const client = await Client.findOne({id: partner_id});
+  if (!client) return res.badRequest("Invalid partner_id");
 
-  inputs: {
-    partner_id: {
-      type: 'string',
-      required: true,
-    },
-    venue_id: {
-        type: 'string',
-        required: true,
-    },
-    page: {
-        type: 'number',
-        required: true,
-    },
-    page_size: {
-        type: 'number',
-        required: true,
-    },
-  },
+  const venue = await Branch.findOne({client: partner_id, id: venue_id});
+  if (!venue) return res.badRequest("Invalid venue_id");
 
-  exits: {
-    forbidden: {
-      responseType: 'forbidden',
-    },
-    upcomingSchedulesNotFound: {
-      responseType: 'badRequest',
-    },
-  },
 
-  fn: async function (inputs, exits) {
+  console.log(venues);
+  
+  
+  console.log(venues.length, venues);
+  if (venues.length == 0) {
+    let fakeVenue = {};
+    fakeVenue.id = `client_${partner_id}_default_branch`;
+    fakeVenue.name = client.name;
+    fakeVenue.updatedAt = client.updatedAt;
+    venues.push(fakeVenue);
+  }
 
-    if (!await sails.helpers.can2('controller.IntegrationsClasspassCom.get-upcoming-schedules', this.req)) {
-      return exits.forbidden();
+  const countOfVenues = venues.length;
+  let resData = {};
+  resData.venues = [];
+  resData.pagination = {
+    page: page,
+    page_size: page_size,
+    total_pages: Math.ceil(countOfVenues / page_size)
+  };
+
+  if (page_size * (page - 1) < countOfVenues) {
+    // page number is valid
+    const numOfLastVenue = (page_size * page < countOfVenues) ? page_size * page : countOfVenues;
+    for (let i = (page_size * (page - 1)); i < numOfLastVenue; i++) {
+      let venue = {};
+      venue.partner_id = partner_id;
+      venue.venue_id = venues[i].id;
+      venue.venue_name = venues[i].name;
+      venue.address = {
+        address_line1: client.address_1,
+        address_line2: client.address_2,
+        city: client.city,
+        zip: client.zip_code,
+        country: client.country,
+      };
+      venue.phone = client.phone;
+      venue.email = client.email;
+      venue.website = client.website;
+      venue.last_updated = moment(venues[i].updatedAt).format();
+      resData.venues.push(venue);
     }
-    const partner_id = inputs.partner_id;
-    const venue_id = inputs.venue_id;
-    const page = inputs.page;
-    const page_size = inputs.page_size;
+  } else {
+    // page number is invalid
+  }
 
-    const response = await ClassPassApi.get(`/partners/${partner_id}/venues/${venue_id}/schedules?page=${page}&page_size=${page_size}`);
-
-    if (response) {
-        return exits.success({
-            schedules: response.schedules,
-            pagination: response.pagination,
-        });
-    } else {
-        return exits.upcomingSchedulesNotFound('Upcoming schedules not found');
-    }
-  },
-};
+  return res.json(resData);
+}
