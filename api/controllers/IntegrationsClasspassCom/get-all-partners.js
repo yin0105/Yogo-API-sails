@@ -6,15 +6,15 @@ module.exports = async (req, res) => {
   const clients = await Client.find();
   const countOfClients = clients.length;
   
-  if (!page) return res.badRequest("missing query 'page'");
-  if (!page_size) return res.badRequest("missing query 'page_size'");
+  if (!page) return res.badRequest("Missing query 'page'");
+  if (!page_size) return res.badRequest("Missing query 'page_size'");
 
   let resData = {};
   resData.partners = [];
   resData.pagination = {
     page: page,
     page_size: page_size,
-    total_pages: countOfClients
+    total_pages: Math.ceil(countOfClients / page_size)
   };
   
   if (page_size * (page - 1) < countOfClients) {

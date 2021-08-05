@@ -1,52 +1,49 @@
-const ClassPassApi = require('../../services/ClassPassApi');
+const moment = require('moment');
 
-module.exports = {
-  friendlyName: 'List all Venues of a Partner',
+module.exports = async (req, res) => {
+  const partner_id = req.params.id;
+  const page = req.query.page;
+  const page_size = req.query.page_size; 
+  const venues = await Branch.find({client: partner_id});
+  const client = await Client.findOne({id: partner_id});
 
-  description: 'Get list of all venues of a partner',
+  console.log(venues);
 
-  inputs: {
-    id: {
-      type: 'string',
-      required: true,
-    },
-    page: {
-        type: 'number',
-        required: true,
-    },
-    page_size: {
-      type: 'number',
-      required: true,
-    },
-  },
+  const countOfVenues = venues.length;
+  
+  if (!page) return res.badRequest("Missing query 'page'");
+  if (!page_size) return res.badRequest("Missing query 'page_size'");
+  if (!client) return res.badRequest("Invalid partner_id");
 
-  exits: {
-    forbidden: {
-      responseType: 'forbidden',
-    },
-    listNotFound: {
-      responseType: 'badRequest',
-    },
-  },
-
-  fn: async function (inputs, exits) {
-
-    if (!await sails.helpers.can2('controller.IntegrationsClasspassCom.get-all-venues-of-partner', this.req)) {
-      return exits.forbidden();
+  let resData = {};
+  resData.venues = [];
+  resData.pagination = {
+    page: page,
+    page_size: page_size,
+    total_pages: Math.ceil(countOfVenues / page_size)
+  };
+  
+  if (page_size * (page - 1) < countOfVenues) {
+    // page number is valid
+    const numOfLastVenue = (page_size * page < countOfVenues) ? page_size * page : countOfVenues;
+    for (let i = (page_size * (page - 1)); i < numOfLastVenue; i++) {
+      let venue = {};
+      venue.partner_id = partner_id;
+      venue.venue_id = venues[i].id;
+      venue.venue_name = venues[i].name;
+      venue.address = {
+        address_line1: client.address_1,
+        address_line2: client.address_2,
+        city: client.city,
+        zip: client.zip_code,
+        country: client.country,
+      }
+      venue.last_updated = moment(venues[i].updatedAt).format();
+      resData.venues.push(venue);
     }
-    const partner_id = inputs.id;
-    const page = inputs.page;
-    const page_size = inputs.page_size;
+  } else {
+    // page number is invalid
+  }
 
-    const response = await ClassPassApi.get(`/partners/${partner_id}/venues?page=${page}&page_size=${page_size}`);
-
-    if (response) {
-        return exits.success({
-            venues: response.venues,
-            pagination: response.pagination,
-        });
-    } else {
-        return exits.listNotFound('List of venues of a partner not found');
-    }
-  },
-};
+  return res.json(resData);
+}
