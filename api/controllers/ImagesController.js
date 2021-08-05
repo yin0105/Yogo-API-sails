@@ -23,7 +23,6 @@ module.exports = {
 
             }, async function (err, uploadedFiles) {
 
-
                 if (err) {
                     return res.serverError(err);
                 }
@@ -34,6 +33,8 @@ module.exports = {
                             client: req.client.id,
                             original_filename: file.filename,
                             filename: file.fd,
+                            original_width: req.params.width,
+                            original_height: req.params.height,
                             expires: moment().add('1 hour').unix() // If image is not used within an hour, delete it.
                         }).fetch()
                     )

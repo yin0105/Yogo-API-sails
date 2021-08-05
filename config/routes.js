@@ -162,7 +162,7 @@ module.exports.routes = {
   'POST /gift-cards/:id/register-as-not-sent': 'GiftCardsController.register-as-not-sent',
 
   'GET /images/:id': 'ImagesController.findOne',
-  'POST /images': 'ImagesController.create',
+  'POST /images/:width/:height': 'ImagesController.create',
 
   'POST /import/customers': 'ImportController.customers',
   'POST /import/reset-import': 'ImportController.reset-import',

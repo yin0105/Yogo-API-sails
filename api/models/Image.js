@@ -17,6 +17,16 @@ module.exports = {
       type: 'string',
     },
 
+    original_width: {
+      type: 'number',
+      allowNull: true,
+    },
+
+    original_height: {
+      type: 'number',
+      allowNull: true,
+    },
+
     filename: {
       type: 'string',
     },
@@ -25,6 +35,7 @@ module.exports = {
       type: 'number',
       // Timestamp
     },
+
 
   },
 
