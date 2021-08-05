@@ -36,11 +36,18 @@ module.exports = async (req, res) => {
     knex.raw("r.id AS room_id"),
     knex.raw("r.name AS room_name"),
     knex.raw("r.updatedAt AS room_last_updated"),
-    knex.raw("c.seats AS total_spots"))
+    knex.raw("c.seats AS total_spots"),
+    knex.raw("c.classpass_com_all_seats_allowed AS classpass_com_all_seats_allowed"),
+    knex.raw("c.classpass_com_number_of_seats_allowed AS classpass_com_number_of_seats_allowed"),
+    knex.raw("c.seats AS seats"),
+    knex.raw("c.classpass_com_number_of_seats_allowed AS classpass_com_number_of_seats_allowed"))
   .where("c.client", partner_id)
   .andWhere("b.id", venue_id)
   .andWhereRaw("DATE BETWEEN ? AND ?", [start_date, end_date])
   .orderBy('c.id');
+
+  const classpass_com_release_all_seats_before_class_start = await sails.helpers.clientSettings.find(partner_id, 'classpass_com_release_all_seats_before_class_start');
+  const classpass_com_release_all_seats_minutes_before_class_start = await sails.helpers.clientSettings.find(partner_id, 'classpass_com_release_all_seats_minutes_before_class_start');
 
   let teachers = [];
 
@@ -84,8 +91,6 @@ module.exports = async (req, res) => {
         .where("c.class_teachers", schedule.id)
         .orderBy('c.id');
 
-      console.log("teachers = ", teachers);
-
       schedule.teachers = await Promise.all(teachers.map( async(teacher) => {
         let images = [];
         if (teacher.uri) {
@@ -104,16 +109,7 @@ module.exports = async (req, res) => {
               url: `${sails.config.imgixServer}/${teacher.uri}`,
             });
           }
-        } else {
-          console.log("elase");
-          return {
-            id: teacher.id,
-            first_name: teacher.first_name,
-            last_name: teacher.last_name,
-            last_updated: moment(teacher.last_updated).format(),
-            images: images,
-          };
-        }
+        } 
 
         return {
           id: teacher.id,
@@ -124,7 +120,6 @@ module.exports = async (req, res) => {
         }
         
       }));
-      console.log("schedule.teacher = ", schedule.teachers);
 
       schedule.room = {
         id: schedules[i].room_id,
@@ -132,7 +127,33 @@ module.exports = async (req, res) => {
         last_updated: moment(schedules[i].room_last_updated).format(),
       };
       schedule.total_spots = schedules[i].total_spots;
+
+      const classSignups = await knex({c: 'class_signup'})
+        .select( knex.raw("COUNT(*) AS signups") )
+        .where("c.class", schedules[i].schedule_id)
+        .andWhere("c.cancelled_at", 0)
+      const actual_number_of_available_seats = schedules[i].seats - classSignups[0].signups;
+      const classpass_com_all_seats_allowed = schedules[i].classpass_com_all_seats_allowed;
+      const classpass_com_number_of_seats_allowed = schedules[i].classpass_com_number_of_seats_allowed;
+      const class_start = new Date(`${schedules[i].start_datetime}`);
+      console.log(class_start);
+
+      schedule.available_spots = actual_number_of_available_seats;
+      if (!classpass_com_all_seats_allowed) {
+        schedule.available_spots = Math.min(actual_number_of_available_seats, classpass_com_number_of_seats_allowed);
+
+        if (classpass_com_release_all_seats_before_class_start) {
+
+        }
+      } else {
+
+      }
+      schedule.late_cancel_window = "";
+      schedule.bookable_window_starts = "";
+      schedule.bookable_window_ends = "";
+
       resData.schedules.push(schedule);
+      
     }
   } else {
     // page number is invalid
