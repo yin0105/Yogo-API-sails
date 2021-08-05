@@ -48,6 +48,9 @@ module.exports = async (req, res) => {
 
   const classpass_com_release_all_seats_before_class_start = await sails.helpers.clientSettings.find(partner_id, 'classpass_com_release_all_seats_before_class_start');
   const classpass_com_release_all_seats_minutes_before_class_start = await sails.helpers.clientSettings.find(partner_id, 'classpass_com_release_all_seats_minutes_before_class_start');
+  const class_signoff_deadline = await sails.helpers.clientSettings.find(partner_id, 'class_signoff_deadline');
+  const private_class_signup_deadline = await sails.helpers.clientSettings.find(partner_id, 'private_class_signup_deadline');
+  const customer_can_sign_up_for_class_max_days_before_class = await sails.helpers.clientSettings.find(partner_id, 'customer_can_sign_up_for_class_max_days_before_class');
 
   let teachers = [];
 
@@ -137,9 +140,6 @@ module.exports = async (req, res) => {
       const classpass_com_number_of_seats_allowed = schedules[i].classpass_com_number_of_seats_allowed;
       const class_start = moment(schedules[i].start_datetime); // new Date(schedules[i].start_datetime);
       const minsDiff = class_start.diff(new Date(), 'minutes');
-      console.log(class_start);
-      console.log(moment(schedules[i].start_datetime));
-      console.log(minsDiff);
 
       schedule.available_spots = actual_number_of_available_seats;
       if (!classpass_com_all_seats_allowed) {
@@ -151,16 +151,13 @@ module.exports = async (req, res) => {
           }
         }
       } 
-      
-      schedule.late_cancel_window = "";
-      schedule.bookable_window_starts = "";
-      schedule.bookable_window_ends = "";
+      schedule.late_cancel_window = schedules[i].seats == 1? class_start.subtract( private_class_signup_deadline, 'minutes') : class_start.subtract( class_signoff_deadline);
+      schedule.bookable_window_starts = clas_start.subtract( customer_can_sign_up_for_class_max_days_before_class, "days");
+      schedule.bookable_window_ends = schedules[i].seats == 1? class_start.subtract( private_class_signup_deadline, 'minutes') : class_start;
 
       resData.schedules.push(schedule);
       
     }
-  } else {
-    // page number is invalid
   }
 
   return res.json(resData);
