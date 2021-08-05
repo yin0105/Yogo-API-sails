@@ -21,7 +21,8 @@ module.exports = async (req, res) => {
     knex.raw("c.website AS website"),
     knex.raw("i.original_width AS width"),
     knex.raw("i.original_height AS height"),
-    knex.raw("i.filename AS uri"));
+    knex.raw("i.filename AS uri"))
+  .where('c.id', partner_id);
   
   if (!page) return res.badRequest("Missing query 'page'");
   if (!page_size) return res.badRequest("Missing query 'page_size'");
@@ -65,20 +66,20 @@ module.exports = async (req, res) => {
       venue.last_updated = moment(venues[i].updatedAt).format();
 
       venue.images = [];
-      if (clients[i].uri) {
-        if (clients[i].width) {
+      if (clients[0].uri) {
+        if (clients[0].width) {
           venue.images.push({
-            width: clients[i].width,
-            height: clients[i].height,
-            url: `${sails.config.imgixServer}/${clients[i].uri}`,
+            width: clients[0].width,
+            height: clients[0].height,
+            url: `${sails.config.imgixServer}/${clients[0].uri}`,
           });
         } else {
-          await axios.get(`${sails.config.imgixServer}/${clients[i].uri}?fm=json`)
+          await axios.get(`${sails.config.imgixServer}/${clients[0].uri}?fm=json`)
           .then(result => {
             venue.images.push({
               width: result.data.PixelWidth,
               height: result.data.PixelHeight,
-              url: `${sails.config.imgixServer}/${clients[i].uri}`,
+              url: `${sails.config.imgixServer}/${clients[0].uri}`,
             });
           })
         }

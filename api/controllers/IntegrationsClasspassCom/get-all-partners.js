@@ -5,10 +5,6 @@ const axios = require('axios').default;
 module.exports = async (req, res) => {
   const page = req.query.page;
   const page_size = req.query.page_size; 
-  /*
-  SELECT image.`original_width`, image.`original_height`, image.`filename` 
-  FROM `user` LEFT JOIN image ON `user`.image=image.id
-   */
   const clients = await knex({c: 'client'})
   .leftJoin({i: 'image'}, 'i.id', 'c.logo')
   .select(
