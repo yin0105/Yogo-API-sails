@@ -151,7 +151,7 @@ module.exports = async (req, res) => {
           }
         }
       } 
-      schedule.late_cancel_window = schedules[i].seats == 1? class_start.subtract( private_class_signup_deadline, 'minutes') : class_start.subtract( class_signoff_deadline);
+      schedule.late_cancel_window = schedules[i].seats == 1? class_start.subtract( private_class_signup_deadline, 'minutes') : class_start.subtract( class_signoff_deadline, 'minutes');
       schedule.bookable_window_starts = class_start.subtract( customer_can_sign_up_for_class_max_days_before_class, "days");
       schedule.bookable_window_ends = schedules[i].seats == 1? class_start.subtract( private_class_signup_deadline, 'minutes') : class_start;
 

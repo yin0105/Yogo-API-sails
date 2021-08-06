@@ -4,89 +4,77 @@ const axios = require('axios').default;
 
 module.exports = async (req, res) => {
   const partner_id = req.params.partner_id;
-  const venue_id = req.params.venue_id;
+  const attendance_id = req.params.attendance_id;
   const schedule_id = req.params.schedule_id;
 
   const page = req.query.page;
   const page_size = req.query.page_size; 
-
-  const venues = await Branch.find({client: partner_id});
-  const clients = await knex({c: 'class_signup'})
+/**
+ * SELECT cs.updateAt, cs.cancelled_at, cs.`classpass_com_reservation_id`, c.`cancelled`  
+ * FROM class_signup cs LEFT JOIN class c ON cs.class=c.id 
+ * WHERE c.id=540 
+ */
+  const attendances = await knex({cs: 'class_signup'})
+  .leftJoin({c: 'class'}, 'c.id', 'cs.class')
   .select(
-    knex.raw("c.reservation_id AS reservation_id"),
-    knex.raw("c.address_1 AS address_1"), 
-    knex.raw("c.address_2 AS address_2"),
-    knex.raw("c.city AS city"),
-    knex.raw("c.zip_code AS zip_code"),
-    knex.raw("c.country AS country"),
-    knex.raw("c.phone AS phone"),
-    knex.raw("c.email AS email"),
-    knex.raw("c.website AS website"),
-    knex.raw("i.original_width AS width"),
-    knex.raw("i.original_height AS height"),
-    knex.raw("i.filename AS uri"))
-  .where('c.class', schedule_id);
+    knex.raw("cs.classpass_com_reservation_id AS reservation_id"),
+    knex.raw("cs.updatedAt AS updatedAt"),
+    knex.raw("cs.cancelled_at AS cancelled_at"), 
+    knex.raw("c.cancelled AS cancelled"),
+    knex.raw("c.date AS date"),
+    knex.raw("CONCAT(c.date, 'T', start_time) AS start_time"),
+    knex.raw("c.end_time AS end_time"),
+    knex.raw("c.seats AS seats"))
+  .where('c.id', schedule_id);
   
   if (!page) return res.badRequest("Missing query 'page'");
   if (!page_size) return res.badRequest("Missing query 'page_size'");
-  if (clients.length == 0) return res.badRequest("Invalid partner_id");  
-  
-  if (venues.length == 0) {
-    let fakeVenue = {};
-    fakeVenue.id = `client_${partner_id}_default_branch`;
-    fakeVenue.name = clients[0].name;
-    fakeVenue.updatedAt = clients[0].updatedAt;
-    venues.push(fakeVenue);
-  }
 
-  const countOfVenues = venues.length;
+  const countOfAttendances = attendances.length;
   let resData = {};
-  resData.venues = [];
+  resData.attendances = [];
   resData.pagination = {
     page: page,
     page_size: page_size,
-    total_pages: Math.ceil(countOfVenues / page_size)
+    total_pages: Math.ceil(countOfAttendances / page_size)
   };
 
-  if (page_size * (page - 1) < countOfVenues) {
+  if (page_size * (page - 1) < countOfAttendances) {
     // page number is valid
-    const numOfLastVenue = (page_size * page < countOfVenues) ? page_size * page : countOfVenues;
-    for (let i = (page_size * (page - 1)); i < numOfLastVenue; i++) {
-      let venue = {};
-      venue.partner_id = partner_id;
-      venue.venue_id = venues[i].id;
-      venue.venue_name = venues[i].name;
-      venue.address = {
-        address_line1: clients[0].address_1,
-        address_line2: clients[0].address_2,
-        city: clients[0].city,
-        zip: clients[0].zip_code,
-        country: clients[0].country,
-      };
-      venue.phone = clients[0].phone;
-      venue.email = clients[0].email;
-      venue.website = clients[0].website;
-      venue.last_updated = moment(venues[i].updatedAt).format();
+    const numOfLastAttendance = (page_size * page < countOfAttendances) ? page_size * page : countOfAttendances;
+    for (let i = (page_size * (page - 1)); i < numOfLastAttendance; i++) {
+      let attendance = {};
+      attendance.reservation_id = attendances[i].reservation_id;
+      attendance.last_updated = moment(attendances[i].updatedAt).format();
+      // attendance.status = "ENROLLED";
+      console.log(attendances[i]);
 
-      venue.images = [];
-      if (clients[0].uri) {
-        if (clients[0].width) {
-          venue.images.push({
-            width: clients[0].width,
-            height: clients[0].height,
-            url: `${sails.config.imgixServer}/${clients[0].uri}`,
-          });
+      const class_signoff_deadline = await sails.helpers.clientSettings.find(partner_id, 'class_signoff_deadline');
+      const private_class_signup_deadline = await sails.helpers.clientSettings.find(partner_id, 'private_class_signup_deadline');      
+      const start_window = moment(`${attendances[i].start_time}`);
+      const cancelled_window = moment(`${attendances[i].cancelled_at}`);
+      const late_cancel_window = attendances[i].seats == 1? start_window.subtract( private_class_signup_deadline, 'minutes') : start_window.subtract( class_signoff_deadline, 'minutes');
+
+      // check status
+      if (attendances[i].cancelled) {
+        attendance.status = "CLASS_CANCELLED";
+      } else if (attendances[i].cancelled_at == 0) {
+        if (moment() < start_window) {
+          attendance.status = "ENROLLED";
         } else {
-          let result = await axios.get(`${sails.config.imgixServer}/${clients[0].uri}?fm=json`)
-          venue.images.push({
-            width: result.data.PixelWidth,
-            height: result.data.PixelHeight,
-            url: `${sails.config.imgixServer}/${clients[0].uri}`,
-          });
+          attendance.status = "ATTENDED";
+        }
+      } else {
+        if ( cancelled_window < late_cancel_window) {
+          attendance.status = "CANCELLED";
+        } else if ( cancelled_window < start_window) {
+          attendance.status = "LATE_CANCELLED";
+        } else {
+          attendance.status = "MISSED";
         }
       }
 
-      resData.venues.push(venue);
+      resData.attendances.push(attendance);
     }
   } else {
     // page number is invalid
