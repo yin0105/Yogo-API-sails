@@ -4,7 +4,7 @@ const axios = require('axios').default;
 
 const reservation = async (user_id, schedule_id, reservation_id, partner_id) => {
   console.log("== before");
-  return axios.post(`/class-signups?client=${partner_id}`, {
+  return axios.post(`http://localhost:1337/class-signups?client=${partner_id}`, {
     user: user_id,
     class: schedule_id,
     checked_in: false,
@@ -81,7 +81,9 @@ module.exports = async (req, res) => {
     result = await reservation (user.id, schedule_id, reservation_id, partner_id);
     // }
   }
+  console.log("result = ", result.data);
+  console.log("error = ", result.error);
   
-  return res.json(result);
+  return res.json(result.data);
   // return res.ok("asba");
 }
