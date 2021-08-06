@@ -3,9 +3,52 @@ const knex = require('../../services/knex')
 const axios = require('axios').default;
 
 module.exports = async (req, res) => {
-  console.log(req.params);
-  console.log(req.param);
   console.log(req.body);
+  const reservation_id = req.body.reservation_id;
+  const partner_id = req.body.partner_id;
+  const venue_id = req.body.venue_id;
+  const schedule_id = req.body.schedule_id;
+  const user = req.body.user;
+  const spot_label = req.body.spot_label ? req.body.spot_label: "";
+
+  if ( !reservation_id || !partner_id || !venue_id || !schedule_id || !user ) {
+    // bad request
+  }
+
+  const user_id = user.user_id;
+  const user_email = user.user_email;
+  const username = user.user_username;
+  const first_name = user.first_name;
+  const last_name = user.last_name;
+  const gender = user.gender;  
+  const address = user.address;
+  const emergency_contact = user.emergency_contact;
+
+  if ( !user_id || !user_email || !username || !first_name || !last_name || !gender || !address || !emergency_contact ) {
+    // bad request
+  }
+
+  const phone = user.phone ? user.phone: "";
+  const birthday = user.birthday ? user.birthday : "";
+  const address_1 = address.address_line1 ? address.address_line1: "";
+  const address_2 = address.address_line2 ? address.address_line2: "";
+  const city = address.city ? address.city: "";
+  const state = address.state ? address.state: "";
+  const zip = address.zip ? address.zip: "";
+  const country = address.country ? address.country: "";
+
+  const emergency_contact_name = emergency_contact.name ? emergency_contact.name: "";
+  const emergency_contact_phone = emergency_contact.phone ? emergency_contact.phone: "";
+  
+  
+
+  
+  console.log("spot_label = ", req.body.spot_label);
+  console.log("spot_label = ", spot_label);
+  // const reservation_id = req.body.reservation_id;
+  // const reservation_id = req.body.reservation_id;
+  // const reservation_id = req.body.reservation_id;
+
   // const partner_id = req.params.id;
   // const page = req.query.page;
   // const page_size = req.query.page_size; 
