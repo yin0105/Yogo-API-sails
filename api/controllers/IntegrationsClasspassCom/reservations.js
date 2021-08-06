@@ -3,7 +3,8 @@ const knex = require('../../services/knex')
 const axios = require('axios').default;
 
 const reservation = async (user_id, schedule_id, reservation_id, partner_id) => {
-  return await axios.post(`/class-signups?client=${partner_id}`, {
+  console.log("== before");
+  return axios.post(`/class-signups?client=${partner_id}`, {
     user: user_id,
     class: schedule_id,
     checked_in: false,
@@ -72,10 +73,11 @@ module.exports = async (req, res) => {
       address_2: address_2,
       city: city,
       zip_code: zip,
-      country: country
+      country: country,
+      client: partner_id,
     }).fetch();
     // if (user) {
-    console.log(user);
+    console.log(user, user.id, schedule_id, reservation_id, partner_id);
     result = await reservation (user.id, schedule_id, reservation_id, partner_id);
     // }
   }
