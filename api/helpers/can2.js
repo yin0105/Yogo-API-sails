@@ -52,20 +52,21 @@ module.exports = {
     }
 
     const aclPublicPermission = acl.public;
-
+    console.log("1");
     if (aclPublicPermission === true) return exits.success(true);
-
+    console.log("2");
     if (typeof aclPublicPermission === 'function' && (await aclPublicPermission(inputs.req, inputs.controllerActionInputs))) return exits.success(true);
-
+    console.log("3: ", inputs.req.authorizedRequestContext);
     if (inputs.req.authorizedRequestContext === 'public') return exits.success(false);
-
+    console.log("4");
     const aclAuthorizedPermission = acl[inputs.req.authorizedRequestContext];
-
+    console.log("5");
     if (typeof aclAuthorizedPermission === 'undefined') return exits.success(false);
-
+    console.log("6");
     if (typeof aclAuthorizedPermission === 'boolean') return exits.success(aclAuthorizedPermission);
-
+    console.log("7");
     if (typeof aclAuthorizedPermission === 'function') {
+      console.log("8");
       const response = await aclAuthorizedPermission(inputs.req, inputs.controllerActionInputs);
       return exits.success(response);
     }

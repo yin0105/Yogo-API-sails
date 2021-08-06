@@ -1,7 +1,6 @@
 module.exports = {
 
   admin: async (req) => {
-
     if (req.query.user) {
 
       const user = await User.findOne(req.query.user)

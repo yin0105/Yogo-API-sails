@@ -79,12 +79,11 @@ module.exports = {
     if (!user || user.archived) {
       throw 'userNotFound';
     }
-
     const classItem = await Class.findOne(
       sails.helpers.util.idOrObjectIdInteger(inputs.classItem),
     );
     if (!classItem || classItem.archived) {
-      throw 'classNotFound';
+      throw 'classNotFound'; 
     }
 
     if (parseInt(user.client, 10) !== parseInt(classItem.client, 10)) {

@@ -60,6 +60,8 @@ module.exports = {
 
         const startDate = inputs.startDate ? moment(inputs.startDate, 'YYYY-MM-DD') : moment();
         const endDate = inputs.endDate ? moment(inputs.endDate, 'YYYY-MM-DD') : moment(startDate).add(1, 'year').subtract(1, 'day');
+        console.log(startDate, endDate);
+        console.log(moment(1521459935747));
 
         if (startDate.year() < 2017) {
             throw 'startDateTooEarly';
@@ -74,7 +76,7 @@ module.exports = {
         }
 
         let SQL = require('../../sql/class-signups-controller/find-class-signups-by-user.sql');
-
+        console.log("SQL = ", SQL);
         const rawResult = await sails.sendNativeQuery(SQL, [
             user.id,
             startDate.format('YYYY-MM-DD'),

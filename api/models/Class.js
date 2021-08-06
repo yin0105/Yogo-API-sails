@@ -88,14 +88,17 @@ module.exports = {
 
     classpass_com_enabled: {
       type: 'boolean',
+      allowNull: true,
     },
 
     classpass_com_all_seats_allowed: {
       type: 'boolean',
+      allowNull: true,
     },
 
     classpass_com_number_of_seats_allowed: {
       type: 'number',
+      allowNull: true,
     },
   },
 

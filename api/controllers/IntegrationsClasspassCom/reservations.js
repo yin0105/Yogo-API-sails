@@ -2,8 +2,16 @@ const moment = require('moment');
 const knex = require('../../services/knex')
 const axios = require('axios').default;
 
+reservation = async(user_id, schedule_id, reservation_id, partner_id) => {
+  let result = await axios.post(`/class-signups?client=${partner_id}`, {
+    user: user_id,
+    class: schedule_id,
+    checked_in: false,
+    classpass_com_reservation_id: reservation_id,
+  });
+}
+
 module.exports = async (req, res) => {
-  console.log(req.body);
   const reservation_id = req.body.reservation_id;
   const partner_id = req.body.partner_id;
   const venue_id = req.body.venue_id;
@@ -13,6 +21,7 @@ module.exports = async (req, res) => {
 
   if ( !reservation_id || !partner_id || !venue_id || !schedule_id || !user ) {
     // bad request
+    return res.badRequest("Missing some params");
   }
 
   const user_id = user.user_id;
@@ -26,6 +35,7 @@ module.exports = async (req, res) => {
 
   if ( !user_id || !user_email || !username || !first_name || !last_name || !gender || !address || !emergency_contact ) {
     // bad request
+    return res.badRequest("Missing some params");
   }
 
   const phone = user.phone ? user.phone: "";
@@ -39,12 +49,32 @@ module.exports = async (req, res) => {
 
   const emergency_contact_name = emergency_contact.name ? emergency_contact.name: "";
   const emergency_contact_phone = emergency_contact.phone ? emergency_contact.phone: "";
-  
-  
 
+  let user = User.findOne({email: user_email});
+  if (user) {
+    if (first_name != user.first_name || last_name != user.last_name) {
+      // other user with the email already exists
+      return res.badRequest("Other user with the email already exists");
+    } else {
+      // reservation
+    }
+  } else {
+    // user registration
+    user = await User.create({
+      email: user_email,
+      first_name: first_name,
+      last_name: last_name,
+      phone: phone,
+      date_of_birth: birthday,
+      address_1: address_1,
+      address_2: address_2,
+      city: city,
+      zip_code: zip,
+      country: country
+    });
+  }
   
-  console.log("spot_label = ", req.body.spot_label);
-  console.log("spot_label = ", spot_label);
+  
   // const reservation_id = req.body.reservation_id;
   // const reservation_id = req.body.reservation_id;
   // const reservation_id = req.body.reservation_id;

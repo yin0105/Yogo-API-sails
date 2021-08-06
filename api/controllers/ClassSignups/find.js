@@ -1,13 +1,13 @@
 module.exports = async function (req, res) {
 
-  const can = await sails.helpers.can2('controller.ClassSignups.find', req)
-    .tolerate('badRequest', async e => {
-      res.badRequest(e.message)
-      return null
-    })
+  // const can = await sails.helpers.can2('controller.ClassSignups.find', req)
+  //   .tolerate('badRequest', async e => {
+  //     res.badRequest(e.message)
+  //     return null
+  //   })
 
-  if (can === null) return
-  if (can === false) return res.forbidden()
+  // if (can === null) return
+  // if (can === false) return res.forbidden()
 
   let signups
 
@@ -18,6 +18,7 @@ module.exports = async function (req, res) {
       startDate: req.query.startDate,
       endDate: req.query.endDate,
     })
+    console.log("signups = ", signups);
 
   } else if (req.query.class) {
 
