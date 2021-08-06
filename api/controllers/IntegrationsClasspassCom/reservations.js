@@ -4,12 +4,62 @@ const axios = require('axios').default;
 
 const reservation = async (user_id, schedule_id, reservation_id, partner_id) => {
   console.log("== before");
-  return axios.post(`http://localhost:1337/class-signups?client=${partner_id}`, {
+  let errCode = "";
+  let result = await sails.helpers.classes.createSignup.with({
+    user: user_id,
+    classItem: schedule_id,
+    checkCustomerIn: false,
+    allowOverbooking: false,
+    classpass_com_reservation_id: reservation_id,
+  })
+    .tolerate('alreadySignedUp', async () => {
+      errCode = 'alreadySignedUp';
+    })
+    .tolerate('classCancelled', async () => {
+      errCode = 'classCancelled';
+    })
+    .tolerate('classIsFull', async () => {
+      errCode = 'classIsFull';
+    })
+    .tolerate('noAccess', async () => {
+      errCode = 'noAccess';
+    });
+  
+  
+  if (errCode != "") {
+    console.log("errCode = ", errCode);
+    return errCode;
+  }
+  if (!result) return;
+
+  if (result.used_class_pass || result.used_class_pass_id) {
+    const classPassId = sails.helpers.util.idOrObjectIdInteger(result.used_class_pass_id || result.used_class_pass);
+    const classPass = await ClassPass.findOne(classPassId).populate('class_pass_type');
+    if (classPass.class_pass_type.pass_type === 'fixed_count') {
+      const classDescription = await sails.helpers.classes.getDescription(result.class_id || result.class);
+      let logMessage = sails.helpers.t(
+        'classPassLog.classPassUsedToSignUpForClass',
+        [classDescription, classPass.classes_left],
+      );
+      await sails.helpers.classPassLog.log(classPass, logMessage);
+    }
+  }
+
+  return result;
+
+
+  return await sails. axios.post(`http://localhost:1337/class-signups?client=${partner_id}`, {
     user: user_id,
     class: schedule_id,
     checked_in: false,
     classpass_com_reservation_id: reservation_id,
   });
+  // return axios.post(`http://localhost:1337/class-signups?client=${partner_id}`, {
+  //   user: user_id,
+  //   class: schedule_id,
+  //   checked_in: false,
+  //   classpass_com_reservation_id: reservation_id,
+  // });
 }
 
 module.exports = async (req, res) => {
@@ -81,9 +131,7 @@ module.exports = async (req, res) => {
     result = await reservation (user.id, schedule_id, reservation_id, partner_id);
     // }
   }
-  console.log("result = ", result.data);
-  console.log("error = ", result.error);
+  console.log("result = ", result);
   
-  return res.json(result.data);
-  // return res.ok("asba");
+  return res.json(result);
 }

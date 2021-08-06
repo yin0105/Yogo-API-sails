@@ -1,19 +1,19 @@
 module.exports = async function (req, res) {
 
-  // const can = await sails.helpers.can2('controller.ClassSignups.create', req)
-  //   .tolerate('classHasStarted', async () => {
-  //     const errorResponse = await sails.helpers.applicationError.buildResponse('classHasStarted', req);
-  //     res.ok(errorResponse);
-  //     return null;
-  //   })
-  //   .tolerate('signupDeadlineHasBeenExceeded', async () => {
-  //     const errorResponse = await sails.helpers.applicationError.buildResponse('signupDeadlineHasBeenExceeded', req);
-  //     res.ok(errorResponse);
-  //     return null;
-  //   });
+  const can = await sails.helpers.can2('controller.ClassSignups.create', req)
+    .tolerate('classHasStarted', async () => {
+      const errorResponse = await sails.helpers.applicationError.buildResponse('classHasStarted', req);
+      res.ok(errorResponse);
+      return null;
+    })
+    .tolerate('signupDeadlineHasBeenExceeded', async () => {
+      const errorResponse = await sails.helpers.applicationError.buildResponse('signupDeadlineHasBeenExceeded', req);
+      res.ok(errorResponse);
+      return null;
+    });
 
-  // if (can === null) return;
-  // if (can === false) return res.forbidden();
+  if (can === null) return;
+  if (can === false) return res.forbidden();
 
   // Customers can not set checked_in
   if (!_.includes(
