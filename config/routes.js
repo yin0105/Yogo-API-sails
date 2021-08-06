@@ -115,8 +115,8 @@ module.exports.routes = {
   'GET /cp/v1/partners/:partner_id/venues/:venue_id': 'IntegrationsClasspassComController.get-venue-of-partner',
   'GET /cp/v1/partners/:partner_id/venues/:venue_id/schedules': 'IntegrationsClasspassComController.get-upcoming-schedules',  
   'POST /cp/v1/reservations': 'IntegrationsClasspassComController.reservations',
-  
-  'PUT  /cp/v1/reservations/:id': 'IntegrationsClasspassComController.cancel-reservation',
+
+  'PATCH /cp/v1/reservations/:id': 'IntegrationsClasspassComController.cancel-reservation',
   'GET /cp/v1/partners/:partner_id/venues/:venue_id/schedules/:schedule_id/attendance': 'IntegrationsClasspassComController.attendance',
 
   'POST /cron/tick': 'CronController.tick',

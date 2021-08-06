@@ -44,10 +44,7 @@ module.exports = async (req, res) => {
     const numOfLastAttendance = (page_size * page < countOfAttendances) ? page_size * page : countOfAttendances;
     for (let i = (page_size * (page - 1)); i < numOfLastAttendance; i++) {
       let attendance = {};
-      attendance.reservation_id = attendances[i].reservation_id;
-      attendance.last_updated = moment(attendances[i].updatedAt).format();
-      // attendance.status = "ENROLLED";
-      console.log(attendances[i]);
+      attendance.reservation_id = attendances[i].reservation_id;      
 
       const class_signoff_deadline = await sails.helpers.clientSettings.find(partner_id, 'class_signoff_deadline');
       const private_class_signup_deadline = await sails.helpers.clientSettings.find(partner_id, 'private_class_signup_deadline');      
@@ -74,6 +71,8 @@ module.exports = async (req, res) => {
         }
       }
 
+      attendance.last_updated = moment(attendances[i].updatedAt).format();
+      
       resData.attendances.push(attendance);
     }
   } else {
