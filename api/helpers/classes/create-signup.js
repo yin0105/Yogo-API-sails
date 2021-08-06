@@ -28,6 +28,11 @@ module.exports = {
       description: 'Allow booking even if the class is already full.',
       defaultsTo: false,
     },
+
+    classpass_com_reservation_id: {
+      type: 'string',
+      description: 'Reservation ID from ClassPass.com'
+    },
   },
 
   exits: {
@@ -152,12 +157,19 @@ module.exports = {
       signupData.used_membership = memberships[0].id;
       signupData.used_class_pass = null;
       signupData.class_pass_seat_spent = false;
+      signupData.classpass_com_reservation_id = null;
     } else if (classPasses && classPasses.length > 0) {
       let classPass = classPasses[0];
       signupData.used_class_pass = classPass.id;
       signupData.class_pass_seat_spent = classPass.class_pass_type.pass_type === 'fixed_count';
       signupData.used_membership = null;
+      signupData.classpass_com_reservation_id = null;
       usingFixedClassPass = classPass.class_pass_type.pass_type === 'fixed_count';
+    } else if (inputs.classpass_com_reservation_id) {
+      signupData.used_membership = null
+      signupData.used_class_pass = null;
+      signupData.class_pass_seat_spent = false;
+      signupData.classpass_com_reservation_id = inputs.classpass_com_reservation_id;
     } else {
       throw 'noAccess';
     }
@@ -172,7 +184,7 @@ module.exports = {
 
       [insertSignupResult] = await knex.raw(`
                   INSERT INTO class_signup(createdAt, updatedAt, client, user, class, checked_in, archived, cancelled_at, used_class_pass,
-                                                        used_membership, class_pass_seat_spent, no_show_fee_applied)
+                                                        used_membership, class_pass_seat_spent, no_show_fee_applied, classpass_com_reservation_id)
                   SELECT :createdAt,
                          :updatedAt,
                          :client,
@@ -184,7 +196,8 @@ module.exports = {
                          :used_class_pass,
                          :used_membership,
                          :class_pass_seat_spent,
-                         0
+                         0,
+                         :classpass_com_reservation_id
                   FROM dual
                   WHERE (
                       SELECT id FROM class_signup WHERE user = :user AND class = :class AND archived = 0 AND cancelled_at = 0 LIMIT 1
@@ -213,7 +226,7 @@ module.exports = {
 
       [insertSignupResult] = await knex.raw(`
                   INSERT INTO class_signup(createdAt, updatedAt, client, user, class, checked_in, archived, cancelled_at, used_class_pass,
-                                                        used_membership, class_pass_seat_spent, no_show_fee_applied)
+                                                        used_membership, class_pass_seat_spent, no_show_fee_applied, classpass_com_reservation_id)
                   SELECT :createdAt,
                          :updatedAt,
                          :client,
@@ -225,7 +238,8 @@ module.exports = {
                          :used_class_pass,
                          :used_membership,
                          :class_pass_seat_spent,
-                         0  
+                         0,
+                         :classpass_com_reservation_id  
                   FROM dual
                   WHERE (
                             SELECT id
