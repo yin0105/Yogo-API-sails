@@ -1,63 +1,96 @@
-const ClassPassApi = require('../../services/ClassPassApi');
+const moment = require('moment');
+const knex = require('../../services/knex')
+const axios = require('axios').default;
 
-module.exports = {
-  friendlyName: 'Attendance',
+module.exports = async (req, res) => {
+  const partner_id = req.params.partner_id;
+  const venue_id = req.params.venue_id;
+  const schedule_id = req.params.schedule_id;
 
-  description: 'Attendance',
+  const page = req.query.page;
+  const page_size = req.query.page_size; 
 
-  inputs: {
-    partner_id: {
-        type: 'string',
-        required: true,
-    },
-    venue_id: {
-        type: 'string',
-        required: true,
-    },
-    schedule_id: {
-        type: 'string',
-        required: true,
-    },
-    page: {
-        type: 'number',
-        required: true,
-    },
-    page_size: {
-        type: 'number',
-        required: true,
-    },
-  },
+  const venues = await Branch.find({client: partner_id});
+  const clients = await knex({c: 'class_signup'})
+  .select(
+    knex.raw("c.reservation_id AS reservation_id"),
+    knex.raw("c.address_1 AS address_1"), 
+    knex.raw("c.address_2 AS address_2"),
+    knex.raw("c.city AS city"),
+    knex.raw("c.zip_code AS zip_code"),
+    knex.raw("c.country AS country"),
+    knex.raw("c.phone AS phone"),
+    knex.raw("c.email AS email"),
+    knex.raw("c.website AS website"),
+    knex.raw("i.original_width AS width"),
+    knex.raw("i.original_height AS height"),
+    knex.raw("i.filename AS uri"))
+  .where('c.class', schedule_id);
+  
+  if (!page) return res.badRequest("Missing query 'page'");
+  if (!page_size) return res.badRequest("Missing query 'page_size'");
+  if (clients.length == 0) return res.badRequest("Invalid partner_id");  
+  
+  if (venues.length == 0) {
+    let fakeVenue = {};
+    fakeVenue.id = `client_${partner_id}_default_branch`;
+    fakeVenue.name = clients[0].name;
+    fakeVenue.updatedAt = clients[0].updatedAt;
+    venues.push(fakeVenue);
+  }
 
-  exits: {
-    forbidden: {
-      responseType: 'forbidden',
-    },
-    attendanceFailed: {
-      responseType: 'badRequest',
-    },
-  },
+  const countOfVenues = venues.length;
+  let resData = {};
+  resData.venues = [];
+  resData.pagination = {
+    page: page,
+    page_size: page_size,
+    total_pages: Math.ceil(countOfVenues / page_size)
+  };
 
-  fn: async function (inputs, exits) {
+  if (page_size * (page - 1) < countOfVenues) {
+    // page number is valid
+    const numOfLastVenue = (page_size * page < countOfVenues) ? page_size * page : countOfVenues;
+    for (let i = (page_size * (page - 1)); i < numOfLastVenue; i++) {
+      let venue = {};
+      venue.partner_id = partner_id;
+      venue.venue_id = venues[i].id;
+      venue.venue_name = venues[i].name;
+      venue.address = {
+        address_line1: clients[0].address_1,
+        address_line2: clients[0].address_2,
+        city: clients[0].city,
+        zip: clients[0].zip_code,
+        country: clients[0].country,
+      };
+      venue.phone = clients[0].phone;
+      venue.email = clients[0].email;
+      venue.website = clients[0].website;
+      venue.last_updated = moment(venues[i].updatedAt).format();
 
-    if (!await sails.helpers.can2('controller.IntegrationsClasspassCom.attendance', this.req)) {
-      return exits.forbidden();
+      venue.images = [];
+      if (clients[0].uri) {
+        if (clients[0].width) {
+          venue.images.push({
+            width: clients[0].width,
+            height: clients[0].height,
+            url: `${sails.config.imgixServer}/${clients[0].uri}`,
+          });
+        } else {
+          let result = await axios.get(`${sails.config.imgixServer}/${clients[0].uri}?fm=json`)
+          venue.images.push({
+            width: result.data.PixelWidth,
+            height: result.data.PixelHeight,
+            url: `${sails.config.imgixServer}/${clients[0].uri}`,
+          });
+        }
+      }
+
+      resData.venues.push(venue);
     }
+  } else {
+    // page number is invalid
+  }
 
-    const partner_id = inputs.partner_id;
-    const venue_id = inputs.venue_id;
-    const schedule_id = inputs.schedule_id;
-    const page = inputs.page;
-    const page_size = inputs.page_size;
-
-    const response = await ClassPassApi.put(`/partners/${partner_id}/venues/${venue_id}/schedules/${schedule_id}/attendance?page=${page}&page_size=${page_size}`);
-
-    if (response) {
-        return exits.success({
-            attendance: response.attendance,
-            pagination: response.pagination,
-        });
-    } else {
-        return exits.attendanceFailed('Attendance failed');
-    }
-  },
-};
+  return res.json(resData);
+}

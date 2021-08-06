@@ -63,6 +63,7 @@
     'get-upcoming-schedules': ['cpAccessToken'],
     'reservations': ['cpAccessToken'],
     'cancel-reservation': ['cpAccessToken'],
+    'attendance': ['cpAccessToken'],
   },
 
   SmsController: {
