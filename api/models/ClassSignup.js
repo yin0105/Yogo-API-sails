@@ -47,6 +47,11 @@ module.exports = {
       defaultsTo: 0,
     },
 
+    classpass_com_reservation_id: {
+      type: 'string',
+      allowNull: true,
+    },
+
     no_show_fee_applied: {
       type: 'boolean',
       defaultsTo: false,
