@@ -51,20 +51,6 @@ const reservation = async (user_id, schedule_id, reservation_id, partner_id) => 
   }
 
   return result;
-
-
-  return await sails. axios.post(`http://localhost:1337/class-signups?client=${partner_id}`, {
-    user: user_id,
-    class: schedule_id,
-    checked_in: false,
-    classpass_com_reservation_id: reservation_id,
-  });
-  // return axios.post(`http://localhost:1337/class-signups?client=${partner_id}`, {
-  //   user: user_id,
-  //   class: schedule_id,
-  //   checked_in: false,
-  //   classpass_com_reservation_id: reservation_id,
-  // });
 }
 
 module.exports = async (req, res) => {
@@ -178,8 +164,7 @@ module.exports = async (req, res) => {
         }
       });
     }
+  } else {
+    return res.ok({"spot_label": spot_label});
   }
-  console.log("result = ", result);
-  
-  return res.json(result);
 }
