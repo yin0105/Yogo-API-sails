@@ -27,10 +27,15 @@ const reservation = async (user_id, schedule_id, reservation_id, partner_id) => 
   
   
   if (errCode != "") {
-    console.log("errCode = ", errCode);
-    return errCode;
+    return {
+      err: true,
+      errMsg: errCode,
+    };
   }
-  if (!result) return;
+  if (!result) return {
+    err: true,
+    errMsg: "",
+  };
 
   if (result.used_class_pass || result.used_class_pass_id) {
     const classPassId = sails.helpers.util.idOrObjectIdInteger(result.used_class_pass_id || result.used_class_pass);
@@ -130,6 +135,49 @@ module.exports = async (req, res) => {
     console.log(user, user.id, schedule_id, reservation_id, partner_id);
     result = await reservation (user.id, schedule_id, reservation_id, partner_id);
     // }
+  }
+  if (result.err) {
+    if (result.errMsg == 'classIsFull') {
+      return res.badRequest({
+        "error": {
+          "code": 4003,
+          "name": "NO_CAPACITY_EXCEPTION",
+          "message": "schedule has no available spots"
+        }
+      });
+    } else if (result.errMsg == 'classCancelled') {
+      return res.badRequest({
+        "error": {
+          "code": 4004,
+          "name": "CLASS_CANCELLED_EXCEPTION",
+          "message": "schedule is cancelled"
+          }
+      });
+    } else if (result.errMsg == 'alreadySignedUp') {
+      return res.badRequest({
+        "error": {
+          "code": 4006,
+          "name": "ALREADY_RESERVED_EXCEPTION",
+          "message": "user has already reserved this class"
+          }
+      });
+    } else if (result.errMsg == 'alreadySignedUp') {
+      return res.badRequest({
+        "error": {
+          "code": 4001,
+          "name": "RESERVATION_EXCEPTION",
+          "message": "reservation failed"
+        }
+      });
+    } else {
+      return res.badRequest({
+        "error": {
+          "code": 4001,
+          "name": "RESERVATION_EXCEPTION",
+          "message": "reservation failed"
+        }
+      });
+    }
   }
   console.log("result = ", result);
   
