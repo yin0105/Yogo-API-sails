@@ -44,6 +44,7 @@ module.exports = {
     const feeShouldBeApplied = classItem.class_signoff_deadline_has_been_exceeded && !inputs.userGetsRefundAfterDeadline;
 
     const noShowFeesApplyMethod = await sails.helpers.clientSettings.find(signup.client, 'no_show_fees_apply_method');
+    let is_late_cancel = false;
 
     if (signup.used_class_pass) {
 
@@ -52,7 +53,7 @@ module.exports = {
       if (classPassBeforeCancellation.class_pass_type.pass_type === 'fixed_count') {
 
         if (feeShouldBeApplied) {
-
+          is_late_cancel = true;
           await sails.helpers.classPass.applyNoShowFeeTypeFixedCount.with({
             signup,
             reason: 'late_cancel',
@@ -84,6 +85,7 @@ module.exports = {
 
         }
       } else if (feeShouldBeApplied) {
+        is_late_cancel = true;
         await sails.helpers.classPass.applyNoShowFeeTypeUnlimited.with({
           signup,
           reason: 'late_cancel',
@@ -92,6 +94,7 @@ module.exports = {
       }
 
     } else if (signup.used_membership && feeShouldBeApplied) {
+      is_late_cancel = true;
       await sails.helpers.memberships.applyNoShowFee.with({
         signup,
         reason: 'late_cancel',
@@ -99,8 +102,10 @@ module.exports = {
       });
     }
 
+    
     await ClassSignup.update({id: signup.id}, {
       cancelled_at: Date.now(),
+      late_cancel: is_late_cancel,
     });
 
 

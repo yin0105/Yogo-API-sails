@@ -13,6 +13,7 @@ module.exports = async (req, res) => {
     knex.raw("cs.classpass_com_reservation_id AS reservation_id"),
     knex.raw("cs.cancelled_at AS cancelled_at"), 
     knex.raw("CONCAT(c.date, 'T', start_time) AS start_time"),
+    knex.raw("c.end_time AS end_time"),
     knex.raw("c.seats AS seats"))
   .where('cs.classpass_com_reservation_id', reservation_id);
   
@@ -25,6 +26,10 @@ module.exports = async (req, res) => {
       } 
     });
   }
+
+  console.log("end_time: ",moment(`1970-01-01T${reservation[0].end_time}`));
+  console.log("end_time: ",moment(`1970-01-01T${reservation[0].end_time}`).unix());
+  console.log("end_time: ",moment(`1970-01-01T${reservation[0].end_time}`)).getTime();
 
   const class_signoff_deadline = await sails.helpers.clientSettings.find(partner_id, 'class_signoff_deadline');
   const private_class_signup_deadline = await sails.helpers.clientSettings.find(partner_id, 'private_class_signup_deadline');      
