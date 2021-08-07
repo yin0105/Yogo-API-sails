@@ -95,7 +95,7 @@ module.exports = async (req, res) => {
   let user = await User.findOne({email: user_email});
   let result
   if (user) {
-    if (first_name != user.first_name || last_name != user.last_name) {
+    if (user_id != user_.classpass_com_user_id) {
       // other user with the email already exists
       return res.badRequest("Other user with the email already exists");
     } else {
@@ -116,6 +116,7 @@ module.exports = async (req, res) => {
       zip_code: zip,
       country: country,
       client: partner_id,
+      classpass_com_user_id: user_id,
     }).fetch();
     // if (user) {
     console.log(user, user.id, schedule_id, reservation_id, partner_id);

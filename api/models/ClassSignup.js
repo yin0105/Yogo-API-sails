@@ -52,6 +52,11 @@ module.exports = {
       allowNull: true,
     },
 
+    late_cancel: {
+      type: 'boolean',
+      defaultsTo: false,
+    },
+
     no_show_fee_applied: {
       type: 'boolean',
       defaultsTo: false,

@@ -31,19 +31,32 @@ module.exports = async (req, res) => {
   const start_window = moment(`${reservation[0].start_time}`);
   const late_cancel_window = reservation[0].seats == 1? start_window.subtract( private_class_signup_deadline, 'minutes') : start_window.subtract( class_signoff_deadline, 'minutes');
 
-  await ClassSignup.update({
-    classpass_com_reservation_id: reservation_id,
-    archived: false,
-    cancelled_at: 0,
-  }, {
-    cancelled_at: Date.now(),
-  });
+  if (moment() > start_window) {
+    return res.badRequest({
+      "error": {
+      "code": 4002,
+      "name": "CANCELLATION_EXCEPTION",
+      "message": "cancellation failed"
+      } 
+    });
+  }
 
   if (moment() > late_cancel_window) {
     is_late_cancel = true;
   } else {
     is_late_cancel = false;
   }
+  
+  await ClassSignup.update({
+    classpass_com_reservation_id: reservation_id,
+    archived: false,
+    cancelled_at: 0,
+  }, {
+    cancelled_at: Date.now(),
+    late_cancel: is_late_cancel,
+  });
+
+  
 
   // console.log({
   //   "is_late_cancel": is_late_cancel

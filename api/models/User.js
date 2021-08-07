@@ -192,6 +192,11 @@ module.exports = {
       isIn: ['elapsed', 'remaining'],
       defaultsTo: 'remaining',
       allowNull: true,
+    },
+
+    classpass_com_user_id: {
+      type: 'string',
+      allowNull: true,
     }
 
   },
