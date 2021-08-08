@@ -27,6 +27,7 @@ module.exports = {
         'cs.cancelled_at': 0,
         'cs.checked_in': 0,
         'cs.no_show_fee_applied': 0,
+        'cs.classpass_com_reservation_id': null,
       })
       .where(b => b.whereNotNull('cs.used_membership').orWhereNotNull('cs.used_class_pass'))
       .eager({

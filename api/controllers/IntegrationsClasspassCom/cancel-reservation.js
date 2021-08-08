@@ -27,10 +27,6 @@ module.exports = async (req, res) => {
     });
   }
 
-  console.log("end_time: ",moment(`1970-01-01T${reservation[0].end_time}`));
-  console.log("end_time: ",moment(`1970-01-01T${reservation[0].end_time}`).unix());
-  console.log("end_time: ",moment(`1970-01-01T${reservation[0].end_time}`)).getTime();
-
   const class_signoff_deadline = await sails.helpers.clientSettings.find(partner_id, 'class_signoff_deadline');
   const private_class_signup_deadline = await sails.helpers.clientSettings.find(partner_id, 'private_class_signup_deadline');      
   const start_window = moment(`${reservation[0].start_time}`);
