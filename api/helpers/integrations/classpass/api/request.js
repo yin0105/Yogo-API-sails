@@ -1,7 +1,18 @@
 const API_ROOT = 'https://sandbox-api.classpass.com'
 
 const request = require('request-promise')
-var errors = require('request-promise/errors')
+const errors = require('request-promise/errors')
+
+const AWS = require('aws-sdk');
+console.log("sqs = ", sails.config.sqs);
+console.log("sqs.region = ", sails.config.sqs.region);
+const AWSRegion = sails.config.sqs.region;
+
+AWS.config.update({region: AWSRegion});
+
+const sqsPolicy = sails.config.sqs.policy;
+const sqs = new AWS.SQS(sqsPolicy);
+
 
 module.exports = {
   friendlyName: 'Call the ClassPass API',
@@ -32,7 +43,7 @@ module.exports = {
   },
 
   fn: async (inputs, exits) => {   
-    const accessToken = inputs.accessToken || (await sails.config.integrations.classpass_com.classpass_com_access_token)
+    const accessToken = inputs.accessToken || (sails.config.classpass_com.classpass_com_access_token)
 
     const requestOptions = {
       method: inputs.method,
@@ -42,10 +53,29 @@ module.exports = {
         Authorization: accessToken,
       },
       json: true,
-      body: inputs.body,
+      body: inputs.body,      
     }
 
-    //console.log('requestOptions:', requestOptions)
+    const params = {
+      // Remove DelaySeconds parameter and value for FIFO queues
+      DelaySeconds: 10,
+      MessageAttributes: {
+       "Title": {
+         DataType: "String",
+         StringValue: "ClassPass.com API"
+       },
+      //  "Author": {
+      //    DataType: "String",
+      //    StringValue: "John Grisham12"
+      //  },
+      //  "WeeksOn": {
+      //    DataType: "Number",
+      //    StringValue: "7"
+      //  }
+     },
+     MessageBody: requestOptions,
+     QueueUrl: sails.config.sqs.policy,
+   };
 
     request(requestOptions)
       .then(response => {

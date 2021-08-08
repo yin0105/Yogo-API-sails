@@ -163,6 +163,29 @@ module.exports = {
     webhookSecret:'asdf',
     maxConnectionsPerSession: '499'
   },
+  sqs: {
+    region: 'us-east-2',
+    credential: {},
+    policy: {
+      "Id": "Policy1628414671189",
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "Stmt1628414649734",
+          "Action": "sqs:*",
+          "Effect": "Allow",
+          "Resource": "arn:aws:sqs:us-east-2:249026561983:testYogoQueue",
+          "Principal": {
+            "AWS": [
+              "b"
+            ]
+          }
+        }
+      ]
+    },
+    url: "https://sqs.us-east-2.amazonaws.com/249026561983/testYogoQueue",
+
+  }
   
   // ALSO UPDATE bootstrap.js WHEN ADDING REQUIRED PARAMS IN THIS FILE
 }
