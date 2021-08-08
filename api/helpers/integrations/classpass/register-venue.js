@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Get current user',
 
   inputs: {
-    partner: {
+    venue: {
       type: 'ref',
       required: true,
     },
@@ -18,9 +18,9 @@ module.exports = {
 
     const resp = await sails.helpers.integrations.classpass.api.request.with({
       method: 'POST',
-      endpoint: '/v1/inventory/partners',
+      endpoint: '/v1/inventory/venues',
       body: {
-        "partner": inputs.partner,
+        "venue": inputs.venue,
       },
     })
 

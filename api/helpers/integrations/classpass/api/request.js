@@ -32,13 +32,14 @@ module.exports = {
   },
 
   fn: async (inputs, exits) => {   
+    const accessToken = inputs.accessToken || (await sails.config.integrations.classpass_com.classpass_com_access_token)
 
     const requestOptions = {
       method: inputs.method,
       url: API_ROOT + inputs.endpoint,
       headers: {
         'content-type': 'application/json',
-        Authorization: inputs.accessToken,
+        Authorization: accessToken,
       },
       json: true,
       body: inputs.body,

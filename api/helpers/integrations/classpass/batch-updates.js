@@ -4,7 +4,7 @@ module.exports = {
   friendlyName: 'Get current user',
 
   inputs: {
-    partner: {
+    updates: {
       type: 'ref',
       required: true,
     },
@@ -18,15 +18,15 @@ module.exports = {
 
     const resp = await sails.helpers.integrations.classpass.api.request.with({
       method: 'POST',
-      endpoint: '/v1/inventory/partners',
+      endpoint: '/v1/inventory/batch-updates',
       body: {
-        "partner": inputs.partner,
+        "events": inputs.updates,
       },
     })
 
     if (resp.error) {
         return exits.error(resp);
-    }
+    } 
     //   .tolerate('unauthorized', e => {
     //     exits.unauthorized(e.message)
     //     return null
