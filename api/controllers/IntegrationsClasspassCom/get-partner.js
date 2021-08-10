@@ -19,8 +19,8 @@ module.exports = async (req, res) => {
   
   if (clients.length > 0) {
     // client exists    
-    partner.id = clients[0].id;
-    partner.name = clients[0].name;
+    partner.partner_id = clients[0].id.toString();
+    partner.partner_name = clients[0].name;
     partner.last_updated = moment(clients[0].updatedAt).format();
     partner.images = [];
       if (clients[0].uri) {

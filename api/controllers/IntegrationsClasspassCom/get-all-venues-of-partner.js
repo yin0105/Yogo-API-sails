@@ -3,9 +3,11 @@ const knex = require('../../services/knex')
 const axios = require('axios').default;
 
 module.exports = async (req, res) => {
+  console.log("welcome - 1");
   const partner_id = req.params.id;
   const page = req.query.page;
   const page_size = req.query.page_size; 
+  console.log("welcome - 2");
   const venues = await Branch.find({client: partner_id});
   const clients = await knex({c: 'client'})
   .leftJoin({i: 'image'}, 'i.id', 'c.logo')
@@ -23,11 +25,14 @@ module.exports = async (req, res) => {
     knex.raw("i.original_height AS height"),
     knex.raw("i.filename AS uri"))
   .where('c.id', partner_id);
-  
+  console.log("welcome - 3");
+  console.log("page = ", page);
+  console.log("page_size = ", page_size);
+  console.log("clients = ", clients);
   if (!page) return res.badRequest("Missing query 'page'");
   if (!page_size) return res.badRequest("Missing query 'page_size'");
   if (clients.length == 0) return res.badRequest("Invalid partner_id");  
-  
+  console.log("welcome - 4");
   if (venues.length == 0) {
     let fakeVenue = {};
     fakeVenue.id = `client_${partner_id}_default_branch`;
@@ -35,6 +40,8 @@ module.exports = async (req, res) => {
     fakeVenue.updatedAt = clients[0].updatedAt;
     venues.push(fakeVenue);
   }
+
+  console.log("welcome - 5");
 
   const countOfVenues = venues.length;
   let resData = {};
@@ -44,6 +51,8 @@ module.exports = async (req, res) => {
     page_size: page_size,
     total_pages: Math.ceil(countOfVenues / page_size)
   };
+
+  console.log("welcome - 6");
 
   if (page_size * (page - 1) < countOfVenues) {
     // page number is valid
@@ -88,6 +97,8 @@ module.exports = async (req, res) => {
   } else {
     // page number is invalid
   }
+
+  console.log("resData = ", resData);
 
   return res.json(resData);
 }

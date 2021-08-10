@@ -8,6 +8,8 @@
 module.exports = function (req, res, next) {
 
   req.accessToken = req.header('Yogo-Access-Token');
+  console.log("req = ", req);
+  console.log("req.header = ", req).header;
   const yogo_access_token = sails.config.integrations.classpass_com.yogo_access_token;
 
   if (req.accessToken && req.accessToken == yogo_access_token) {

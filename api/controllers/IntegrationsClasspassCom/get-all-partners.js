@@ -22,8 +22,8 @@ module.exports = async (req, res) => {
   let resData = {};
   resData.partners = [];
   resData.pagination = {
-    page: page,
-    page_size: page_size,
+    page: parseInt(page),
+    page_size: parseInt(page_size),
     total_pages: Math.ceil(countOfClients / page_size)
   };
   
@@ -32,8 +32,8 @@ module.exports = async (req, res) => {
     const numOfLastClient = (page_size * page < countOfClients) ? page_size * page : countOfClients;
     for (let i = (page_size * (page - 1)); i < numOfLastClient; i++) {
       let partner = {};
-      partner.id = clients[i].id;
-      partner.name = clients[i].name;
+      partner.partner_id = clients[i].id.toString();
+      partner.partner_name = clients[i].name;
       partner.last_updated = moment(clients[i].updatedAt).format();
       
       partner.images = [];
