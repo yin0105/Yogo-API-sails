@@ -3,15 +3,15 @@ const API_ROOT = 'https://sandbox-api.classpass.com'
 const request = require('request-promise')
 const errors = require('request-promise/errors')
 
-const AWS = require('aws-sdk');
-console.log("sqs = ", sails.config.sqs);
-console.log("sqs.region = ", sails.config.sqs.region);
-const AWSRegion = sails.config.sqs.region;
+// const AWS = require('aws-sdk');
+// console.log("sqs = ", sails.config.sqs);
+// console.log("sqs.region = ", sails.config.sqs.region);
+// const AWSRegion = sails.config.sqs.region;
 
-AWS.config.update({region: AWSRegion});
+// AWS.config.update({region: AWSRegion});
 
-const sqsPolicy = sails.config.sqs.policy;
-const sqs = new AWS.SQS(sqsPolicy);
+// const sqsPolicy = sails.config.sqs.policy;
+// const sqs = new AWS.SQS(sqsPolicy);
 
 
 module.exports = {
@@ -56,26 +56,26 @@ module.exports = {
       body: inputs.body,      
     }
 
-    const params = {
-      // Remove DelaySeconds parameter and value for FIFO queues
-      DelaySeconds: 10,
-      MessageAttributes: {
-       "Title": {
-         DataType: "String",
-         StringValue: "ClassPass.com API"
-       },
-      //  "Author": {
-      //    DataType: "String",
-      //    StringValue: "John Grisham12"
-      //  },
-      //  "WeeksOn": {
-      //    DataType: "Number",
-      //    StringValue: "7"
-      //  }
-     },
-     MessageBody: requestOptions,
-     QueueUrl: sails.config.sqs.policy,
-   };
+  //   const params = {
+  //     // Remove DelaySeconds parameter and value for FIFO queues
+  //     DelaySeconds: 10,
+  //     MessageAttributes: {
+  //      "Title": {
+  //        DataType: "String",
+  //        StringValue: "ClassPass.com API"
+  //      },
+  //     //  "Author": {
+  //     //    DataType: "String",
+  //     //    StringValue: "John Grisham12"
+  //     //  },
+  //     //  "WeeksOn": {
+  //     //    DataType: "Number",
+  //     //    StringValue: "7"
+  //     //  }
+  //    },
+  //    MessageBody: requestOptions,
+  //    QueueUrl: sails.config.sqs.url,
+  //  };
 
     request(requestOptions)
       .then(response => {

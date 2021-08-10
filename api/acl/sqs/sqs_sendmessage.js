@@ -29,7 +29,7 @@ const params = {
   MessageBody: "Information about current NY Times fiction bestseller for week of 08/08/2021.",
   // MessageDeduplicationId: "TheWhistler",  // Required for FIFO queues
   // MessageGroupId: "Group1",  // Required for FIFO queues
-  QueueUrl: sails.config.sqs.policy,
+  QueueUrl: sails.config.sqs.url,
 };
 
 sqs.sendMessage(params, function(err, data) {
