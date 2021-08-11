@@ -334,16 +334,30 @@ module.exports = async (req, res) => {
 // ===================   batch-updates - reservations  ==============
 
 const resp = await sails.helpers.integrations.classpass.batchUpdates.with({
-  updates:  {
-    "type": "RESERVATION",
-    "payload": {
-        "cp_user_id": "xyz987",
-        "reservation_id": "abc123",
-        "spot_label": "Bike 3",
-        "status": "ATTENDED",
-        "last_updated": "2019-01-02T20:30:38+00:00"
+  updates:  [
+    {
+        "id": "1",
+        "type": "RESERVATION",
+        "payload": {
+            "cp_user_id": "xyz987",
+            "reservation_id": "abc123",
+            "spot_label": "Bike 3",
+            "status": "ATTENDED",
+            "last_updated": "2019-01-02T20:30:38+00:00"
+        }
+    },
+    {
+        "id": "2",
+        "type": "RESERVATION",
+        "payload": {
+            "cp_user_id": "xyz987",
+            "reservation_id": "abc123",
+            "spot_label": "Bike 3",
+            "status": "ATTENDED",
+            "last_updated": "2019-01-02T20:30:38+00:00"
+        }
     }
-  },
+],
 })
 
 if(resp) {
