@@ -27,13 +27,8 @@ module.exports = {
     if (resp.error) {
         return exits.error(resp);
     }
-    //   .tolerate('unauthorized', e => {
-    //     exits.unauthorized(e.message)
-    //     return null
-    //   })
 
     if (!resp) return
-
     return exits.success(resp)
 
   },
