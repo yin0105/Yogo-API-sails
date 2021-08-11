@@ -64,6 +64,7 @@
     'reservations': ['cpAccessToken'],
     'cancel-reservation': ['cpAccessToken'],
     'attendance': ['cpAccessToken'], //'cpAccessToken'
+    'test': [],
   },
 
   SmsController: {

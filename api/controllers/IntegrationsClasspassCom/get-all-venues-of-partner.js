@@ -3,8 +3,6 @@ const knex = require('../../services/knex')
 const axios = require('axios').default;
 
 module.exports = async (req, res) => {
-  console.log("req.params = ", req.params);
-  console.log("req.query = ", req.query);
   const partner_id = req.params.id;
   const page = req.query.page ? req.query.page: 1;
   const page_size = req.query.page_size ? req.query.page_size : 100; 
