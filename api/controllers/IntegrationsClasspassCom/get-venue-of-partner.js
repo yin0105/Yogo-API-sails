@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
   if (venue) {
     // venue exists
     resData.venue.partner_id = partner_id;
-    resData.venue.venue_id = venue.id;
+    resData.venue.venue_id = venue.id.toString();
     resData.venue.venue_name = venue.name;
     resData.venue.address = {
       address_line1: clients[0].address_1,

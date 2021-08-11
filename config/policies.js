@@ -63,7 +63,7 @@
     'get-upcoming-schedules': ['cpAccessToken'],
     'reservations': ['cpAccessToken'],
     'cancel-reservation': ['cpAccessToken'],
-    'attendance': ['cpAccessToken'],
+    'attendance': ['cpAccessToken'], //'cpAccessToken'
     'test': [],
   },
 

@@ -29,6 +29,8 @@ module.exports = async (req, res) => {
     knex.raw("c.id AS schedule_id"), 
     knex.raw("CONCAT(c.date, 'T', c.`start_time`) AS start_datetime"),
     knex.raw("CONCAT(c.date, 'T', c.`end_time`) AS end_datetime"),
+    knex.raw("c.updatedAt AS schedule_last_updated"),
+    knex.raw("c.cancelled AS cancelled"),
     knex.raw("ct.id AS class_type_id"),
     knex.raw("ct.name AS class_type_name"),
     knex.raw("ct.description AS class_type_description"),
@@ -58,8 +60,8 @@ module.exports = async (req, res) => {
   let resData = {};
   resData.schedules = [];
   resData.pagination = {
-    page: page,
-    page_size: page_size,
+    page: parseInt(page),
+    page_size: parseInt(page_size),
     total_pages: Math.ceil(countOfSchedules / page_size)
   };
 
@@ -68,13 +70,17 @@ module.exports = async (req, res) => {
     const numOfLastSchedule = (page_size * page < countOfSchedules) ? page_size * page : countOfSchedules;
     for (let i = (page_size * (page - 1)); i < numOfLastSchedule; i++) {
       let schedule = {};
-      schedule.id = schedules[i].schedule_id;
+      schedule.id = schedules[i].schedule_id.toString();
       schedule.partner_id = partner_id;
       schedule.venue_id = venue_id;
       schedule.start_datetime = schedules[i].start_datetime;
       schedule.end_datetime = schedules[i].end_datetime;
+      schedule.last_updated = moment(schedules[i].schedule_last_updated).format();
+      schedule.is_cancelled = !!schedules[i].cancelled;
+      schedule.has_layout = false;
+      
       schedule.class = {
-        id: schedules[i].class_type_id,
+        id: schedules[i].class_type_id.toString(),
         name: schedules[i].class_type_name,
         description: schedules[i].class_type_description,
         last_updated: moment(schedules[i].class_type_last_updated).format(),
@@ -115,7 +121,7 @@ module.exports = async (req, res) => {
         } 
 
         return {
-          id: teacher.id,
+          id: teacher.id.toString(),
           first_name: teacher.first_name,
           last_name: teacher.last_name,
           last_updated: moment(teacher.last_updated).format(),
@@ -125,7 +131,7 @@ module.exports = async (req, res) => {
       }));
 
       schedule.room = {
-        id: schedules[i].room_id,
+        id: schedules[i].room_id.toString(),
         name: schedules[i].room_name,
         last_updated: moment(schedules[i].room_last_updated).format(),
       };
@@ -152,8 +158,8 @@ module.exports = async (req, res) => {
         }
       } 
       schedule.late_cancel_window = schedules[i].seats == 1? class_start.subtract( private_class_signup_deadline, 'minutes') : class_start.subtract( class_signoff_deadline, 'minutes');
-      schedule.bookable_window_starts = class_start.subtract( customer_can_sign_up_for_class_max_days_before_class, "days");
-      schedule.bookable_window_ends = schedules[i].seats == 1? class_start.subtract( private_class_signup_deadline, 'minutes') : class_start;
+      schedule.bookable_window_starts = class_start.subtract( customer_can_sign_up_for_class_max_days_before_class, "days").local().format('YYYY-MM-DDTHH:mm:ss');
+      schedule.bookable_window_ends = (schedules[i].seats == 1? class_start.subtract( private_class_signup_deadline, 'minutes') : class_start).local().format('YYYY-MM-DDTHH:mm:ss');
 
       resData.schedules.push(schedule);
       

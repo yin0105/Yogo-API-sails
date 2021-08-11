@@ -43,48 +43,38 @@ module.exports = {
   },
 
   fn: async (inputs, exits) => {   
-    const accessToken = inputs.accessToken || (sails.config.classpass_com.classpass_com_access_token)
+    const accessToken = inputs.accessToken || (sails.config.integrations.classpass_com.classpass_com_access_token)
+    console.log("token = ", sails.config.integrations.classpass_com.classpass_com_access_token);
+    console.log("token = ", accessToken);
 
     const requestOptions = {
       method: inputs.method,
       url: API_ROOT + inputs.endpoint,
       headers: {
         'content-type': 'application/json',
-        Authorization: accessToken,
+        Authorization: `Token ${accessToken}`,
       },
       json: true,
       body: inputs.body,      
     }
 
-  //   const params = {
-  //     // Remove DelaySeconds parameter and value for FIFO queues
-  //     DelaySeconds: 10,
-  //     MessageAttributes: {
-  //      "Title": {
-  //        DataType: "String",
-  //        StringValue: "ClassPass.com API"
-  //      },
-  //     //  "Author": {
-  //     //    DataType: "String",
-  //     //    StringValue: "John Grisham12"
-  //     //  },
-  //     //  "WeeksOn": {
-  //     //    DataType: "Number",
-  //     //    StringValue: "7"
-  //     //  }
-  //    },
-  //    MessageBody: requestOptions,
-  //    QueueUrl: sails.config.sqs.url,
-  //  };
+    console.log("requestOptions = ", requestOptions);
 
     request(requestOptions)
       .then(response => {
         return exits.success(response)
       })
       .catch(e => {
-        const errorMessage = 'ClassPass API request failed. Error: ' + e.code + ' - ' + e.message
-        console.log(errorMessage)
-        return exits.error(new Error(errorMessage))
+        console.log("e ========== ", e);
+        console.log("e.message ========== ", e.message);
+        console.log("jj = ", e.message.substr(e.message.indexOf("{")));
+        let errorMessage = JSON.parse(e.message.substr(e.message.indexOf("{")));
+        if (errorMessage.error) {
+          console.log("errorMessage.error = ", errorMessage.error);
+          errorMessage = errorMessage.error;
+        }
+        console.log("errorMessage = ", errorMessage);
+        return exits.success(errorMessage);
       })
 
   },

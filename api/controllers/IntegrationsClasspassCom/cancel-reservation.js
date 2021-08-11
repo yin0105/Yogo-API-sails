@@ -16,6 +16,8 @@ module.exports = async (req, res) => {
     knex.raw("c.end_time AS end_time"),
     knex.raw("c.seats AS seats"))
   .where('cs.classpass_com_reservation_id', reservation_id);
+
+  console.log("reservation = ", reservation);
   
   if (reservation.length == 0) {
     return res.badRequest({
