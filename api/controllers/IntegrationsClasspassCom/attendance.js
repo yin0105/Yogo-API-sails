@@ -3,17 +3,14 @@ const knex = require('../../services/knex')
 const axios = require('axios').default;
 
 module.exports = async (req, res) => {
+  console.log("header = ", req.headers);
   const partner_id = req.params.partner_id;
   const attendance_id = req.params.attendance_id;
   const schedule_id = req.params.schedule_id;
 
-  const page = req.query.page;
-  const page_size = req.query.page_size; 
-/**
- * SELECT cs.updateAt, cs.cancelled_at, cs.`classpass_com_reservation_id`, c.`cancelled`  
- * FROM class_signup cs LEFT JOIN class c ON cs.class=c.id 
- * WHERE c.id=540 
- */
+  const page = req.query.page ? req.query.page : 1;
+  const page_size = req.query.page_size ? req.query.page_size : 100; 
+
   const attendances = await knex({cs: 'class_signup'})
   .leftJoin({c: 'class'}, 'c.id', 'cs.class')
   .leftJoin({u: 'user'}, 'u.id', 'cs.user')
@@ -35,7 +32,7 @@ module.exports = async (req, res) => {
 
   const countOfAttendances = attendances.length;
   let resData = {};
-  resData.attendances = [];
+  resData.attendance = [];
   resData.pagination = {
     page: page,
     page_size: page_size,
@@ -75,7 +72,7 @@ module.exports = async (req, res) => {
 
       attendance.last_updated = moment(attendances[i].updatedAt).format();
       
-      resData.attendances.push(attendance);
+      resData.attendance.push(attendance);
     }
   } else {
     // page number is invalid

@@ -81,7 +81,7 @@ module.exports = async (req, res) => {
   }
 
   const phone = user_.phone ? user_.phone: "";
-  const birthday = user_.birthday ? user_.birthday : "";
+  const birthday = user_.birthday ? user_.birthday : null;
   const address_1 = address.address_line1 ? address.address_line1: "";
   const address_2 = address.address_line2 ? address.address_line2: "";
   const city = address.city ? address.city: "";

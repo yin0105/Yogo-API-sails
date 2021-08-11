@@ -56,15 +56,14 @@
   },
 
   IntegrationsClasspassComController: {
-    'get-all-partners': [],
-    'get-partner': [],
-    'get-all-venues-of-partner': [],
-    'get-venue-of-partner': [],
-    'get-upcoming-schedules': [],
-    'reservations': [],
-    'cancel-reservation': [],
-    'attendance': [], //'cpAccessToken'
-    'test': [],
+    'get-all-partners': ['cpAccessToken'],
+    'get-partner': ['cpAccessToken'],
+    'get-all-venues-of-partner': ['cpAccessToken'],
+    'get-venue-of-partner': ['cpAccessToken'],
+    'get-upcoming-schedules': ['cpAccessToken'],
+    'reservations': ['cpAccessToken'],
+    'cancel-reservation': ['cpAccessToken'],
+    'attendance': ['cpAccessToken'], //'cpAccessToken'
   },
 
   SmsController: {
