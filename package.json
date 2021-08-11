@@ -23,6 +23,7 @@
     "express-pdf": "^1.2.2",
     "fm.liveswitch": "^1.8.1-24993",
     "global": "^4.3.2",
+    "got": "^11.8.2",
     "grunt": "1.0.1",
     "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-coffee": "1.0.0",
