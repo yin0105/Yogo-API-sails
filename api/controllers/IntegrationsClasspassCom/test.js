@@ -357,14 +357,14 @@ const resp = await sails.helpers.integrations.classpass.batchUpdates.with({
             "last_updated": "2019-01-02T20:30:38+00:00"
         }
     }
-],
-})
+  ],
+  })
 
-if(resp) {
-  console.log("success => ", resp);
-} else {
-  console.log("failed = ", resp);
-}
+  if(resp) {
+    console.log("success => ", resp);
+  } else {
+    console.log("failed = ", resp);
+  }
 
 
   console.log('resp = ', resp);
