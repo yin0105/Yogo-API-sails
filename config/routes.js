@@ -120,6 +120,8 @@ module.exports.routes = {
   
   'GET /cp/v1/test': 'IntegrationsClasspassComController.test',
 
+  'POST /v1/inventory/partners': 'IntegrationsClasspassComController.register-partner',
+  
 
   'POST /cron/tick': 'CronController.tick',
   'POST /cron/log': 'CronController.log',
@@ -269,6 +271,8 @@ module.exports.routes = {
   'DELETE /user-video-favorites/:user/:video': 'UsersController.destroy-favorite-video',
 
   'GET /user-devices': 'UserDevicesController.find',
+
+  'GET /video-filters': 'VideoFilters.find',
 
 
   'GET /video-filters': 'VideoFilters.find',

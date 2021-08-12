@@ -64,6 +64,7 @@
     'reservations': ['cpAccessToken'],
     'cancel-reservation': ['cpAccessToken'],
     'attendance': ['cpAccessToken'], //'cpAccessToken'
+    'register-partner': [],
     'test': [],
   },
 
@@ -79,6 +80,7 @@
     'logo': [],
     'find-one': [],
     'update-settings': [],
+    // 'get-settings': [],
     'create': [],
     'update': [],
     'find-all':[],

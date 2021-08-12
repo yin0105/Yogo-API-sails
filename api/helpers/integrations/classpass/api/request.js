@@ -58,8 +58,6 @@ module.exports = {
       body: inputs.body,      
     }
 
-    console.log("requestOptions = ", requestOptions);
-
     request(requestOptions)
       .then(response => {
         return exits.success(response)
