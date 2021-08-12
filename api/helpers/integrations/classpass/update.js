@@ -19,6 +19,11 @@ module.exports = {
       type: 'string',
       required: true,
     },
+    cancelled: {
+      type: 'boolean',
+      required: false,
+      defaultsTo: false,
+    }
   },
 
   exits: {
@@ -51,7 +56,6 @@ module.exports = {
         knex.raw("c.classpass_com_all_seats_allowed AS classpass_com_all_seats_allowed"),
         knex.raw("c.classpass_com_number_of_seats_allowed AS classpass_com_number_of_seats_allowed"),
         knex.raw("c.seats AS seats"),
-        knex.raw("c.subtitle AS subtitle"),
         knex.raw("c.classpass_com_number_of_seats_allowed AS classpass_com_number_of_seats_allowed"))
       .where("c.id", schedule_id);
 
@@ -143,45 +147,19 @@ module.exports = {
               "description": schedule[0].class_type_description,
               "last_updated": moment(schedule[0].class_type_last_updated).format(),
           },
-          "schedule_name": schedule[0].subtitle,
           "teachers": teachers_2,
           "room": {
               "id": schedule[0].room_id.toString(),
               "name": schedule[0].room_name,
               "last_updated": moment(schedule[0].room_last_updated).format("hh:mm:ss"),
           },
-          // "address": {
-          //     "address_line1": "123 Main St",
-          //     "address_line2": "Floor 1",
-          //     "city": "New York",
-          //     "state": "NY",
-          //     "zip": "10016",
-          //     "country": "US"
-          // },
-          // "coordinate": {
-          //     "latitude": 46.8697822,
-          //     "longitude": -113.995265
-          // },
           "total_spots": schedule[0].total_spots,
           "available_spots": available_spots,
           "has_layout": false,
-          // "layout": [
-          //     {
-          //         "x": 1,
-          //         "y": 1,
-          //         "label": "A"
-          //     }
-          // ],
-          // "available_spot_labels": [
-          //     "A",
-          //     "B",
-          //     "C",
-          //     "D"
-          // ],
           "bookable_window_starts": class_start.subtract( customer_can_sign_up_for_class_max_days_before_class, "days").local().format('YYYY-MM-DDTHH:mm:ss'),
           "bookable_window_ends": (schedule[0].seats == 1? class_start.subtract( private_class_signup_deadline, 'minutes') : class_start).local().format('YYYY-MM-DDTHH:mm:ss'),
           "late_cancel_window": schedule[0].seats == 1? class_start.subtract( private_class_signup_deadline, 'minutes') : class_start.subtract( class_signoff_deadline, 'minutes'),
-          "is_cancelled": false,
+          "is_cancelled": inputs.cancelled,
           "last_updated": moment(schedule[0].schedule_last_updated).format()
       }
     };

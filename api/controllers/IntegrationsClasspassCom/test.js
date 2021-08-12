@@ -69,6 +69,18 @@ module.exports = async (req, res) => {
 
 // ================= updates - schedules ===================
 
+  const resp = await sails.helpers.integrations.classpass.update.with({
+    schedule_id: 212,
+    partner_id: 1,
+    cancelled: false,
+  })
+
+  if(resp) {
+    console.log("success => ", resp);
+  } else {
+    console.log("failed = ", resp);
+  }
+
   // const resp = await sails.helpers.integrations.classpass.update.with({
   //   update:  {
   //     "type": "SCHEDULE",
@@ -333,38 +345,38 @@ module.exports = async (req, res) => {
 
 // ===================   batch-updates - reservations  ==============
 
-const resp = await sails.helpers.integrations.classpass.batchUpdates.with({
-  updates:  [
-    {
-        "id": "1",
-        "type": "RESERVATION",
-        "payload": {
-            "cp_user_id": "xyz987",
-            "reservation_id": "abc123",
-            "spot_label": "Bike 3",
-            "status": "ATTENDED",
-            "last_updated": "2019-01-02T20:30:38+00:00"
-        }
-    },
-    {
-        "id": "2",
-        "type": "RESERVATION",
-        "payload": {
-            "cp_user_id": "xyz987",
-            "reservation_id": "abc123",
-            "spot_label": "Bike 3",
-            "status": "ATTENDED",
-            "last_updated": "2019-01-02T20:30:38+00:00"
-        }
-    }
-  ],
-  })
+// const resp = await sails.helpers.integrations.classpass.batchUpdates.with({
+//   updates:  [
+//     {
+//         "id": "1",
+//         "type": "RESERVATION",
+//         "payload": {
+//             "cp_user_id": "xyz987",
+//             "reservation_id": "abc123",
+//             "spot_label": "Bike 3",
+//             "status": "ATTENDED",
+//             "last_updated": "2019-01-02T20:30:38+00:00"
+//         }
+//     },
+//     {
+//         "id": "2",
+//         "type": "RESERVATION",
+//         "payload": {
+//             "cp_user_id": "xyz987",
+//             "reservation_id": "abc123",
+//             "spot_label": "Bike 3",
+//             "status": "ATTENDED",
+//             "last_updated": "2019-01-02T20:30:38+00:00"
+//         }
+//     }
+//   ],
+//   })
 
-  if(resp) {
-    console.log("success => ", resp);
-  } else {
-    console.log("failed = ", resp);
-  }
+//   if(resp) {
+//     console.log("success => ", resp);
+//   } else {
+//     console.log("failed = ", resp);
+//   }
 
 
   console.log('resp = ', resp);

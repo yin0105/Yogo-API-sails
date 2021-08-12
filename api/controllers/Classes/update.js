@@ -24,7 +24,12 @@ module.exports = {
 
     await sails.helpers.classes.checkIfWaitingListShouldBeApplied(createdClass)
 
-    return exits.success(createdClass)
+    exits.success(createdClass)
+
+    const resp = await sails.helpers.integrations.classpass.update.with({
+      schedule_id: createdClass.id,
+      partner_id: createdClass.client
+    })
 
   },
 }

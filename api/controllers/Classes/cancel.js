@@ -138,6 +138,12 @@ module.exports = {
 
 
     // Done
-    return exits.success();
+    exits.success();
+
+    const resp = await sails.helpers.integrations.classpass.update.with({
+      schedule_id: createdClass.id,
+      partner_id: createdClass.client,
+      cancelled: true,
+    })
   },
 };
