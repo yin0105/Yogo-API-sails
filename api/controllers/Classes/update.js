@@ -13,7 +13,10 @@ module.exports = {
       'room',
       'seats',
       'studio_attendance_enabled',
-      'livestream_enabled'
+      'livestream_enabled',
+      'classpass_com_enabled',
+      'classpass_com_all_seats_allowed',
+      'classpass_com_number_of_seats_allowed'
     ])
 
     if (classData.room === '') {

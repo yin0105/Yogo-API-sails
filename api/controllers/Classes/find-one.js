@@ -17,11 +17,13 @@ function getPopulateFields(req) {
       'signups.used_membership.real_user_image',
       'capacity_text',
       'ics_url',
+      'classpass_com_all_seats_allowed',
+      'classpass_com_number_of_seats_allowed',
     ],
   ))
 }
 
-module.exports = {
+module.exports = {  
   friendlyName: 'Find one class',
 
   inputs: {
@@ -33,6 +35,7 @@ module.exports = {
   },
 
   fn: async function(inputs, exits) {
+    console.log("findOne");
 
     let classQuery = Class.findOne(this.req.param('id'))
 
@@ -40,6 +43,7 @@ module.exports = {
 
     let simplePopulateFields = _.pick(populateFields, ['room', 'class_type'])
     _.each(simplePopulateFields, (populateField => {
+      console.log("populateField = ", populateField);
       classQuery.populate(populateField)
     }))
 

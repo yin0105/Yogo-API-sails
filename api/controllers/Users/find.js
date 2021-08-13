@@ -76,7 +76,7 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-
+    console.log("users.find")
     if (!await sails.helpers.can2('controller.Users.find', this.req)) {
       return this.res.forbidden();
     }
