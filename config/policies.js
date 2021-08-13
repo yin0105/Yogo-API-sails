@@ -21,7 +21,7 @@
 
   // - Always check for client. There is always a client context.
   // - Check for valid token. Ok if not.
-  // - Look up user and get roles for active client. Ok if none.
+  // - Look up user and get roles for active client. Ok if none.e only i
   // - Check if user is allowed to do what she requests
 
   PingController: {

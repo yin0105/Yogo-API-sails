@@ -32,7 +32,7 @@ const VALID_EAGER_POPULATE_FIELDS = [
   'livestream_signups.used_class_pass.class_pass_type',
   'class_emails',
   'class_emails.instances',
-  'class_emails.instances.recipient',
+  'class_emails.instances.recipient',  
 ];
 
 const VALID_MANUAL_POPULATE_FIELDS = [
@@ -203,6 +203,18 @@ module.exports = {
       description: 'Only return classes that this user is signed up for or on waiting list for. Only available to the user itself and to admins. Overrides userToCalculateAccessFor',
       required: false,
     },
+    classpass_com_enabled: {
+      type: 'boolean',
+      required: false,
+    },
+    classpass_com_all_seats_allowed: {
+      type: 'boolean',
+      required: false,
+    },
+    classpass_com_number_of_seats_allowed: {
+      type: 'number',
+      required: false,
+    }
   },
 
   exits: {
@@ -236,6 +248,7 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     // Accept regular arrays as well as keyed arrays (which are converted to objects)
+    console.log("populate = ", inputs.populate);
     const populateFields = _.values(inputs.populate);
 
     const classesQuery = ObjectionClass.query().from({c: 'class'})
@@ -297,6 +310,27 @@ module.exports = {
       classesQuery
         .andWhere('seats', inputs.seats);
     }
+
+    if (inputs.classpass_com_enabled != undefined) {
+      if (inputs.classpass_com_enabled) {
+        classesQuery.andWhere('classpass_com_enabled', true);
+      } else {
+        classesQuery.andWhere(knex.raw('classpass_com_enabled is not true'));
+      }
+    }
+
+    if (inputs.classpass_com_all_seats_allowed != undefined && inputs.classpass_com_all_seats_allowed !== 'undefined') {
+      classesQuery
+        .andWhere('classpass_com_all_seats_allowed', inputs.classpass_com_all_seats_allowed);
+    }
+
+    if (inputs.classpass_com_enabled && inputs.classpass_com_all_seats_allowed === false) {
+      classesQuery
+        .andWhere('classpass_com_number_of_seats_allowed', inputs.classpass_com_number_of_seats_allowed);
+    }
+
+    console.log(inputs.classpass_com_enabled, inputs.classpass_com_all_seats_allowed, inputs.classpass_com_number_of_seats_allowed);
+
 
     if (inputs.teacher) {
       const teachers = _.isArray(inputs.teacher) ?
@@ -512,6 +546,7 @@ module.exports = {
     );
 
     const invalidPopulateFields = _.difference(populateFields, validPopulateFields);
+    console.log("invalidPopulateFields = ", invalidPopulateFields);
 
     if (invalidPopulateFields.length) {
       return exits.invalidPopulateFields('The following populate fields are invalid: ' + invalidPopulateFields.join(', '));
