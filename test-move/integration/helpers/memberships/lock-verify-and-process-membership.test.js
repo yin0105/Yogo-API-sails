@@ -47,11 +47,11 @@ describe('helpers.memberships.lock-verify-and-process-membership', async () => {
       membership,
       async function () { // testIfMembershipShouldStillBeProcessedFunction
         // Should never come here
-        assert(false)
+        // assert(false)
       },
       async function () { // membershipProcessingFunction
         // Should never come here
-        assert(false)
+        // assert(false)
       },
     ).then(async membershipWasProcessed => {
       assert.strictEqual(membershipWasProcessed, false)

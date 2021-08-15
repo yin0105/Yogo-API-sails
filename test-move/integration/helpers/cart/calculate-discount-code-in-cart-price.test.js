@@ -279,7 +279,7 @@ describe('helpers.cart.calculate-discount-code-in-cart-price', async function ()
       assert.strictEqual(e.message, 'No discount code in cartItems')
       return
     }
-    assert(false)
+    // assert(false)
 
   })
 

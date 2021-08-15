@@ -277,7 +277,8 @@ describe('policies.getClient', async () => {
 
   it('should use POST body client ID', async () => {
     // Is this still relevant after we switched to Reepay?
-
+    console.log("authorizeAdmin = ", authorizeAdmin())
+    console.log("testClientId = ", testClientId)
     const {body: classType} = await supertest(sails.hooks.http.app)
       .post('/class-types')
       .use(authorizeAdmin())
@@ -287,6 +288,9 @@ describe('policies.getClient', async () => {
         color: '#abcdef',
       })
       .expect(200);
+  
+    console.log("body: ", body);
+    console.log("classType: ", classType);
 
     assert.strictEqual(
       classType.client,
