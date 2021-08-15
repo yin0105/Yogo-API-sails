@@ -21,7 +21,7 @@ describe('models.Class.customToJson', async () => {
   })
 
   after(async () => {
-    // await Class.destroy({id: class1.id})
+    await Class.destroy({id: class1.id})
   })
 
   it('should remove seconds on start_time and end_time and send date in simple format', async () => {
