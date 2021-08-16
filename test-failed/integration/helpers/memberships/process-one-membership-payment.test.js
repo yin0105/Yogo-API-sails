@@ -36,7 +36,7 @@ describe('helpers.memberships.process-one-membership-payment', async () => {
       payment_service_provider: 'dibs'
     }).fetch()
 
-    pdfReceiptFake = sinon.fake.returns({filename: 'Test filename', pdfBuffer: new Buffer('Test')})
+    pdfReceiptFake = sinon.fake.returns({filename: 'Test filename', pdfBuffer: Buffer.from('Test')})
     pdfReceiptFake.with = pdfReceiptFake
     sinon.replace(sails.helpers.order, 'pdfReceipt', pdfReceiptFake)
 

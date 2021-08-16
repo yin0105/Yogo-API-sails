@@ -28,4 +28,5 @@ WHERE
      archived = 0
   ) > 0 AND
   m.automatic_payment_processing_started = 0
+ORDER BY id
 LIMIT 1

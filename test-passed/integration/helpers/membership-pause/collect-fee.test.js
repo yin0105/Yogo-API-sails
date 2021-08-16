@@ -17,7 +17,7 @@ describe('controllers.membership-pause.collect-fee', async function () {
   beforeEach(async () => {
     emailSendFake = emailSendFakeFactory.installEmailSendFake();
 
-    const pdfReceiptFake = sinon.fake.returns(new Buffer('Test'));
+    const pdfReceiptFake = sinon.fake.returns(Buffer.from('Test'));
     sinon.replace(sails.helpers.order, 'pdfReceipt', pdfReceiptFake);
     await MembershipLog.destroy({});
     await CronLog.destroy({});

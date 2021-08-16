@@ -10,7 +10,7 @@ describe('helpers.payment-provider.reepay.api.http-auth-header', () => {
 
     const authHeader = await sails.helpers.paymentProvider.reepay.api.httpAuthHeader(testClientId)
 
-    const basicAuthString = 'Basic ' + (new Buffer('priv_test_123456789:')).toString('base64')
+    const basicAuthString = 'Basic ' + (Buffer.from('priv_test_123456789:')).toString('base64')
 
     assert.deepStrictEqual(
       authHeader,
@@ -35,7 +35,7 @@ describe('helpers.payment-provider.reepay.api.http-auth-header', () => {
 
     const authHeader = await sails.helpers.paymentProvider.reepay.api.httpAuthHeader(testClientId)
 
-    const basicAuthString = 'Basic ' + (new Buffer('priv_1234567890:')).toString('base64')
+    const basicAuthString = 'Basic ' + (Buffer.from('priv_1234567890:')).toString('base64')
 
     assert.deepStrictEqual(
       authHeader,

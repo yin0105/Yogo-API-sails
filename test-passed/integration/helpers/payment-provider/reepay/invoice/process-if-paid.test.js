@@ -53,7 +53,7 @@ describe('helpers.payment-provider.reepay.invoice.process-if-paid', async () => 
     })
     sinon.replace(sails.helpers.paymentProvider.reepay.api, 'request', chargeRequestFake)
 
-    const pdfReceiptFake = sinon.fake.returns({filename: 'Test filename', pdfBuffer: new Buffer('Test')})
+    const pdfReceiptFake = sinon.fake.returns({filename: 'Test filename', pdfBuffer: Buffer.from('Test')})
     pdfReceiptFake.with = pdfReceiptFake
     sinon.replace(sails.helpers.order, 'pdfReceipt', pdfReceiptFake)
 
@@ -130,7 +130,7 @@ describe('helpers.payment-provider.reepay.invoice.process-if-paid', async () => 
     })
     sinon.replace(sails.helpers.paymentProvider.reepay.api, 'request', chargeRequestFake)
 
-    const pdfReceiptFake = sinon.fake.returns({filename: 'Test filename', pdfBuffer: new Buffer('Test')})
+    const pdfReceiptFake = sinon.fake.returns({filename: 'Test filename', pdfBuffer: Buffer.from('Test')})
     pdfReceiptFake.with = pdfReceiptFake
     sinon.replace(sails.helpers.order, 'pdfReceipt', pdfReceiptFake)
 

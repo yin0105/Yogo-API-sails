@@ -34,7 +34,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
   beforeEach(async () => {
     emailSendFake = emailSendFakeFactory.installEmailSendFake();
 
-    pdfReceiptFake = sinon.fake.returns(new Buffer('Test'));
+    pdfReceiptFake = sinon.fake.returns(Buffer.from('Test'));
     sinon.replace(sails.helpers.order, 'pdfReceipt', pdfReceiptFake);
   });
 
@@ -899,6 +899,11 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
 
     const createdOrderItems = await OrderItem.find({order: createdOrders[0].id});
 
+    createdOrderItems.sort((a, b) => {
+      return a.item_type > b.item_type ? -1 : 1;
+
+    });
+
     expect(createdOrderItems).to.matchPattern(`
       [
         {
@@ -927,7 +932,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
       ]`,
     );
 
-    const orderText = fixtures.userAlice.first_name + ' ' + fixtures.userAlice.last_name + '\n' + fixtures.membershipTypeYogaUnlimited.name + '. Payment for 1 month from May 16, 2019 to June 15, 2019. Discount code: "test_discount_code".,\nNo-show fee for Yoga, Tuesday, May 14, 2019 10:00';
+    const orderText = fixtures.userAlice.first_name + ' ' + fixtures.userAlice.last_name + '\nNo-show fee for Yoga, Tuesday, May 14, 2019 10:00,\n' + fixtures.membershipTypeYogaUnlimited.name + '. Payment for 1 month from May 16, 2019 to June 15, 2019. Discount code: "test_discount_code".';
 
     expect(apiRequestFake.getCall(0).args[0]).to.matchPattern({
       merchant: fixtures.testClient1.dibs_merchant,

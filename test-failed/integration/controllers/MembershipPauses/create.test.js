@@ -26,7 +26,7 @@ describe('controllers.MembershipPauses.create', async function () {
   beforeEach(async () => {
     emailSendFake = emailSendFakeFactory.installEmailSendFake();
 
-    pdfReceiptFake = sinon.fake.returns(new Buffer('Test'));
+    pdfReceiptFake = sinon.fake.returns(Buffer.from('Test'));
     sinon.replace(sails.helpers.order, 'pdfReceipt', pdfReceiptFake);
     await MembershipLog.destroy({});
   });

@@ -96,7 +96,7 @@ describe('controllers.Cron.tick', async () => {
 
   it('should process a membership payment, but not do anything else', async () => {
 
-    const pdfReceiptFake = sinon.fake.returns({filename: 'Test filename', pdfBuffer: new Buffer('Test buffer')})
+    const pdfReceiptFake = sinon.fake.returns({filename: 'Test filename', pdfBuffer: Buffer.from('Test buffer')})
     pdfReceiptFake.with = pdfReceiptFake
     sinon.replace(sails.helpers.order, 'pdfReceipt', pdfReceiptFake)
 

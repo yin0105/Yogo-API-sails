@@ -26,7 +26,7 @@ module.exports = {
 
     const basicAuthUsername = privateKey + ':'
 
-    const base64EncodedBasicAuthUsername = (new Buffer(basicAuthUsername)).toString('base64')
+    const base64EncodedBasicAuthUsername = (Buffer.from(basicAuthUsername)).toString('base64')
 
     const authHeader = {
       authorization: 'Basic ' + base64EncodedBasicAuthUsername,
