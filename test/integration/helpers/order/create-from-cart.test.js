@@ -207,112 +207,118 @@ describe('helpers.order.create-from-cart', async () => {
 
   // });
 
-  // it("should apply a discount code", async () => {
+  it("should apply a discount code", async () => {
 
-  //   const discountCode = await DiscountCode.create({
-  //     name: 'halfprice',
-  //     type: 'discount_percent',
-  //     discount_percent: 50,
-  //     valid_for_items: ['events', 'products'],
-  //   }).fetch();
+    const discountCode = await DiscountCode.create({
+      name: 'halfprice',
+      type: 'discount_percent',
+      discount_percent: 50,
+      valid_for_items: ['events', 'products'],
+    }).fetch();
 
-  //   const cartItems = await CartItem.createEach(
-  //     [
-  //       {
-  //         item_type: 'membership_type',
-  //         item_id: fixtures.membershipTypeYogaUnlimited.id,
-  //         payment_option: fixtures.yogaUnlimitedPaymentOptionMonthly.id,
-  //         user: fixtures.userAlice.id,
-  //       },
-  //       {
-  //         item_type: 'event',
-  //         item_id: fixtures.eventWithMultipleTimeSlots.id,
-  //         user: fixtures.userAlice.id,
-  //       },
-  //       {
-  //         item_type: 'class_pass_type',
-  //         item_id: fixtures.classPassTypeYogaTenClasses.id,
-  //         user: fixtures.userAlice.id,
-  //       },
-  //       {
-  //         item_type: 'product',
-  //         item_id: fixtures.productYogaMat.id,
-  //         user: fixtures.userAlice.id,
-  //       },
-  //       {
-  //         item_type: 'discount_code',
-  //         item_id: discountCode.id,
-  //         user: fixtures.userAlice.id,
-  //       },
-  //     ],
-  //   ).fetch();
+    const cartItems = await CartItem.createEach(
+      [
+        {
+          item_type: 'membership_type',
+          item_id: fixtures.membershipTypeYogaUnlimited.id,
+          payment_option: fixtures.yogaUnlimitedPaymentOptionMonthly.id,
+          user: fixtures.userAlice.id,
+        },
+        {
+          item_type: 'event',
+          item_id: fixtures.eventWithMultipleTimeSlots.id,
+          user: fixtures.userAlice.id,
+        },
+        {
+          item_type: 'class_pass_type',
+          item_id: fixtures.classPassTypeYogaTenClasses.id,
+          user: fixtures.userAlice.id,
+        },
+        {
+          item_type: 'product',
+          item_id: fixtures.productYogaMat.id,
+          user: fixtures.userAlice.id,
+        },
+        {
+          item_type: 'discount_code',
+          item_id: discountCode.id,
+          user: fixtures.userAlice.id,
+        },
+      ],
+    ).fetch();
 
-  //   const returnedOrder = await sails.helpers.order.createFromCart.with({
-  //     user: fixtures.userAlice,
-  //   });
+    const returnedOrder = await sails.helpers.order.createFromCart.with({
+      user: fixtures.userAlice,
+    });
 
-  //   const expectedTotal = fixtures.yogaUnlimitedPaymentOptionMonthly.payment_amount +
-  //     fixtures.eventWithMultipleTimeSlots.price / 2 +
-  //     fixtures.classPassTypeYogaTenClasses.price +
-  //     fixtures.productYogaMat.price / 2;
+    const expectedTotal = fixtures.yogaUnlimitedPaymentOptionMonthly.payment_amount +
+      fixtures.eventWithMultipleTimeSlots.price / 2 +
+      fixtures.classPassTypeYogaTenClasses.price +
+      fixtures.productYogaMat.price / 2;
 
-  //   expect(returnedOrder).to.matchPattern(`{
-  //     client: ${testClientId},
-  //     user: ${fixtures.userAlice.id},
-  //     test: true,
-  //     total: ${expectedTotal},
-  //     vat_amount: ${fixtures.productYogaMat.price * 0.2 / 2},
-  //     ...
-  //   }`);
+    expect(returnedOrder).to.matchPattern(`{
+      client: ${testClientId},
+      user: ${fixtures.userAlice.id},
+      test: true,
+      total: ${expectedTotal},
+      vat_amount: ${fixtures.productYogaMat.price * 0.2 / 2},
+      ...
+    }`);
 
-  //   const createdOrder = await Order.findOne(returnedOrder.id).populate('order_items');
+    let createdOrder = await Order.findOne(returnedOrder.id).populate('order_items')
+  
+    // console.log("createdOrder = ", createdOrder);
+    createdOrder.order_items.sort( (a, b) => {
+      return a.item_type > b.item_type ? 1 : -1;
+    });
+    console.log('createdOrder= ', createdOrder)
+    // console.log(fixtures.membershipTypeYogaUnlimited.id, fixtures.yogaUnlimitedPaymentOptionMonthly.id, fixtures.eventWithMultipleTimeSlots.id, fixtures.classPassTypeYogaTenClasses.id, fixtures.productYogaMat.id, discountCode.id );
+    expect(createdOrder).to.matchPattern(`{
+      order_items: [
+        {
+          item_type: 'class_pass_type',
+          item_id: ${fixtures.classPassTypeYogaTenClasses.id},
+          ...
+        },
+        {
+          item_type: 'discount_code',
+          item_id: ${discountCode.id},
+          count: 1,
+          item_price: -2110,
+          total_price: -2110,
+          ...
+        },
+        {
+          item_type: 'event',
+          item_id: ${fixtures.eventWithMultipleTimeSlots.id},
+          ...
+        },
+        {
+          item_type: 'membership_type',
+          item_id: ${fixtures.membershipTypeYogaUnlimited.id},
+          payment_option: ${fixtures.yogaUnlimitedPaymentOptionMonthly.id},
+          ...
+        },
+        {
+          item_type: 'product',
+          item_id: ${fixtures.productYogaMat.id},
+          ...
+        },
+      ],
+      client: ${testClientId},
+      user: ${fixtures.userAlice.id},
+      test: true,
+      total: ${expectedTotal},
+      vat_amount: ${fixtures.productYogaMat.price * 0.2 / 2},
+      ...
+    }`);
 
-  //   expect(createdOrder).to.matchPattern(`{
-  //     order_items: [
-  //       {
-  //         item_type: 'membership_type',
-  //         item_id: ${fixtures.membershipTypeYogaUnlimited.id},
-  //         payment_option: ${fixtures.yogaUnlimitedPaymentOptionMonthly.id},
-  //         ...
-  //       },
-  //       {
-  //         item_type: 'event',
-  //         item_id: ${fixtures.eventWithMultipleTimeSlots.id},
-  //         ...
-  //       },
-  //       {
-  //         item_type: 'class_pass_type',
-  //         item_id: ${fixtures.classPassTypeYogaTenClasses.id},
-  //         ...
-  //       },
-  //       {
-  //         item_type: 'product',
-  //         item_id: ${fixtures.productYogaMat.id},
-  //         ...
-  //       },
-  //       {
-  //         item_type: 'discount_code',
-  //         item_id: ${discountCode.id},
-  //         count: 1,
-  //         item_price: -2110,
-  //         total_price: -2110,
-  //         ...
-  //       }
-  //     ],
-  //     client: ${testClientId},
-  //     user: ${fixtures.userAlice.id},
-  //     test: true,
-  //     total: ${expectedTotal},
-  //     vat_amount: ${fixtures.productYogaMat.price * 0.2 / 2},
-  //     ...
-  //   }`);
+    await Order.destroy({id: createdOrder.id});
+    await OrderItem.destroy({order: createdOrder.id});
+    await CartItem.destroy({id: _.map(cartItems, 'id')});
+    await DiscountCode.destroy({id: discountCode.id});
 
-  //   await Order.destroy({id: createdOrder.id});
-  //   await OrderItem.destroy({order: createdOrder.id});
-  //   await CartItem.destroy({id: _.map(cartItems, 'id')});
-  //   await DiscountCode.destroy({id: discountCode.id});
-
-  // });
+  });
 
   it('should apply a membership campaign name', async () => {
 
