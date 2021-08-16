@@ -12,6 +12,10 @@ describe('controllers.ClassTypes.find', () => {
       .get(`/class-types?client=${testClientId}`)
       .expect(200);
 
+    classTypes.sort((a, b) => {
+      return a.id > b.id ? 1 : -1;
+    });
+
     expect(classTypes).to.matchPattern(`[
       {
         name: 'Yoga',

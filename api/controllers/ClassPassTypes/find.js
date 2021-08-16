@@ -67,7 +67,7 @@ module.exports = {
       }
     })
 
-    const classPassTypes = await query
+    const classPassTypes = await query.sort('id ASC')
 
     const manualPopulateFields = _.intersection(
       inputs.populate,

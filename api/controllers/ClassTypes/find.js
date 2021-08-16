@@ -47,7 +47,6 @@ module.exports = {
         .groupBy('ct.id');
 
       query.andWhere('id', 'in', _.map(classTypesWithClassesFromDateForward, 'id'));
-
     }
 
     const populateFields = _.intersection(inputs.populate, [
@@ -67,7 +66,7 @@ module.exports = {
     query.modifyEager('membership_types_livestream', builder => builder.where({'membership_type.archived': 0}));
     query.modifyEager('class_type_emails', builder => builder.where({'class_type_email.archived': 0}));
 
-    const classTypes = await query;
+    const classTypes = await query
 
     return exits.success(
       inputs.id && !_.isArray(inputs.id)
