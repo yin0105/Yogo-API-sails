@@ -232,6 +232,14 @@ describe('helpers.populate.classes.user-can-sign-up-for-class', async function (
       expectedResult[0],
       {
         signup_count: 0,
+        checkedin_count: 0,
+        class_is_fully_booked: false,
+        class_has_started: false,
+        class_signup_deadline_has_been_exceeded: false,
+        class_is_too_far_in_the_future_to_sign_up: false,
+        class_is_open: false,
+        class_accepts_customer_signups: true,
+
         user_has_access_to_class: true,
         class_has_started: false,
         class_is_open: false,
@@ -250,13 +258,18 @@ describe('helpers.populate.classes.user-can-sign-up-for-class', async function (
       expectedResult[1],
       {
         signup_count: 1,
-        user_has_access_to_class: true,
-        class_has_started: false,
-        class_is_open: false,
+        
+        checkedin_count: 0,
         class_is_fully_booked: false,
+        class_has_started: false,
         class_signup_deadline_has_been_exceeded: false,
         class_is_too_far_in_the_future_to_sign_up: false,
+        class_is_open: false,
         class_accepts_customer_signups: true,
+
+        user_has_access_to_class: true,
+        class_has_started: false,
+        
         user_is_signed_up_for_class: true,
         user_can_sign_up_for_class: false,
         user_signup_id: signup.id,
@@ -268,6 +281,14 @@ describe('helpers.populate.classes.user-can-sign-up-for-class', async function (
       expectedResult[2],
       {
         signup_count: 0,
+        checkedin_count: 0,
+        class_is_fully_booked: false,
+        class_has_started: false,
+        class_signup_deadline_has_been_exceeded: false,
+        class_is_too_far_in_the_future_to_sign_up: false,
+        class_is_open: false,
+        class_accepts_customer_signups: true,
+
         user_has_access_to_class: false,
         class_has_started: false,
         class_is_open: false,
@@ -286,6 +307,14 @@ describe('helpers.populate.classes.user-can-sign-up-for-class', async function (
       expectedResult[3],
       {
         signup_count: 0,
+        checkedin_count: 0,
+        class_is_fully_booked: false,
+        class_has_started: false,
+        class_signup_deadline_has_been_exceeded: false,
+        class_is_too_far_in_the_future_to_sign_up: false,
+        class_is_open: false,
+        class_accepts_customer_signups: false,
+        
         user_has_access_to_class: true,
         class_has_started: false,
         class_is_open: false,
@@ -300,6 +329,9 @@ describe('helpers.populate.classes.user-can-sign-up-for-class', async function (
         user_is_signed_up_for_livestream: false,
       },
     )
+
+    console.log("classes = ", classes);
+    console.log("expectedResult = ", expectedResult);
 
     assert.deepStrictEqual(
       classes,
