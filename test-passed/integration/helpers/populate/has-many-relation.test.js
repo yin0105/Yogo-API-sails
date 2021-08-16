@@ -77,6 +77,10 @@ describe('has-many-relation', async () => {
       'membership_type',
     );
 
+    inputCollection[0].payment_options.sort( (a, b) => {
+      return a.id > b.id ? 1 : -1;
+    });
+
     expect(inputCollection).to.matchPattern(`[
       {
         id: ${fixtures.membershipTypeYogaUnlimited.id},
