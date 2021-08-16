@@ -409,8 +409,12 @@ describe('helpers.memberships.find-one.that-needs-to-process-payment', async () 
     ]).fetch();
 
     await sails.helpers.memberships.findOne.thatNeedsToProcessPayment();
-
+    // console.log("getClientSettingsFake = ", getClientSettingsFake)
+    console.log("count = ", getClientSettingsFake.callCount)
     assert.strictEqual(getClientSettingsFake.callCount, 2);
+    
+    console.log(getClientSettingsFake.firstCall.args[0], testClientId);
+    console.log(getClientSettingsFake.secondCall.args[0], testClientId + 1);
     assert.strictEqual(getClientSettingsFake.firstCall.args[0], testClientId);
     assert.strictEqual(getClientSettingsFake.secondCall.args[0], testClientId + 1);
 

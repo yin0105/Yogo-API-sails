@@ -46,6 +46,16 @@ describe('helpers.video.update-all-video-provider-data', () => {
     await sails.helpers.video.updateAllVideoProviderData(testClientId);
 
     const videosInDb = await Video.find({});
+    videosInDb.sort((a, b) => {
+      if (a.id > b.id) {
+        return 1;
+      } else if (a.id == b.id) {
+        return a.video_provider_id > b.video_provider_id ? 1 : -1;
+      } else {
+        return -1;
+      }
+
+    });
 
     expect(videosInDb).to.matchPattern(`[
       {
@@ -122,6 +132,16 @@ describe('helpers.video.update-all-video-provider-data', () => {
     await sails.helpers.video.updateAllVideoProviderData(testClientId);
 
     const videosInDb = await Video.find({});
+    videosInDb.sort((a, b) => {
+      if (a.id > b.id) {
+        return 1;
+      } else if (a.id == b.id) {
+        return a.video_provider_id > b.video_provider_id ? 1 : -1;
+      } else {
+        return -1;
+      }
+
+    });
 
     expect(videosInDb).to.matchPattern(`[
       {
@@ -213,6 +233,7 @@ describe('helpers.video.update-all-video-provider-data', () => {
   });
 
   it('should do all the things in the same run', async () => {
+    const v1 = await Video.find({});
 
     await Video.createEach([
       {
@@ -308,7 +329,17 @@ describe('helpers.video.update-all-video-provider-data', () => {
 
     await sails.helpers.video.updateAllVideoProviderData(testClientId);
 
-    const videosInDb = await Video.find({});
+    let  videosInDb = await Video.find({});
+    videosInDb.sort((a, b) => {
+      if (a.id > b.id) {
+        return 1;
+      } else if (a.id == b.id) {
+        return a.video_provider_id > b.video_provider_id ? 1 : -1;
+      } else {
+        return -1;
+      }
+
+    });
 
     expect(videosInDb).to.matchPattern(`[
       {
@@ -380,7 +411,7 @@ describe('helpers.video.update-all-video-provider-data', () => {
           description: 'Description 5'
         },
         ...
-      },
+      }
       ]  
     `);
 
@@ -470,6 +501,16 @@ describe('helpers.video.update-all-video-provider-data', () => {
     await sails.helpers.video.updateAllVideoProviderData(testClientId);
 
     const videosInDb = await Video.find({});
+    videosInDb.sort((a, b) => {
+      if (a.id > b.id) {
+        return 1;
+      } else if (a.id == b.id) {
+        return a.video_provider_id > b.video_provider_id ? 1 : -1;
+      } else {
+        return -1;
+      }
+
+    });
 
     expect(videosInDb).to.matchPattern(`[
       {
