@@ -110,6 +110,17 @@ describe('helpers.memberships.cancel-future-signups-livestream', async function 
 
     dbSignups = _.map(dbSignups, cs => _.pick(cs, ['class','user','used_membership', 'cancelled_at', 'archived']));
 
+    dbSignups.sort((a, b) => {
+      if (a.class > b.class) {
+        return 1;
+      } else if (a.class == b.class) {
+        return a.used_membership > b.used_membership ? 1 : -1;
+      } else {
+        return -1;
+      }
+
+    });
+
     expect(dbSignups).to.matchPattern(`[
       {
         class: ${classes[0].id},
@@ -252,6 +263,17 @@ describe('helpers.memberships.cancel-future-signups-livestream', async function 
     let dbSignups = await ClassLivestreamSignup.find({});
 
     dbSignups = _.map(dbSignups, cs => _.pick(cs, ['class','user','used_membership', 'cancelled_at', 'archived']));
+    
+    dbSignups.sort((a, b) => {
+      if (a.class > b.class) {
+        return 1;
+      } else if (a.class == b.class) {
+        return a.used_membership > b.used_membership ? 1 : -1;
+      } else {
+        return -1;
+      }
+
+    });
 
     expect(dbSignups).to.matchPattern(`[
       {
@@ -375,6 +397,17 @@ describe('helpers.memberships.cancel-future-signups-livestream', async function 
     let dbSignups = await ClassLivestreamSignup.find({});
 
     dbSignups = _.map(dbSignups, cs => _.pick(cs, ['class','user','used_membership', 'cancelled_at', 'archived']));
+
+    dbSignups.sort((a, b) => {
+      if (a.class > b.class) {
+        return 1;
+      } else if (a.class == b.class) {
+        return a.used_membership > b.used_membership ? 1 : -1;
+      } else {
+        return -1;
+      }
+
+    });
 
     expect(dbSignups).to.matchPattern(`[
       {
