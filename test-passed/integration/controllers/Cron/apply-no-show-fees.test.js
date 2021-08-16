@@ -85,6 +85,11 @@ describe('controllers.Cron.apply-no-show-fees', async () => {
     const timestampAfterCall = Date.now();
 
     const updatedSignups = await ClassSignup.find({});
+
+    updatedSignups.sort((a, b) => {
+      return a.class > b.class ? 1 : -1;
+    });
+
     expect(updatedSignups).to.matchPattern(`[
       {
         user: ${fixtures.userAlice.id},
@@ -382,6 +387,11 @@ describe('controllers.Cron.apply-no-show-fees', async () => {
     const timestampAfterCall = Date.now();
 
     const updatedSignups = await ClassSignup.find({});
+
+    updatedSignups.sort((a, b) => {
+      return a.class > b.class ? 1 : -1;
+    });
+
     expect(updatedSignups).to.matchPattern(`[
       {        
         class: ${class1.id},       
@@ -525,6 +535,11 @@ describe('controllers.Cron.apply-no-show-fees', async () => {
     const timestampAfterCall = Date.now();
 
     const updatedSignups = await ClassSignup.find({});
+
+    updatedSignups.sort((a, b) => {
+      return a.class > b.class ? 1 : -1;
+    });
+
     expect(updatedSignups).to.matchPattern(`[
       {        
         class: ${class1.id},       
@@ -669,6 +684,11 @@ describe('controllers.Cron.apply-no-show-fees', async () => {
     const timestampAfterCall = Date.now();
 
     const updatedSignups = await ClassSignup.find({});
+
+    updatedSignups.sort((a, b) => {
+      return a.class > b.class ? 1 : -1;
+    });
+
     expect(updatedSignups).to.matchPattern(`[
       {        
         class: ${class1.id},       

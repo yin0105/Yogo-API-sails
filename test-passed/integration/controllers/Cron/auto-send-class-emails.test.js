@@ -115,6 +115,11 @@ describe('controllers.Cron.auto-send-class-emails', async () => {
       .expect(200);
 
     const allInstances = await ClassEmailInstance.find({});
+
+    allInstances.sort((a, b) => {
+      return a.recipient_id > b.recipient_id ? 1 : -1;
+    });
+
     expect(allInstances).to.matchPattern(
       `[{
         class_email_id: ${email.id},
@@ -213,6 +218,11 @@ describe('controllers.Cron.auto-send-class-emails', async () => {
       .expect(200);
 
     const allInstances = await ClassEmailInstance.find({});
+
+    allInstances.sort((a, b) => {
+      return a.recipient_id > b.recipient_id ? 1 : -1;
+    });
+    
     expect(allInstances).to.matchPattern(
       `[{
         class_email_id: ${email.id},
