@@ -109,6 +109,10 @@ module.exports = {
     }
 
     const orders = await ordersQuery;
+    orders.sort((a, b) => {
+      return a.id > b.id ? 1 : -1;
+    });
+
 
     return exits.success(!inputs.id || _.isArray(inputs.id) ? orders : orders[0]);
 

@@ -672,6 +672,7 @@ describe('controllers.MembershipPauses.update', async function () {
 
     MockDate.set(moment.tz('2020-05-15', 'Europe/Copenhagen'));
     const timestampBeforeCall = Date.now();
+    console.log("== before: ", `/membership-pauses/${membershipPause.id}?client=${testClientId}`);
     await supertest(sails.hooks.http.app)
       .put(`/membership-pauses/${membershipPause.id}?client=${testClientId}`)
       .send(
@@ -685,9 +686,12 @@ describe('controllers.MembershipPauses.update', async function () {
       .use(acceptExtendedErrorFormat())
       .use(authorizeAdmin())
       .expect(200);
+    console.log("== after");
     const timestampAfterCall = Date.now();
 
     const createdOrders = await Order.find({});
+
+    console.log("createdOrders = ", createdOrders)
 
     expect(createdOrders).to.matchPattern(`
       [

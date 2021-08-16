@@ -366,7 +366,7 @@ describe('controllers.Orders.find', () => {
       )
       .use(authorizeAdmin())
       .expect(200);
-
+    
     comparePartialObject(
       response.body,
       [
