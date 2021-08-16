@@ -267,12 +267,10 @@ describe('helpers.order.create-from-cart', async () => {
 
     let createdOrder = await Order.findOne(returnedOrder.id).populate('order_items')
   
-    // console.log("createdOrder = ", createdOrder);
     createdOrder.order_items.sort( (a, b) => {
       return a.item_type > b.item_type ? 1 : -1;
     });
-    console.log('createdOrder= ', createdOrder)
-    // console.log(fixtures.membershipTypeYogaUnlimited.id, fixtures.yogaUnlimitedPaymentOptionMonthly.id, fixtures.eventWithMultipleTimeSlots.id, fixtures.classPassTypeYogaTenClasses.id, fixtures.productYogaMat.id, discountCode.id );
+
     expect(createdOrder).to.matchPattern(`{
       order_items: [
         {
