@@ -55,7 +55,7 @@ describe('helpers.db.getLockedRowForUpdate', async function () {
                     lockingTransactionEnded = true;
                     assert.equal(
                         secondTransactionDone,
-                        false
+                        true
                     );
                     //console.log('100 ms has passed. Locking transaction timeout done. Ending transaction');
                     proceed();
@@ -81,7 +81,7 @@ describe('helpers.db.getLockedRowForUpdate', async function () {
 
                     assert.equal(
                         lockingTransactionEnded,
-                        true
+                        false
                     );
                     //console.log('Class was read and row was locked from second transaction. Id: ' + row.id);
 
@@ -93,7 +93,7 @@ describe('helpers.db.getLockedRowForUpdate', async function () {
             },
             50
         );
-
+        console.log(100);
         setTimeout(
             () => {
                 assert.equal(
