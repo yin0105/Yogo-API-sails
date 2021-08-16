@@ -245,7 +245,7 @@ describe('controllers.Reports.generate, turnover', () => {
         startDate: '2018-09-01',
       })
       .use(authorizeAdmin())
-      .expect(200);
+      .expect(200);    
 
     assert.deepEqual(
       response.body,
@@ -272,6 +272,8 @@ describe('controllers.Reports.generate, turnover', () => {
       .expect(200);
 
     response2.body.items = _.sortBy(response2.body.items, ['item_type', 'item_id']);
+
+    console.log("response2.body = ", response2.body)
 
 
     assert.deepEqual(
