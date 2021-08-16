@@ -199,7 +199,8 @@ describe('controllers.Users.destroy', () => {
         class_signups: _.isArray,
         class_waiting_list_signups: _.isArray,
         class_livestream_signups: _.isArray,
-        event_signups: _.isArray
+        event_signups: _.isArray,
+        classpass_com_user_id: null,
       }`,
     );
 
