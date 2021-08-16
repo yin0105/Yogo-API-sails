@@ -54,6 +54,9 @@ describe('controllers.Clients.get-settings', () => {
 
       const settingsSchema = sails.helpers.clientSettings.getSchema()
 
+      console.log("==================== response.body ======================")
+      console.log(response.body)
+
       assert.equal(
         response.body,
         'Query contains the following invalid key(s): invalid_key\n\nValid client settings are:\n' + JSON.stringify(Object.keys(settingsSchema)),
