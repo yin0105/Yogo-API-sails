@@ -110,16 +110,16 @@ describe('helpers.class-email.send', async () => {
       `[
         {
           client_id: ${testClientId},
-          recipient_id: ${fixtures.userBill.id},
+          recipient_id: ${fixtures.userAlice.id},
           class_email_id: ${classEmail.id},
           ...
         },
         {
           client_id: ${testClientId},
-          recipient_id: ${fixtures.userAlice.id},
+          recipient_id: ${fixtures.userBill.id},
           class_email_id: ${classEmail.id},
           ...
-        }
+        }        
       ]`,
     );
 
@@ -162,9 +162,23 @@ describe('helpers.class-email.send', async () => {
     await sails.helpers.classEmail.send(classEmail);
 
     const instances = await ClassEmailInstance.find({});
+    console.log("instances = ", instances);
 
+    console.log(classEmail.id, fixtures.userDennis.id, fixtures.userAlice.id, fixtures.userBill.id, fixtures.userCharlie.id)
     expect(instances).matchPattern(
       `[
+        {
+          client_id: ${testClientId},
+          recipient_id: ${fixtures.userDennis.id},
+          class_email_id: ${classEmail.id},
+          ...
+        },
+        {
+          client_id: ${testClientId},
+          recipient_id: ${fixtures.userAlice.id},
+          class_email_id: ${classEmail.id},
+          ...
+        },
         {
           client_id: ${testClientId},
           recipient_id: ${fixtures.userBill.id},
@@ -176,19 +190,7 @@ describe('helpers.class-email.send', async () => {
           recipient_id: ${fixtures.userCharlie.id},
           class_email_id: ${classEmail.id},
           ...
-        },
-        {
-          client_id: ${testClientId},
-          recipient_id: ${fixtures.userAlice.id},
-          class_email_id: ${classEmail.id},
-          ...
-        },        
-        {
-          client_id: ${testClientId},
-          recipient_id: ${fixtures.userDennis.id},
-          class_email_id: ${classEmail.id},
-          ...
-        },      
+        },   
       ]`,
     );
 
@@ -239,6 +241,10 @@ describe('helpers.class-email.send', async () => {
     await sails.helpers.classEmail.send(classEmail);
 
     const instances = await ClassEmailInstance.find({});
+
+    console.log("instances = ", instances);
+
+    console.log(classEmail.id, fixtures.userBill.id, fixtures.userCharlie.id, fixtures.userAlice.id, fixtures.userEvelyn.id)
 
     expect(instances).matchPattern(
       `[
