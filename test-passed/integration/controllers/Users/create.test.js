@@ -82,6 +82,7 @@ describe('controllers.Users.create', () => {
         .use(authorizeAdmin())
         .expect(200);
 
+      console.log("response.body = ", response.body)
       expect(response.body).to.matchPattern(
         `{
           id: _.isInteger,
@@ -110,7 +111,8 @@ describe('controllers.Users.create', () => {
           import_welcome_set_password_email_sent: false,
           id_in_previous_booking_system: '',
           teacher_can_manage_all_classes: true,
-          livestream_time_display_mode: 'remaining'
+          livestream_time_display_mode: 'remaining',
+          classpass_com_user_id: null
         }`,
       );
 
@@ -271,7 +273,8 @@ describe('controllers.Users.create', () => {
           admin: false,
           checkin: false,
           teacher_can_manage_all_classes: false,
-          livestream_time_display_mode: 'remaining'                  
+          livestream_time_display_mode: 'remaining',
+          classpass_com_user_id: null                 
         }`,
       );
 

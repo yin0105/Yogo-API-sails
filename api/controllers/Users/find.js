@@ -100,6 +100,7 @@ module.exports = {
       const searchQueryParts = inputs.searchQuery.trim().replace(/ {2,}/, ' ').split(' ');
 
       _.each(searchQueryParts, (searchQueryPart) => {
+        console.log("searchQueryPart = ", searchQueryPart);
         query.where(
           builder => builder
             .orWhere('u.first_name', 'like', `%${searchQueryPart}%`)
@@ -111,6 +112,8 @@ module.exports = {
 
       query.orderBy(['u.first_name', 'u.last_name', 'u.email', 'u.phone']);
       query.limit(20);
+    } else {
+      query.orderBy(['u.id']);
     }
 
     if (inputs.customer) {
@@ -204,6 +207,9 @@ module.exports = {
 
 
     let users = await query;
+    // users.sort((a, b) => {
+    //   return a.email > b.email ? 1 : -1;
+    // });
 
     if (inputs.populate && _.includes(inputs.populate, 'teacher_ical_feed_url') && await sails.helpers.can2('populate.users.teacher-ical-feed-url', this.req)) {
       await sails.helpers.populate.users.teacherIcalFeedUrl(users);
