@@ -146,7 +146,8 @@ describe('controller.ClassEmails.create', async () => {
       }`,
       );
 
-      const createdInstances = await ClassEmailInstance.find({class_email_id: createdEmails[0].id});
+      const createdInstances = await ClassEmailInstance.find({class_email_id: createdEmails[0].id}).sort('recipient_id ASC');
+
       expect(createdInstances.length).equals(2);
       expect(createdInstances).matchPattern(
         `[{

@@ -84,6 +84,10 @@ describe('controllers.Branches.update-sort', () => {
 
     let dbBranches = await Branch.find({client: testClientId})
 
+    dbBranches.sort((a, b) => {
+      return a.name > b.name ? 1 : -1;
+    });
+
     compareDbCollection(
       dbBranches,
       [
@@ -130,14 +134,19 @@ describe('controllers.Branches.update-sort', () => {
 
     dbBranches = await Branch.find({client: testClientId})
 
+    dbBranches.sort((a, b) => {
+      return a.name > b.name ? 1 : -1;
+    });
+
     compareDbCollection(
       dbBranches,
-      [{
-        client: testClientId,
-        id: fixtures.testClientBranchA.id,
-        name: 'Branch A',
-        sort: 0,
-      },
+      [
+        {
+          client: testClientId,
+          id: fixtures.testClientBranchA.id,
+          name: 'Branch A',
+          sort: 0,
+        },
         {
           client: testClientId,
           id: fixtures.testClientBranchB.id,

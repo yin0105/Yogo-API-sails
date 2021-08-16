@@ -63,7 +63,10 @@ describe('controllers.Classes.create', async function () {
         seats: 20,
         cancelled: false,
         studio_attendance_enabled: true,
-        livestream_enabled: false
+        livestream_enabled: false,
+        classpass_com_enabled: null,
+        classpass_com_all_seats_allowed: null,
+        classpass_com_number_of_seats_allowed: null,
       }`
     )
 
@@ -96,6 +99,9 @@ describe('controllers.Classes.create', async function () {
         cancelled: false,
         studio_attendance_enabled: true,
         livestream_enabled: false,
+        classpass_com_enabled: null,
+        classpass_com_all_seats_allowed: null,
+        classpass_com_number_of_seats_allowed: null,
       }`
     )
     expect(createdClassInDb.date.toISOString()).to.equal('2018-05-15T00:00:00.000Z')

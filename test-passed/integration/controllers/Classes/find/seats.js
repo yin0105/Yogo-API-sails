@@ -1,16 +1,10 @@
 const supertest = require('supertest')
 const qs = require('qs')
-const assert = require('assert')
 
 const testClientId = require('../../../../global-test-variables').TEST_CLIENT_ID
 const fixtures = require('../../../../fixtures/factory').fixtures
-const comparePartialObject = require('../../../../utils/compare-partial-object')
-const MockDate = require('mockdate')
-const moment = require('moment-timezone')
 
-const {authorizeUserAlice} = require('../../../../utils/request-helpers')
-
-describe('branch', () => {
+describe('weekday', () => {
 
   let
     class1,
@@ -23,7 +17,7 @@ describe('branch', () => {
     class1 = await Class.create({
       client: testClientId,
       class_type: fixtures.classTypeYoga.id,
-      date: '2018-05-11',
+      date: '2020-08-24', // Monday
       start_time: '12:00:00',
       end_time: '14:00:00',
       seats: 20,
@@ -34,23 +28,22 @@ describe('branch', () => {
 
     class2 = await Class.create({
       client: testClientId,
-      class_type: fixtures.classTypeDance.id,
-      date: '2018-05-16',
+      class_type: fixtures.classTypeYoga.id,
+      date: '2020-08-24', // Monday
       start_time: '14:00:00',
       end_time: '16:00:00',
       teachers: [fixtures.userBill.id],
       seats: 20,
-      room: fixtures.testClientRoomA2.id
     }).fetch()
 
     class3 = await Class.create({
       client: testClientId,
-      class_type: fixtures.classTypeHotYoga.id,
-      date: '2018-05-16',
+      class_type: fixtures.classTypeYoga.id,
+      date: '2020-08-26', // Wednesday
       start_time: '14:00:00',
       end_time: '16:00:00',
       teachers: [fixtures.userAlice.id],
-      seats: 20,
+      seats: 18,
       room: fixtures.testClientRoomB1.id
     }).fetch()
 
@@ -69,48 +62,65 @@ describe('branch', () => {
   })
 
 
-  it('should return only classes in the specified branch', async () => {
+  it('should return only classes on the specified weekday', async () => {
 
     let query = qs.stringify({
       client: testClientId,
-      startDate: '2018-05-01',
-      endDate: '2018-05-31',
-      branch: fixtures.testClientBranchA.id
+      startDate: '2020-05-01',
+      endDate: '2020-09-01',
+      seats: 20
     })
 
     let response = await supertest(sails.hooks.http.app)
       .get('/classes').query(query).expect(200)
 
-    comparePartialObject(
-      response.body.classes,
+    response.body.classes.sort((a, b) => {
+      return a.id > b.id ? 1 : -1;
+    });
+
+    expect(response.body.classes).to.matchPattern(`
       [
         {
-          id: class1.id,
+          id: ${class1.id},
+          ...
         },
         {
-          id: class2.id,
+          id: ${class2.id},
+          ...
         },
-      ],
+      ]`
     )
 
 
     query = qs.stringify({
       client: testClientId,
-      startDate: '2018-05-01',
-      endDate: '2018-05-31',
-      branch: fixtures.testClientBranchB.id
+      startDate: '2020-05-01',
+      endDate: '2020-09-01',
+      seats: 19
     })
 
     response = await supertest(sails.hooks.http.app)
       .get('/classes').query(query).expect(200)
 
-    comparePartialObject(
-      response.body.classes,
+    expect(response.body.classes).to.matchPattern([])
+
+    query = qs.stringify({
+      client: testClientId,
+      startDate: '2020-05-01',
+      endDate: '2020-09-01',
+      seats: 18
+    })
+
+    response = await supertest(sails.hooks.http.app)
+      .get('/classes').query(query).expect(200)
+
+    expect(response.body.classes).to.matchPattern(`
       [
         {
-          id: class3.id,
-        },
-      ],
+          id: ${class3.id},
+          ...
+        }
+      ]`
     )
 
   })

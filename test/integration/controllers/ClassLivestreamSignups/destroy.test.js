@@ -151,8 +151,9 @@ describe('controllers.ClassLivestreamSignups.destroy', () => {
       .use(authorizeAdmin())
       .expect(200);
 
-
     const updatedSignup = await ClassLivestreamSignup.findOne(signup.id);
+
+    console.log("updatedSignup = ", updatedSignup);
 
     expect(updatedSignup).to.matchPattern(`{
       archived: false,

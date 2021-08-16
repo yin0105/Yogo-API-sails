@@ -346,6 +346,10 @@ describe('controllers.CartItems.create', () => {
 
     const dbInsertedResult = await CartItem.find({})
 
+    dbInsertedResult.sort((a, b) => {
+      return a.id > b.id ? 1 : -1;
+    });
+
     compareDbCollection(
       dbInsertedResult,
       [
@@ -414,6 +418,10 @@ describe('controllers.CartItems.create', () => {
       .expect(200)
 
     const dbInsertedResult = await CartItem.find({})
+
+    dbInsertedResult.sort((a, b) => {
+      return a.id > b.id ? 1 : -1;
+    });
 
     compareDbCollection(
       dbInsertedResult,

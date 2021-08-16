@@ -114,6 +114,10 @@ describe('controllers.CartItems.destroy', () => {
 
     const dbResult = await CartItem.find({})
 
+    dbResult.sort((a, b) => {
+      return a.id > b.id ? 1 : -1;
+    });
+
     comparePartialObject(
       dbResult,
       [

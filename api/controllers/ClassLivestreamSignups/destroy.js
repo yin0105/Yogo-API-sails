@@ -10,11 +10,15 @@ module.exports = {
 
   fn: async function (inputs, exits) {
 
+    console.log("==  destroy");
+
     const can = await sails.helpers.can2('controller.ClassLivestreamSignups.destroy', this.req)
       .tolerate('classHasStarted', () => {
         exits.success('E_CLASS_HAS_STARTED');
         return null;
       });
+
+    console.log("can = ", can, this.req.param('id'));
 
     if (can === null) return;
     if (can === false) return exits.forbidden();
