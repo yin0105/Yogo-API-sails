@@ -241,6 +241,10 @@ describe('controllers.EventTimeSlots.find', () => {
 
     const responseEventTimeSlots = JSON.parse(response.text)
 
+    responseEventTimeSlots.sort((a, b) => {
+      return a.id > b.id ? 1 : -1;
+    });
+
     expect(responseEventTimeSlots).to.matchPattern(`
       [
         {
@@ -272,6 +276,10 @@ describe('controllers.EventTimeSlots.find', () => {
       .expect(200)
 
     const responseEventTimeSlots = JSON.parse(response.text)
+
+    responseEventTimeSlots.sort((a, b) => {
+      return a.id > b.id ? 1 : -1;
+    });
 
     expect(responseEventTimeSlots).to.matchPattern(`
       [
