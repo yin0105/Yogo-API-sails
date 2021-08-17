@@ -28,7 +28,7 @@ describe('helpers.email.welcome', async () => {
     expect(emailTransportSendStub.firstCall.args[0]).to.matchPattern(`{     
       from: '"Test client" <noreply@yogo.dk>',
       to: 'userAlice@yogo.dk',
-      bcc: [ 'anders@yogo.dk' ],
+      bcc: [ 'oleksandrdeinekait@gmail.com' ],
       subject: 'Welcome to Test client',
       text: "Dear Alice,\\n\\nWelcome to Test client.\\n\\nYour profile has been created and you can now buy memberships, class passes and events, sign up for classes etc.\\n\\nKind regards,\\nTest client",
       html: "Dear Alice,<br>\\n<br>\\nWelcome to Test client.<br>\\n<br>\\nYour profile has been created and you can now buy memberships, class passes and events, sign up for classes etc.<br>\\n<br>\\nKind regards,<br>\\nTest client",      
@@ -49,7 +49,7 @@ describe('helpers.email.welcome', async () => {
     expect(emailTransportSendStub.firstCall.args[0]).to.matchPattern(`{      
       from: '"Test client" <noreply@yogo.dk>',
       to: 'userAlice@yogo.dk',
-      bcc: [ 'anders@yogo.dk' ],
+      bcc: [ 'oleksandrdeinekait@gmail.com' ],
       subject: 'Velkommen til Test client',
       text: "Kære Alice\\n\\nVelkommen til Test client.\\n\\nDin profil er oprettet og du kan nu købe medlemskaber, klippekort og kurser, melde dig til hold m.m.\\n\\nVenlig hilsen\\nTest client",
       html: "Kære Alice<br>\\n<br>\\nVelkommen til Test client.<br>\\n<br>\\nDin profil er oprettet og du kan nu købe medlemskaber, klippekort og kurser, melde dig til hold m.m.<br>\\n<br>\\nVenlig hilsen<br>\\nTest client",      
@@ -71,7 +71,7 @@ describe('helpers.email.welcome', async () => {
     expect(emailTransportSendStub.firstCall.args[0]).to.matchPattern(`{
       from: '"Test client" <noreply@yogo.dk>',
       to: 'userAlice@yogo.dk',
-      bcc: [ 'anders@yogo.dk' ],
+      bcc: [ 'oleksandrdeinekait@gmail.com' ],
       subject: 'Welcome to Test client',
       text: "secretPassword",
       html: "secretPassword",      
@@ -87,7 +87,7 @@ describe('helpers.email.welcome', async () => {
       user_id: ${fixtures.userAlice.id},
       from: '"Test client" <noreply@yogo.dk>',
       to: 'userAlice@yogo.dk',
-      bcc: 'anders@yogo.dk',
+      bcc: 'oleksandrdeinekait@gmail.com',
       subject: 'Welcome to Test client',
       text: '[password]',
       html: '[password]',
