@@ -11,7 +11,7 @@ module.exports = {
     const classStartString = moment(classLivestreamSignup.class.date).format('YYYY-MM-DD') + ' ' + classLivestreamSignup.class.start_time
     const classStart = moment.tz(classStartString, 'Europe/Copenhagen')
 
-    if (moment().isAfter(classStart, 'day')) {
+    if (moment().tz('Europe/Copenhagen').isAfter(classStart, 'day')) {
       const e = new Error()
       e.code = 'classHasStarted'
       throw e

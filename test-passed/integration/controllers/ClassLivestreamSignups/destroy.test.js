@@ -153,8 +153,6 @@ describe('controllers.ClassLivestreamSignups.destroy', () => {
 
     const updatedSignup = await ClassLivestreamSignup.findOne(signup.id);
 
-    console.log("updatedSignup = ", updatedSignup);
-
     expect(updatedSignup).to.matchPattern(`{
       archived: false,
       cancelled_at: _.isGreaterThan|0,
