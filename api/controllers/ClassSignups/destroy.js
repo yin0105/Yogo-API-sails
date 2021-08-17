@@ -1,5 +1,4 @@
 module.exports = async function (req, res) {
-
   const can = await sails.helpers.can2('controller.ClassSignups.destroy', req)
     .tolerate('classHasStarted', () => {
       res.ok('E_CLASS_HAS_STARTED')

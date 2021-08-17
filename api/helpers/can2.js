@@ -43,12 +43,10 @@ module.exports = {
     try {
       acl = require('../acl/' + policyFilePath);
     } catch (e) {
-      console.log("No policyfile");
       throw 'noPolicyFile'; 
     }
 
     const aclPublicPermission = acl.public;
-    // console.log("1, ", (typeof aclAuthorizedPermission));
     if (aclPublicPermission === true) return exits.success(true);
     if (typeof aclPublicPermission === 'function' && (await aclPublicPermission(inputs.req, inputs.controllerActionInputs))) return exits.success(true);
     if (inputs.req.authorizedRequestContext === 'public') return exits.success(false);
@@ -56,11 +54,7 @@ module.exports = {
     if (typeof aclAuthorizedPermission === 'undefined') return exits.success(false);
     if (typeof aclAuthorizedPermission === 'boolean') return exits.success(aclAuthorizedPermission);
     if (typeof aclAuthorizedPermission === 'function') {
-      // console.log("8", inputs.req, inputs.controllerActionInputs);
       const response = await aclAuthorizedPermission(inputs.req, inputs.controllerActionInputs);
-      if (response) {
-        // console.log("9, ", response)
-      }
       return exits.success(response);
     }
 

@@ -3,15 +3,12 @@ const moment = require('moment-timezone')
 module.exports = {
 
   admin: async (req) => {
-
     const classSignup = await ClassSignup.findOne(req.param('id')).populate('class')
-
     if (parseInt(classSignup.client) !== parseInt(req.client.id)) return false
 
     const classStartString = moment(classSignup.class.date).format('YYYY-MM-DD') + ' ' + classSignup.class.start_time
     const classStart = moment.tz(classStartString, 'Europe/Copenhagen')
-
-    if (moment().isAfter(classStart, 'day')) {
+    if (moment().tz('Europe/Copenhagen').isAfter(classStart, 'day')) {
       const e = new Error()
       e.code = 'classHasStarted'
       throw e

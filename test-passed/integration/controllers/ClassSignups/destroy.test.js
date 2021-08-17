@@ -206,7 +206,6 @@ describe('controllers.ClassSignups.destroy', () => {
       .use(authorizeAdmin())
       .expect(200);
 
-
     const updatedSignup = await ClassSignup.findOne(signup.id);
 
     expect(updatedSignup).to.matchPattern(`{
