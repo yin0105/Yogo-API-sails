@@ -33,7 +33,6 @@ module.exports = {
   },
 
   fn: async (inputs, exits) => {
-    console.log("1")
 
     if (!inputs.classes && !inputs.eventTimeSlots) {
       throw 'classesOrEventTimeSlotsMustBeSpecified';
@@ -41,9 +40,7 @@ module.exports = {
 
     const calendarItems = [];
 
-    console.log("2")
     if (inputs.classes && inputs.classes.length) {
-      console.log("3")
       const classIds = inputs.classes[0].id ? _.map(inputs.classes, 'id') : inputs.classes;
       const classObjects = await ObjectionClass
         .query()
@@ -72,10 +69,7 @@ module.exports = {
       )));
     }
 
-    console.log("4")
-
     if (inputs.eventTimeSlots && inputs.eventTimeSlots.length) {
-      console.log("5")
       const eventTimeSlotIds = inputs.eventTimeSlots[0].id ? _.map(inputs.eventTimeSlots, 'id') : inputs.eventTimeSlots;
       const eventTimeSlots = await ObjectionEventTimeSlot
         .query()
@@ -105,11 +99,7 @@ module.exports = {
       )));
     }
 
-    console.log("5")
-
-
     if (!calendarItems.length) {
-      console.log("6")
       const escapedCalendarName = inputs.calendarName.replace(/,/g, '\\,');
       return exits.success(`BEGIN:VCALENDAR
 VERSION:2.0
@@ -121,8 +111,6 @@ X-PUBLISHED-TTL:PT5M
 END:VCALENDAR
 `);
     }
-
-    console.log("7")
 
     const icsEvents = _.map(calendarItems, calendarItem => {
 
@@ -145,17 +133,13 @@ END:VCALENDAR
 
     });
 
-    console.log("icsEvents = ", icsEvents)
-
     let {error, value} = ics.createEvents(icsEvents);
 
     if (error) {
-      console.log("error = ", error)
       return exits.error(error);
     }
 
-    console.log("value = ", value)
-
+    value = value.replace(/\\,/g, ',')
     value = value.replace(/adamgibbons\/ics/, 'Yogo API');
     value = value.replace(/X-PUBLISHED-TTL:PT1H/, 'X-PUBLISHED-TTL:PT5M');
 

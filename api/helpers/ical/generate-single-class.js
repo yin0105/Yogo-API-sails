@@ -59,13 +59,12 @@ module.exports = {
     let {error, value} = ics.createEvent(icsEvent);
 
     if (error) {
-      console.log("error = ", error)
       throw error;
     }
 
+    value = value.replace(/\\,/g, ',')
     value = value.replace(/adamgibbons\/ics/, 'Yogo API');
     value = value.replace(/X-PUBLISHED-TTL:PT1H/, 'X-PUBLISHED-TTL:PT5M');
-    console.log("value = ", value)
 
     return exits.success(value);
   },

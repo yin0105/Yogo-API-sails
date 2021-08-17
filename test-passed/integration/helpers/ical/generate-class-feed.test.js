@@ -30,42 +30,43 @@ describe('helpers.ical.generate-class-feed', async () => {
       classes: [classItem1, classItem2],
       calendarName: 'Test calendar feed',
     });
-    // const sanitizedIcalData = icalData
-    //   .replace(/[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/g, '')
-    //   .replace(/DTSTAMP:\d{8}T\d{6}Z/g, 'DTSTAMP:');
+    const sanitizedIcalData = icalData
+      .replace(/[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/g, '')
+      .replace(/DTSTAMP:\d{8}T\d{6}Z/g, 'DTSTAMP:')
+      .replace(/UID:.*\r\n/g, 'UID:\r\n');
 
-//     const expectedResult = `BEGIN:VCALENDAR
-// VERSION:2.0
-// CALSCALE:GREGORIAN
-// PRODID:Yogo API
-// METHOD:PUBLISH
-// X-WR-CALNAME:Test calendar feed
-// X-PUBLISHED-TTL:PT5M
-// BEGIN:VEVENT
-// UID:
-// SUMMARY:Yoga
-// DTSTAMP:
-// DTSTART:20200515T130000Z
-// DTEND:20200515T143000Z
-// DESCRIPTION:with Evelyn.
-// LOCATION:Room A1, Branch A.
-// END:VEVENT
-// BEGIN:VEVENT
-// UID:
-// SUMMARY:Yoga
-// DTSTAMP:
-// DTSTART:20200517T130000Z
-// DTEND:20200517T143000Z
-// DESCRIPTION:with Evelyn.
-// LOCATION:Room A1, Branch A.
-// END:VEVENT
-// END:VCALENDAR
-// `.replace(/\n/g, '\r\n');
+    const expectedResult = `BEGIN:VCALENDAR
+VERSION:2.0
+CALSCALE:GREGORIAN
+PRODID:Yogo API
+METHOD:PUBLISH
+X-WR-CALNAME:Test calendar feed
+X-PUBLISHED-TTL:PT5M
+BEGIN:VEVENT
+UID:
+SUMMARY:Yoga
+DTSTAMP:
+DTSTART:20200515T130000Z
+DTEND:20200515T143000Z
+DESCRIPTION:with Evelyn.
+LOCATION:Room A1, Branch A.
+END:VEVENT
+BEGIN:VEVENT
+UID:
+SUMMARY:Yoga
+DTSTAMP:
+DTSTART:20200517T130000Z
+DTEND:20200517T143000Z
+DESCRIPTION:with Evelyn.
+LOCATION:Room A1, Branch A.
+END:VEVENT
+END:VCALENDAR
+`.replace(/\n/g, '\r\n');
 
-//     assert.strictEqual(
-//       sanitizedIcalData,
-//       expectedResult,
-//     );
+    assert.strictEqual(
+      sanitizedIcalData,
+      expectedResult,
+    );
 
     await Class.destroy({id: [classItem1.id, classItem2.id]});
 
