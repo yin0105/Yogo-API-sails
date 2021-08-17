@@ -52,10 +52,10 @@ describe('controllers.Clients.get-settings', () => {
         .use(authorizeAdmin())
         .expect(400)
 
-      const settingsSchema = sails.helpers.clientSettings.getSchema()
+      let settingsSchema = sails.helpers.clientSettings.getSchema()
 
-      console.log("==================== response.body ======================")
-      console.log(response.body)
+      const secretSettingsSchema = sails.helpers.clientSettings.getSecretsSchema()
+      Object.assign(settingsSchema, secretSettingsSchema)
 
       assert.equal(
         response.body,
@@ -78,7 +78,10 @@ describe('controllers.Clients.get-settings', () => {
         .use(authorizeAdmin())
         .expect(400)
 
-      const settingsSchema = sails.helpers.clientSettings.getSchema()
+      let settingsSchema = sails.helpers.clientSettings.getSchema()
+
+      const secretSettingsSchema = sails.helpers.clientSettings.getSecretsSchema()
+      Object.assign(settingsSchema, secretSettingsSchema)
 
       assert.equal(
         response.body,
