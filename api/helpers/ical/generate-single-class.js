@@ -47,8 +47,8 @@ module.exports = {
         : '';
 
     const icsEvent = {
-      start: classStart.format('Y-M-D-H-m').split('-'),
-      end: classEnd.format('Y-M-D-H-m').split('-'),
+      start: classStart.format('Y-M-D-H-m').split('-').map(i => parseInt(i)),
+      end: classEnd.format('Y-M-D-H-m').split('-').map(i => parseInt(i)),
       startInputType: 'utc',
       endInputType: 'utc',
       title: classItem.class_type.name,
@@ -59,11 +59,13 @@ module.exports = {
     let {error, value} = ics.createEvent(icsEvent);
 
     if (error) {
+      console.log("error = ", error)
       throw error;
     }
 
     value = value.replace(/adamgibbons\/ics/, 'Yogo API');
     value = value.replace(/X-PUBLISHED-TTL:PT1H/, 'X-PUBLISHED-TTL:PT5M');
+    console.log("value = ", value)
 
     return exits.success(value);
   },

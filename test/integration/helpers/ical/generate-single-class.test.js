@@ -17,6 +17,7 @@ describe('helpers.ical.generate-single-class', async () => {
     }).fetch();
 
     const icalData = await sails.helpers.ical.generateSingleClass(classItem);
+    console.log("icalData = ", icalData)
     const sanitizedIcalData = icalData
       .replace(/[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}/g, '')
       .replace(/DTSTAMP:\d{8}T\d{6}Z/g, 'DTSTAMP:');
