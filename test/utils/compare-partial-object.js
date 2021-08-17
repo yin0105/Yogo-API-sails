@@ -7,8 +7,6 @@ module.exports = comparePartialObject = (dbResultRecord, expectedRecordData, dat
   _.each(
     expectedRecordData,
     (expectedFieldValue, key) => {
-        //console.log('dbResultRecord', dbResultRecord)
-        //console.log('Expected:',key, expectedFieldValue)
 
       if (typeof dbResultRecord[key] === 'undefined' && expectedFieldValue !== 'UNDEFINED') throw new Error(
         'Error in ' + dataPathDescription + ': The property "' + key + '" does not exist.\n' +

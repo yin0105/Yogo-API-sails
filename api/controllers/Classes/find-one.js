@@ -35,15 +35,12 @@ module.exports = {
   },
 
   fn: async function(inputs, exits) {
-    console.log("findOne");
-
     let classQuery = Class.findOne(this.req.param('id'))
 
     let populateFields = getPopulateFields(this.req)
 
     let simplePopulateFields = _.pick(populateFields, ['room', 'class_type'])
     _.each(simplePopulateFields, (populateField => {
-      console.log("populateField = ", populateField);
       classQuery.populate(populateField)
     }))
 

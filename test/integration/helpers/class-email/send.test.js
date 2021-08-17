@@ -106,6 +106,10 @@ describe('helpers.class-email.send', async () => {
 
     const instances = await ClassEmailInstance.find({});
 
+    instances.sort((a, b) => {
+      return a.recipient_id > b.recipient_id ? 1 : -1;
+    });
+
     expect(instances).matchPattern(
       `[
         {
@@ -162,17 +166,16 @@ describe('helpers.class-email.send', async () => {
     await sails.helpers.classEmail.send(classEmail);
 
     const instances = await ClassEmailInstance.find({});
-    console.log("instances = ", instances);
+    
+    instances.sort((a, b) => {
+      return a.recipient_id > b.recipient_id ? 1 : -1;
+    });
 
-    console.log(classEmail.id, fixtures.userDennis.id, fixtures.userAlice.id, fixtures.userBill.id, fixtures.userCharlie.id)
+    console.log("instances = ", instances)
+    console.log(fixtures.userDennis.id, fixtures.userAlice.id)
+
     expect(instances).matchPattern(
       `[
-        {
-          client_id: ${testClientId},
-          recipient_id: ${fixtures.userDennis.id},
-          class_email_id: ${classEmail.id},
-          ...
-        },
         {
           client_id: ${testClientId},
           recipient_id: ${fixtures.userAlice.id},
@@ -191,9 +194,15 @@ describe('helpers.class-email.send', async () => {
           class_email_id: ${classEmail.id},
           ...
         },   
+        {
+          client_id: ${testClientId},
+          recipient_id: ${fixtures.userDennis.id},
+          class_email_id: ${classEmail.id},
+          ...
+        },
       ]`,
     );
-
+    
     expect(emailSendFake.getCall(0).args[0]).to.matchPattern(`
       {        
         user: {id: ${fixtures.userAlice.id}, ... },
@@ -242,12 +251,18 @@ describe('helpers.class-email.send', async () => {
 
     const instances = await ClassEmailInstance.find({});
 
-    console.log("instances = ", instances);
-
-    console.log(classEmail.id, fixtures.userBill.id, fixtures.userCharlie.id, fixtures.userAlice.id, fixtures.userEvelyn.id)
+    instances.sort((a, b) => {
+      return a.recipient_id > b.recipient_id ? 1 : -1;
+    });
 
     expect(instances).matchPattern(
       `[
+        {
+          client_id: ${testClientId},
+          recipient_id: ${fixtures.userAlice.id},
+          class_email_id: ${classEmail.id},
+          ...
+        },        
         {
           client_id: ${testClientId},
           recipient_id: ${fixtures.userBill.id},
@@ -260,12 +275,6 @@ describe('helpers.class-email.send', async () => {
           class_email_id: ${classEmail.id},
           ...
         },
-        {
-          client_id: ${testClientId},
-          recipient_id: ${fixtures.userAlice.id},
-          class_email_id: ${classEmail.id},
-          ...
-        },        
         {
           client_id: ${testClientId},
           recipient_id: ${fixtures.userEvelyn.id},

@@ -305,9 +305,6 @@ describe('helpers.populate.classes.user-can-sign-up-for-class', async function (
       },
     )
 
-    console.log("classes = ", classes);
-    console.log("expectedResult = ", expectedResult);
-
     assert.deepStrictEqual(
       classes,
       expectedResult,

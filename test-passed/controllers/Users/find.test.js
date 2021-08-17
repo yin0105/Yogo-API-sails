@@ -31,8 +31,6 @@ describe('controllers.Users.find', () => {
       .use(authorizeAdmin())
       .expect(200);
 
-      console.log("response.body = ", response.body)
-
     comparePartialObject(
       response.body,
       [
@@ -68,8 +66,6 @@ describe('controllers.Users.find', () => {
         '/users?client=' + testClientId + '&searchQuery=a')
       .use(authorizeAdmin())
       .expect(200);    
-
-      console.log("2  response.body = ", response.body)
 
     expect(response.body).to.matchPattern(`
       [
@@ -159,8 +155,6 @@ describe('controllers.Users.find', () => {
         '/users?client=' + testClientId + '&teacher=1')
       .use(authorizeUserAlice())
       .expect(200);
-
-    console.log("3  response.body = ", response.body)
 
     expect(response.body).matchPattern(`
       [

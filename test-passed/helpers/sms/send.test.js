@@ -37,9 +37,6 @@ describe('helpers.sms.send', async function () {
       type: 'class_cancelled',
     });
 
-    //console.log('dbSms:', dbSms);
-    //console.log('smsSendFake.getCall(0).args:', );
-
     expect(smsSendFake.getCall(0).args[0]).to.matchPattern({
       message: 'Test message, timestamp ' + timestamp,
       sender: 'Test client',

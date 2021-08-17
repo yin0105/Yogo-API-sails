@@ -82,7 +82,6 @@ describe('controllers.Users.create', () => {
         .use(authorizeAdmin())
         .expect(200);
 
-      console.log("response.body = ", response.body)
       expect(response.body).to.matchPattern(
         `{
           id: _.isInteger,

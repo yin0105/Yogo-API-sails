@@ -150,8 +150,6 @@ describe('helpers.memberships.getMembershipThatNeedsPayment', async function () 
 
         const result = await sails.helpers.memberships.getMembershipThatNeedsPayment();        
 
-        console.log('result = ', result, memberships[0].id);
-
         comparePartialObject(
             result,
             {
@@ -162,8 +160,6 @@ describe('helpers.memberships.getMembershipThatNeedsPayment', async function () 
         await Membership.destroy({id: memberships[0].id});
 
         const result2 = await sails.helpers.memberships.getMembershipThatNeedsPayment();
-
-        console.log('result = ', result2, memberships[10].id);
 
         comparePartialObject(
             result2,

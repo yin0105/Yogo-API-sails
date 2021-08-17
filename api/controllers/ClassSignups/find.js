@@ -18,7 +18,6 @@ module.exports = async function (req, res) {
       startDate: req.query.startDate,
       endDate: req.query.endDate,
     })
-    console.log("signups = ", signups);
 
   } else if (req.query.class) {
 

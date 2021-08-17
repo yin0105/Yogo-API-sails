@@ -2,7 +2,6 @@ module.exports = {
   friendlyName: 'Update class',
 
   fn: async function (inputs, exits) {
-    console.log("== updates ");
 
     let classData = _.pick(this.req.body, [
       'date',
@@ -19,8 +18,6 @@ module.exports = {
       'classpass_com_all_seats_allowed',
       'classpass_com_number_of_seats_allowed'
     ])
-
-    console.log("classData = ", classData);
 
     if (classData.room === '') {
       classData.room = null;

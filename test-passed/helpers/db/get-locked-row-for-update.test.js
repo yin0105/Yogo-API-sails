@@ -19,8 +19,6 @@ describe('helpers.db.getLockedRowForUpdate', async function () {
             client: testClientId
         }).fetch();
 
-        //console.log('Class created. Id: ' + class1.id);
-
     });
 
     after(async () => {
@@ -33,22 +31,16 @@ describe('helpers.db.getLockedRowForUpdate', async function () {
 
     it('should prevent locking a row, if there is already a lock on the row. Should wait until the locking transaction has finished', (done) => {
 
-        //console.log('Test started');
-
         let lockingTransactionEnded = false;
         let secondTransactionDone = false;
 
         sails.getDatastore().transaction(async (dbConnection, proceed) => {
-
-            //console.log('Locking transaction started');
 
             const row = await sails.helpers.db.getLockedRowForUpdate.with({
                 table: 'class',
                 rowId: class1.id,
                 dbConnection: dbConnection
             });
-
-            //console.log('Lock aquired');
 
             setTimeout(
                 () => {
@@ -57,7 +49,6 @@ describe('helpers.db.getLockedRowForUpdate', async function () {
                         secondTransactionDone,
                         true
                     );
-                    //console.log('100 ms has passed. Locking transaction timeout done. Ending transaction');
                     proceed();
                 },
                 100
@@ -67,11 +58,8 @@ describe('helpers.db.getLockedRowForUpdate', async function () {
 
 
         setTimeout(() => {
-                //console.log('50 ms has passed. Start second transaction.');
 
                 sails.getDatastore().transaction(async (dbConnection, proceed) => {
-
-                    //console.log('Second transaction started');
 
                     const row = await sails.helpers.db.getLockedRowForUpdate.with({
                         table: 'class',
@@ -83,7 +71,6 @@ describe('helpers.db.getLockedRowForUpdate', async function () {
                         lockingTransactionEnded,
                         false
                     );
-                    //console.log('Class was read and row was locked from second transaction. Id: ' + row.id);
 
                     secondTransactionDone = true;
 
@@ -93,7 +80,7 @@ describe('helpers.db.getLockedRowForUpdate', async function () {
             },
             50
         );
-        console.log(100);
+
         setTimeout(
             () => {
                 assert.equal(

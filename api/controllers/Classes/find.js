@@ -248,7 +248,6 @@ module.exports = {
   fn: async function (inputs, exits) {
 
     // Accept regular arrays as well as keyed arrays (which are converted to objects)
-    console.log("populate = ", inputs.populate);
     const populateFields = _.values(inputs.populate);
 
     const classesQuery = ObjectionClass.query().from({c: 'class'})
@@ -328,8 +327,6 @@ module.exports = {
       classesQuery
         .andWhere('classpass_com_number_of_seats_allowed', inputs.classpass_com_number_of_seats_allowed);
     }
-
-    console.log(inputs.classpass_com_enabled, inputs.classpass_com_all_seats_allowed, inputs.classpass_com_number_of_seats_allowed);
 
 
     if (inputs.teacher) {
@@ -546,7 +543,6 @@ module.exports = {
     );
 
     const invalidPopulateFields = _.difference(populateFields, validPopulateFields);
-    console.log("invalidPopulateFields = ", invalidPopulateFields);
 
     if (invalidPopulateFields.length) {
       return exits.invalidPopulateFields('The following populate fields are invalid: ' + invalidPopulateFields.join(', '));

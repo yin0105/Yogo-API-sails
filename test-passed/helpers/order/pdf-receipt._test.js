@@ -47,10 +47,8 @@ describe('helpers.order.pdf-receipt', async () => {
       'Receipt from Test client.pdf',
     )
 
-    console.log('pdfBuffer:', pdfBuffer)
     await new Promise(resolve => {
       pdfParse(pdfBuffer).then(data => {
-        console.log('data:', data)
         assert.match(data.text, /Invoice no\.:/)
         assert.match(data.text, /Date: February 24, 2020/)
         assert.match(data.text, /CVR:/)

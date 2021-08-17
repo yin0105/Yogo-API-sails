@@ -37,7 +37,6 @@ module.exports = {
     }
 
     const createdClass = await Class.create(classData).fetch();
-    console.log("createdClass = ", createdClass);
 
     exits.success(createdClass);
 
