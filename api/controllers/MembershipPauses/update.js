@@ -37,7 +37,6 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-
     if (!await sails.helpers.can2('controller.MembershipPauses.update', this.req, inputs)) {
       return exits.forbidden();
     }

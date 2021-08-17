@@ -24,7 +24,10 @@ module.exports = {
             model: 'Membership'
         },
 
-        entry: 'string'
+        entry: {
+            type:'string',
+            columnType: 'longtext'
+        }
 
     },
 

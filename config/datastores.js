@@ -51,6 +51,7 @@ module.exports.datastores = {
         adapter: 'sails-mysql',
         // url: 'mysql://root:@127.0.0.1/yogo_dev',
         url: 'mysql://yogo_dev:yogo_dev@127.0.0.1/yogo_dev_simple',
+        // url: 'mysql://yogo_test:yogo_test@127.0.0.1/yogo_test',
         charset: 'utf8mb4',
         collation: 'utf8mb4_unicode_520_ci',
         timezone: 'utc'
