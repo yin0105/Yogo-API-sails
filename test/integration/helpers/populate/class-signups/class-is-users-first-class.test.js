@@ -77,6 +77,10 @@ describe('helpers.populate.class-signups.class-is-on-users-birthday', async func
 
     await sails.helpers.populate.classSignups.classIsUsersFirstClass(classSignups);
 
+    classSignups.sort((a, b) => {
+      return a.user > b.user ? 1 : -1;
+    });
+
     expect(classSignups).to.matchPattern(`[
       {
         client: ${testClientId},

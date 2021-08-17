@@ -76,7 +76,7 @@ module.exports = {
         }
 
         let SQL = require('../../sql/class-signups-controller/find-class-signups-by-user.sql');
-        console.log("SQL = ", SQL);
+
         const rawResult = await sails.sendNativeQuery(SQL, [
             user.id,
             startDate.format('YYYY-MM-DD'),

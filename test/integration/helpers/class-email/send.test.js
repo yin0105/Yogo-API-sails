@@ -168,11 +168,14 @@ describe('helpers.class-email.send', async () => {
     const instances = await ClassEmailInstance.find({});
     
     instances.sort((a, b) => {
-      return a.recipient_id > b.recipient_id ? 1 : -1;
+      if (a.class_email_id > b.class_email_id) {
+        return 1;
+      } else if (a.class_email_id < b.class_email_id ) {
+        return -1;
+      } else {
+        return a.recipient_id > b.recipient_id ? 1 : -1;
+      }
     });
-
-    console.log("instances = ", instances)
-    console.log(fixtures.userDennis.id, fixtures.userAlice.id)
 
     expect(instances).matchPattern(
       `[
@@ -202,6 +205,11 @@ describe('helpers.class-email.send', async () => {
         },
       ]`,
     );
+
+    // emailSendFake.getCall(0).args[0].sort((a, b) => {
+    //   return a.id > b.id ? 1 : -1;
+    // });
+    console.log("emailSendFake.getCall(0).args[0] = ", emailSendFake.getCall(0).args[0])
     
     expect(emailSendFake.getCall(0).args[0]).to.matchPattern(`
       {        

@@ -933,7 +933,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     );
 
     const orderText = fixtures.userAlice.first_name + ' ' + fixtures.userAlice.last_name + '\nNo-show fee for Yoga, Tuesday, May 14, 2019 10:00,\n' + fixtures.membershipTypeYogaUnlimited.name + '. Payment for 1 month from May 16, 2019 to June 15, 2019. Discount code: "test_discount_code".';
-
+    console.log("apiRequestFake.getCall(0).args[0] = ", apiRequestFake.getCall(0).args[0])
     expect(apiRequestFake.getCall(0).args[0]).to.matchPattern({
       merchant: fixtures.testClient1.dibs_merchant,
       ticket: paymentSubscription.payment_provider_subscription_id,
@@ -993,6 +993,8 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     ////////////////////
 
     const updatedMembership = await Membership.findOne({id: membership.id});
+
+    console.log("updatedMembership = ", updatedMembership)
 
     comparePartialObject(
       updatedMembership.toJSON(),
