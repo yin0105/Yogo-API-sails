@@ -273,9 +273,6 @@ describe('controllers.Reports.generate, turnover', () => {
 
     response2.body.items = _.sortBy(response2.body.items, ['item_type', 'item_id']);
 
-    console.log("response2.body = ", response2.body)
-
-
     assert.deepEqual(
       response2.body,
       {

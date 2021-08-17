@@ -1,5 +1,6 @@
 const knex = require('../../services/knex');
 const moment = require('moment-timezone');
+const turnover = require('../../controllers/Reports/turnover');
 
 
 const getDirectSaleTurnoverForPeriod = async (client, startDate, endDate) => {
@@ -98,8 +99,6 @@ const getMembershipRenewalTurnoverForPeriod = async (client, startDate, endDate)
 };
 
 const summarizeMembershipData = async turnoverRows => {
-
-  // Combine membership payment types to one amount per membership type
   const membershipSumRows = _.chain(turnoverRows)
     .filter(row => row.item_type === 'membership_type' || row.item_type === 'membership_renewal')
     .groupBy('item_id')
@@ -112,7 +111,7 @@ const summarizeMembershipData = async turnoverRows => {
           return sum;
         },
         {
-          item_id: itemId,
+          item_id: parseInt(itemId),
           name: membershipRows[0].name,
           turnover: 0,
           item_count: 0,
@@ -123,7 +122,6 @@ const summarizeMembershipData = async turnoverRows => {
     })
     .toArray()
     .value();
-
   turnoverRows = turnoverRows.concat(membershipSumRows);
   turnoverRows = _.filter(turnoverRows, row => row.item_type !== 'membership_type' && row.item_type !== 'membership_renewal');
 
@@ -264,11 +262,8 @@ const getTurnoverForPeriod = async (client, startDate, endDate) => {
   );
 
   turnoverRows = await summarizeMembershipData(turnoverRows);
-
   turnoverRows = await addDatesToEventNames(turnoverRows);
-
   turnoverRows = await summarizeNoShowFeeRows(turnoverRows);
-
   turnoverRows = await summarizeGiftCards(turnoverRows);
 
   return turnoverRows;
@@ -340,8 +335,10 @@ module.exports = {
           moment(date).add(1, 'month').subtract(1, 'day').format('YYYY-MM-DD'),
         );
 
+
+
         turnoverData = {
-          label: _.upperFirst(date.format('MMMM YYYY')),
+          label: _.upperFirst(date.locale("en").format('MMMM YYYY')),
           startDate: date.format('YYYY-MM-DD'),
           endDate: moment(date).add(1, 'month').subtract(1, 'day').format('YYYY-MM-DD'),
           items: monthData,
@@ -376,7 +373,7 @@ module.exports = {
           date.format('YYYY-MM-DD'),
           endDate.format('YYYY-MM-DD'),
         );
-
+        
         return exits.success(
           {
             label: date.format('DD.MM.YYYY') + ' - ' + endDate.format('DD.MM.YYYY'),
