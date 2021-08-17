@@ -12,7 +12,7 @@ module.exports = {
     const classStartString = moment(classItem.date).tz('Europe/Copenhagen').format('YYYY-MM-DD') + ' ' + classItem.start_time
     const classStart = moment.tz(classStartString, 'Europe/Copenhagen')
 
-    if (moment().isAfter(classStart, 'day')) {
+    if (moment().tz('Europe/Copenhagen').isAfter(classStart, 'day')) {
       const e = new Error()
       e.code = 'classHasStarted'
       throw e
@@ -87,7 +87,7 @@ module.exports = {
 
     const customerCreateSignupDeadline = moment(classStart).add(checkinExtraMinutes, 'minutes')
 
-    if (moment().isAfter(customerCreateSignupDeadline, 'minute')) {
+    if (moment().tz('Europe/Copenhagen').isAfter(customerCreateSignupDeadline, 'minute')) {
       const e = new Error()
       e.code = 'classHasStarted'
       throw e

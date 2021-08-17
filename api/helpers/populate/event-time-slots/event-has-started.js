@@ -29,7 +29,7 @@ module.exports = {
 
     _.each(inputs.eventTimeSlots, eventTimeSlot => {
       const eventStartDate = moment(eventTimeSlot.event.start_date).tz('Europe/Copenhagen')
-      eventTimeSlot.event_has_started = moment().isAfter(eventStartDate, 'day')
+      eventTimeSlot.event_has_started = moment().tz('Europe/Copenhagen').isAfter(eventStartDate, 'day')
     })
 
     return exits.success(inputs.eventTimeSlots)
