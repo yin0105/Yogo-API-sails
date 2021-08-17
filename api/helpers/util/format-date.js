@@ -30,7 +30,7 @@ module.exports = {
   sync: true,
 
   fn: (inputs, exits) => {
-
+    
     const date = sails.helpers.util.normalizeDate(inputs.date)
 
     date.locale(inputs.locale)

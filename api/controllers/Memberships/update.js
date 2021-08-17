@@ -254,8 +254,7 @@ module.exports = {
     }
 
     if (updateData.paid_until) {
-
-      const newPaidUntil = moment(updateData.paid_until);
+      const newPaidUntil = moment.tz(updateData.paid_until, 'Europe/Copenhagen')
       if (newPaidUntil.isBefore(moment().subtract(28, 'days'))) {
         return exits.badRequest('New paid_until can not be more than 28 days before today.');
       }

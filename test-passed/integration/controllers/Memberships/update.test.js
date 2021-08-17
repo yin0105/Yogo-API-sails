@@ -1870,7 +1870,6 @@ describe('controllers.Memberships.update', () => {
     }).fetch();
 
     MockDate.set(moment.tz('2016-06-10', 'Europe/Copenhagen'));
-
     await supertest(sails.hooks.http.app)
       .put(
         '/memberships/' + membership.id +
