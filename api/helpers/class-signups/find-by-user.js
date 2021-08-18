@@ -60,7 +60,8 @@ module.exports = {
 
         const startDate = inputs.startDate ? moment(inputs.startDate, 'YYYY-MM-DD') : moment();
         const endDate = inputs.endDate ? moment(inputs.endDate, 'YYYY-MM-DD') : moment(startDate).add(1, 'year').subtract(1, 'day');
-        console.log(startDate, endDate);
+        console.log("startDate = ", startDate)
+        console.log("  endDate = ", endDate);
         console.log(moment(1521459935747));
 
         if (startDate.year() < 2017) {
