@@ -104,7 +104,16 @@ describe('helpers.class-email.send', async () => {
 
     await sails.helpers.classEmail.send(classEmail);
 
-    const instances = await ClassEmailInstance.find({});
+    const instances = await ClassEmailInstance.find({});  
+
+    expect(emailSendFake.getCall(0).args[0]).to.matchPattern(`
+      {       
+        user: {id: ${fixtures.userAlice.id}, ... },
+        subject: 'Test subject Alice, Ali, userAlice@yogo.dk',
+        text: 'Test body Alice, Ali, userAlice@yogo.dk',
+        emailType: 'class_email'
+      }`
+    );
 
     instances.sort((a, b) => {
       return a.recipient_id > b.recipient_id ? 1 : -1;
@@ -125,15 +134,6 @@ describe('helpers.class-email.send', async () => {
           ...
         }        
       ]`,
-    );
-
-    expect(emailSendFake.getCall(0).args[0]).to.matchPattern(`
-      {       
-        user: {id: ${fixtures.userAlice.id}, ... },
-        subject: 'Test subject Alice, Ali, userAlice@yogo.dk',
-        text: 'Test body Alice, Ali, userAlice@yogo.dk',
-        emailType: 'class_email'
-      }`
     );
 
     assert.strictEqual(
@@ -167,6 +167,23 @@ describe('helpers.class-email.send', async () => {
 
     const instances = await ClassEmailInstance.find({});
     
+    expect(emailSendFake.getCall(0).args[0]).to.matchPattern(`
+      {        
+        user: {id: ${fixtures.userAlice.id}, ... },
+        subject: 'Test subject Alice, Ali, userAlice@yogo.dk',
+        text: 'Test body Alice, Ali, userAlice@yogo.dk',
+        emailType: 'class_email'
+      }`
+    );
+    expect(emailSendFake.getCall(1).args[0]).to.matchPattern(`
+      {
+        user: {id: ${fixtures.userDennis.id}, ... },
+        subject: 'Test subject Dennis, Dentist, userDennis@yogo.dk',
+        text: 'Test body Dennis, Dentist, userDennis@yogo.dk',
+        emailType: 'class_email'
+      }`
+    );
+
     instances.sort((a, b) => {
       if (a.class_email_id > b.class_email_id) {
         return 1;
@@ -206,29 +223,6 @@ describe('helpers.class-email.send', async () => {
       ]`,
     );
 
-    // emailSendFake.getCall(0).args[0].sort((a, b) => {
-    //   return a.id > b.id ? 1 : -1;
-    // });
-    console.log("emailSendFake = ", emailSendFake)
-    console.log("emailSendFake.getCall(0).args[0] = ", emailSendFake.getCall(0).args[0])
-    
-    expect(emailSendFake.getCall(0).args[0]).to.matchPattern(`
-      {        
-        user: {id: ${fixtures.userAlice.id}, ... },
-        subject: 'Test subject Alice, Ali, userAlice@yogo.dk',
-        text: 'Test body Alice, Ali, userAlice@yogo.dk',
-        emailType: 'class_email'
-      }`
-    );
-    expect(emailSendFake.getCall(1).args[0]).to.matchPattern(`
-      {
-        user: {id: ${fixtures.userDennis.id}, ... },
-        subject: 'Test subject Dennis, Dentist, userDennis@yogo.dk',
-        text: 'Test body Dennis, Dentist, userDennis@yogo.dk',
-        emailType: 'class_email'
-      }`
-    );
-
     assert.strictEqual(
       emailSendFake.callCount,
       2,
@@ -259,6 +253,23 @@ describe('helpers.class-email.send', async () => {
     await sails.helpers.classEmail.send(classEmail);
 
     const instances = await ClassEmailInstance.find({});
+    
+    expect(emailSendFake.getCall(0).args[0]).to.matchPattern(`
+      {        
+        user: {id: ${fixtures.userAlice.id}, ...},
+        subject: 'Test subject Alice, Ali, userAlice@yogo.dk',
+        text: 'Test body Alice, Ali, userAlice@yogo.dk',
+        emailType: 'class_email'
+      }`
+    );
+    expect(emailSendFake.getCall(1).args[0]).to.matchPattern(`
+      {
+        user: {id: ${fixtures.userEvelyn.id}, ...},
+        subject: 'Test subject Evelyn, Everlast, userEvelyn@yogo.dk',
+        text: 'Test body Evelyn, Everlast, userEvelyn@yogo.dk',
+        emailType: 'class_email'
+      }`
+    );
 
     instances.sort((a, b) => {
       if (a.class_email_id > b.class_email_id) {
@@ -297,24 +308,6 @@ describe('helpers.class-email.send', async () => {
           ...
         },      
       ]`,
-    );
-
-    console.log("emailSendFake.getCall(0).args[0] = ", emailSendFake.getCall(0).args[0])
-    expect(emailSendFake.getCall(0).args[0]).to.matchPattern(`
-      {        
-        user: {id: ${fixtures.userAlice.id}, ...},
-        subject: 'Test subject Alice, Ali, userAlice@yogo.dk',
-        text: 'Test body Alice, Ali, userAlice@yogo.dk',
-        emailType: 'class_email'
-      }`
-    );
-    expect(emailSendFake.getCall(1).args[0]).to.matchPattern(`
-      {
-        user: {id: ${fixtures.userEvelyn.id}, ...},
-        subject: 'Test subject Evelyn, Everlast, userEvelyn@yogo.dk',
-        text: 'Test body Evelyn, Everlast, userEvelyn@yogo.dk',
-        emailType: 'class_email'
-      }`
     );
 
     assert.strictEqual(

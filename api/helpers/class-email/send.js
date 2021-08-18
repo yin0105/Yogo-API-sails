@@ -42,17 +42,17 @@ module.exports = {
 
     const recipientIds = [];
     if (email.send_to_signups) {
-      const signups = await ClassSignup.find({'class': email.class_id, archived: false, cancelled_at: 0});
+      const signups = await ClassSignup.find({'class': email.class_id, archived: false, cancelled_at: 0}).sort('user ASC');
       const signupUserIds = _.map(signups, 'user');
       recipientIds.push(...signupUserIds);
     }
     if (email.send_to_waiting_list) {
-      const waitingListSignups = await ClassWaitingListSignup.find({'class': email.class_id, archived: false, cancelled_at: 0});
+      const waitingListSignups = await ClassWaitingListSignup.find({'class': email.class_id, archived: false, cancelled_at: 0}).sort('user ASC');
       const waitingListSignupUserIds = _.map(waitingListSignups, 'user');
       recipientIds.push(...waitingListSignupUserIds);
     }
     if (email.send_to_livestream_signups) {
-      const livestreamSignups = await ClassLivestreamSignup.find({'class': email.class_id, archived: false, cancelled_at: 0});
+      const livestreamSignups = await ClassLivestreamSignup.find({'class': email.class_id, archived: false, cancelled_at: 0}).sort('user ASC');
       const livestreamSignupUserIds = _.map(livestreamSignups, 'user');
       recipientIds.push(...livestreamSignupUserIds);
     }

@@ -169,6 +169,8 @@ describe('helpers.classSignups.findByUser', async function () {
             user: fixtures.userAlice,
         });
 
+        console.log("result = ", result)
+
         assert.deepEqual(
             _.map(result, 'id').sort(compareNumbers),
             [
