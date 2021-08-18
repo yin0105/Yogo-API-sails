@@ -58,7 +58,7 @@ module.exports = {
             throw 'userNotFound';
         }
 
-        const startDate = inputs.startDate ? moment(inputs.startDate, 'YYYY-MM-DD') : moment();
+        const startDate = inputs.startDate ? moment(inputs.startDate, 'YYYY-MM-DD') : moment().local();
         const endDate = inputs.endDate ? moment(inputs.endDate, 'YYYY-MM-DD') : moment(startDate).add(1, 'year').subtract(1, 'day');
         console.log("startDate = ", startDate)
         console.log("  endDate = ", endDate);
