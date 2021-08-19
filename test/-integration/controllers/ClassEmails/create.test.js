@@ -102,6 +102,8 @@ describe('controller.ClassEmails.create', async () => {
   describe('admin', async () => {
 
     it('should fail if class does not exist or is archived', async () => {
+      await ClassEmail.destroy({});
+      
       await supertest(sails.hooks.http.app)
         .post('/class-emails?client=' + testClientId)
         .send(_.assign(_.cloneDeep(emailTemplate), {class_id: 99999999}))
@@ -169,6 +171,7 @@ describe('controller.ClassEmails.create', async () => {
     });
 
     it('should create the email and schedule it for later sending, if send time has not passed', async () => {
+      await ClassEmail.destroy({});
       MockDate.set(moment.tz('2020-05-15 15:59:00', 'YYYY-MM-DD HH:mm:ss', 'Europe/Copenhagen'));
 
       await supertest(sails.hooks.http.app)
@@ -203,6 +206,7 @@ describe('controller.ClassEmails.create', async () => {
     });
 
     it('should set auto_send_status = "off" when send_to_subsequent_signups is false', async () => {
+      await ClassEmail.destroy({});
 
       MockDate.set(moment.tz('2020-05-15 15:59:00', 'YYYY-MM-DD HH:mm:ss', 'Europe/Copenhagen'));
 
@@ -243,6 +247,7 @@ describe('controller.ClassEmails.create', async () => {
     });
 
     it('should set auto_send_status = "off" if class has started, even if send_to_subsequent_signups is true', async () => {
+      await ClassEmail.destroy({});
 
       MockDate.set(moment.tz('2020-05-15 20:00:00', 'YYYY-MM-DD HH:mm:ss', 'Europe/Copenhagen'));
 

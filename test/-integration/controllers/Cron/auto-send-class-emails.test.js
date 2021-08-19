@@ -114,7 +114,17 @@ describe('controllers.Cron.auto-send-class-emails', async () => {
       .post('/cron/auto-send-class-emails')
       .expect(200);
 
-    const allInstances = await ClassEmailInstance.find({});
+    const allInstances = await ClassEmailInstance.find({}).sort('recipient_id ASC');
+
+    expect(emailSendFake.callCount).to.equal(2);
+    expect(emailSendFake.getCall(1).args[0]).to.matchPattern(
+      `{
+        user: {id: ${fixtures.userBill.id}, ...},
+        subject: 'Test subject Bill Billion, userBill@yogo.dk',
+        text: 'Test body Bill Billion, userBill@yogo.dk',        
+        ...
+      }`,
+    );
 
     allInstances.sort((a, b) => {
       return a.recipient_id > b.recipient_id ? 1 : -1;
@@ -133,16 +143,6 @@ describe('controllers.Cron.auto-send-class-emails', async () => {
       }]`,
     );
 
-    expect(emailSendFake.callCount).to.equal(2);
-    expect(emailSendFake.getCall(1).args[0]).to.matchPattern(
-      `{
-        user: {id: ${fixtures.userBill.id}, ...},
-        subject: 'Test subject Bill Billion, userBill@yogo.dk',
-        text: 'Test body Bill Billion, userBill@yogo.dk',        
-        ...
-      }`,
-    );
-
     const updatedClassEmail = await ClassEmail.findOne({id: email.id});
     expect(updatedClassEmail).matchPattern(
       `{
@@ -150,6 +150,8 @@ describe('controllers.Cron.auto-send-class-emails', async () => {
         ...
       }`,
     );
+
+    
 
   });
 

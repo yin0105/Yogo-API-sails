@@ -236,7 +236,9 @@ describe('controllers.Cron.cancel-class-waiting-lists', async () => {
       .expect(200);
 
     const calls = _.map(emailSendFake.getCalls(), 'args');
-
+    
+    console.log("cron/cancel-class: 240: ", calls)
+    
     expect(calls).to.matchPattern(`
       [
         [{
