@@ -66,6 +66,8 @@ module.exports = {
 
             // Now that we have a db lock, check that the membership was not paid in the meantime and that other criteria are also still valid
             if (membershipThatNeedsPaymentNow.automatic_payment_processing_started > 0) throw 'failLockAlreadySet';
+            console.log("moment(membershipThatNeedsPaymentNow.paid_until, 'YYYY-MM-DD') = ", moment(membershipThatNeedsPaymentNow.paid_until, 'YYYY-MM-DD'))
+            console.log("moment() = ", moment());
 
             if (moment(membershipThatNeedsPaymentNow.paid_until, 'YYYY-MM-DD').isSameOrAfter(moment(), 'day')) throw 'failMembershipIsPaidFor';
 
