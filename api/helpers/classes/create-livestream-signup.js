@@ -219,11 +219,15 @@ module.exports = {
 
     }
 
+    console.log("classes/create-live: 222: insertLivestreamSignupResult = ", insertLivestreamSignupResult)
+
     if (insertLivestreamSignupResult.affectedRows) {
 
       const insertedLivestreamSignup = await ClassLivestreamSignup.findOne(insertLivestreamSignupResult.insertId);
 
       await sails.helpers.classTypeEmails.checkAndSendForLivestreamSignup(insertedLivestreamSignup);
+
+      console.log("classes/create-live: 230: insertedLivestreamSignup = ", insertedLivestreamSignup)
 
       return exits.success(insertedLivestreamSignup);
 
@@ -236,6 +240,9 @@ module.exports = {
         archived: 0,
         cancelled_at: 0,
       });
+
+      console.log("classes/create-live: 244: existingSignup = ", existingSignup)
+
       return exits.success(existingSignup);
     }
 

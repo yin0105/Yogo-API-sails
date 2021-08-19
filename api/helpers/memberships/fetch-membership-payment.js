@@ -27,8 +27,6 @@ module.exports = {
 
   fn: async (inputs, exits) => {
 
-    console.log("membership = ", inputs.membership);
-
     const cronLog = sails.helpers.cron.log;
 
     const membershipId = sails.helpers.util.idOrObjectIdInteger(inputs.membership);
@@ -44,17 +42,14 @@ module.exports = {
 
     const locale = await sails.helpers.clientSettings.find(membership.client, 'locale');
 
-    console.log(1, "membership.payment_subscriptions = ", membership.payment_subscriptions)
     if (membership.payment_subscriptions.length > 1) {
       throw 'moreThanOnePaymentSubscription';
     }
-    console.log(2)
 
     if (membership.payment_subscriptions.length === 0) {
       await sails.helpers.memberships.paymentFailedBecauseNoPaymentSubscriptions(membership);
       return exits.success(false);
     }
-    console.log(3)
 
     const paymentCardId = membership.payment_subscriptions[0].card_prefix + 'XXXXXX' + membership.payment_subscriptions[0].card_last_4_digits;
 
@@ -83,7 +78,6 @@ module.exports = {
       payment_subscription: membership.payment_subscriptions[0].id,
       payment_service_provider: membership.payment_subscriptions[0].payment_service_provider,
     }).fetch();
-    console.log("4: order = ", order)
 
     const monthUnitName = membership.payment_option.number_of_months_payment_covers > 1
       ? sails.helpers.t('time.months')
@@ -151,7 +145,6 @@ module.exports = {
       await Order.update({id: order.id}, {total: price + pendingFeesTotalPrice});
     }
 
-    console.log(5)
     const paymentResult = await sails.helpers.order.payWithPaymentSubscription(
       order,
       membership.payment_subscriptions[0],
