@@ -6,9 +6,7 @@ const moment = require('moment-timezone');
 
 describe('helpers.populate.classes.class-accepts-customer-signups', async function () {
 
-ports.
 
-Name: "Classest"
   before(async () => {
 
 
@@ -165,7 +163,7 @@ Name: "Classest"
         studio_attendance_enabled: true,
         seats: 20,
         signup_count: 5,
-        capacity_text: '',
+        capacity_text: '5/20',
         client: testClientId,
         date: '2018-05-15',
         start_time: '10:00:00',

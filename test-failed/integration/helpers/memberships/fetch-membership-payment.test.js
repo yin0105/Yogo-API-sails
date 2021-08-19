@@ -897,15 +897,26 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     assert(createdOrders[0].paid < createdOrders[0].system_updated);
     assert(createdOrders[0].system_updated < Date.now());
 
-    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id});
+    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id}).sort('item_type ASC');
 
-    createdOrderItems.sort((a, b) => {
-      return a.item_type > b.item_type ? -1 : 1;
+    // createdOrderItems.sort((a, b) => {
+    //   return a.item_type > b.item_type ? 1 : -1;
 
-    });
+    // });
 
     expect(createdOrderItems).to.matchPattern(`
       [
+        {
+          client: ${testClientId},
+          order: ${createdOrders[0].id},
+          item_type: 'membership_no_show_fee',
+          item_id: ${noShowFee.id},
+          name: 'No-show fee for Yoga, Tuesday, May 14, 2019 10:00',
+          count: 1,
+          item_price: 30,
+          total_price: 30,
+          ...
+        },  
         {
           client: ${testClientId},
           order: ${createdOrders[0].id},
@@ -918,17 +929,6 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
           membership_renewal_membership_type: ${fixtures.membershipTypeYogaUnlimited.id},
           ...
         },
-        {
-          client: ${testClientId},
-          order: ${createdOrders[0].id},
-          item_type: 'membership_no_show_fee',
-          item_id: ${noShowFee.id},
-          name: 'No-show fee for Yoga, Tuesday, May 14, 2019 10:00',
-          count: 1,
-          item_price: 30,
-          total_price: 30,
-          ...
-        }  
       ]`,
     );
 

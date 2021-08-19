@@ -97,6 +97,7 @@ module.exports = {
           break;
 
         case 'available_slash_total_seats':
+          console.log("capacity: available_slash_total_seats")
           cls.capacity_text = signupCountsByClassId[cls.id] + '/' + cls.seats;
           break;
 
