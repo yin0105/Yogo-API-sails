@@ -157,7 +157,6 @@ describe('helpers.populate.classes.class-accepts-customer-signups', async functi
 
     await sails.helpers.populate.classes.capacityText(classes);
 
-    console.log("pop/classes/capacity-text: 160: ", classes)
     assert.deepStrictEqual(
       classes,
       [{

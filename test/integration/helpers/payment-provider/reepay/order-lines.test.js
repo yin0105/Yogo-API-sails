@@ -118,13 +118,9 @@ describe('helpers.payment-provider.order-lines', async () => {
 
     const orderLines = await sails.helpers.paymentProvider.reepay.orderLines(order)
 
-    console.log("payment-provider/reepay/order-lines: 116: orderLines = ", orderLines)
-
     orderLines.sort((a,b) => {
       return a.ordertext > b.ordertext ? -1: 1;
     })
-
-    console.log("payment-provider/reepay/order-lines: 122: orderLines = ", orderLines)
 
     expect(orderLines).to.matchPattern(resultPattern)
   })

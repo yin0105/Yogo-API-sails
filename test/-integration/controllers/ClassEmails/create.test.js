@@ -124,9 +124,6 @@ describe('controller.ClassEmails.create', async () => {
 
       expect(emailSendFake.callCount).equals(2);
 
-      console.log("emailSendFake.firstCall.args[0] = ", emailSendFake.firstCall.args[0])
-      console.log("emailSendFake.secondCall.args[0] = ", emailSendFake.secondCall.args[0])
-
       expect(emailSendFake.firstCall.args[0]).to.matchPattern(
         `{
         user: {id: ${fixtures.userAlice.id}, ...},

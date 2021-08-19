@@ -772,7 +772,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
       ]`,
     );
 
-    const orderText = fixtures.userAlice.first_name + ' ' + fixtures.userAlice.last_name + '\n' + fixtures.membershipTypeYogaUnlimited.name + '. Payment for 1 month from May 16, 2019 to June 15, 2019.,\nNo-show fee for Yoga, Tuesday, May 14, 2019 10:00';
+    const orderText = fixtures.userAlice.first_name + ' ' + fixtures.userAlice.last_name + '\nNo-show fee for Yoga, Tuesday, May 14, 2019 10:00,\n' + fixtures.membershipTypeYogaUnlimited.name + '. Payment for 1 month from May 16, 2019 to June 15, 2019.';
 
     expect(apiRequestFake.getCall(0).args[0]).to.matchPattern({
       merchant: fixtures.testClient1.dibs_merchant,
@@ -1271,8 +1271,6 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     const createdPaymentSubscriptionTransactions = await PaymentSubscriptionTransaction.find({
       payment_subscription: paymentSubscription.id,
     });
-
-    console.log("memberships/fetch-membership: 1275: createdPaymentSubscriptionTransactions = ", createdPaymentSubscriptionTransactions)
 
     comparePartialObject(
       createdPaymentSubscriptionTransactions,

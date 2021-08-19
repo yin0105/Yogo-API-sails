@@ -94,6 +94,10 @@ describe('get-valid-memberships-for-class--membership-pause', async function () 
       classItem: classes[0],
     });
 
+    validMembershipsForClass0.sort((a,b) => {
+      return a.id > b.id ? 1: -1;
+    })
+
     expect(validMembershipsForClass0).to.matchPattern(`
       [
         {
@@ -137,6 +141,10 @@ describe('get-valid-memberships-for-class--membership-pause', async function () 
       user: fixtures.userAlice,
       classItem: classes[2],
     });
+
+    validMembershipsForClass2.sort((a,b) => {
+      return a.id > b.id ? 1: -1;
+    })
 
     expect(validMembershipsForClass2).to.matchPattern(`
       [

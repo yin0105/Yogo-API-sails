@@ -11,8 +11,6 @@ module.exports = {
   sync: true,
 
   fn: (inputs, exits) => {
-    console.log("api = ", sails.config.email.mailgun.apiKey);
-    console.log("domain = ", sails.config.email.mailgun.domain);
     const emailTransport = nodemailer.createTransport(mg(
       {
         auth: {

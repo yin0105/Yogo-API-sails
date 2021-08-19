@@ -91,8 +91,6 @@ describe('controllers.Cron.log', async () => {
         .sort('createdAt DESC')
     )[0]
 
-    console.log("cron/log : 94 : ", insertedLogEntry)
-    
     comparePartialObject(
       insertedLogEntry,
       {
