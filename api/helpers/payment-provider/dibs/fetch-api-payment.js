@@ -23,6 +23,9 @@ module.exports = {
 
     const orderId = sails.helpers.util.idOrObjectIdInteger(inputs.order)
     const order = await Order.findOne(orderId).populate('order_items').populate('user').populate('client')
+    order.order_items.sort((a,b) => {
+      return a.item_type > b.item_type? 1: -1;
+    })
 
     const paymentSubscriptionId = sails.helpers.util.idOrObjectIdInteger(inputs.paymentSubscription)
     const paymentSubscription = await PaymentSubscription.findOne(paymentSubscriptionId)

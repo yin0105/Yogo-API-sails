@@ -123,11 +123,9 @@ module.exports = {
       classPasses = _.sortBy(classPasses, 'valid_until');
     }
 
-    console.log("classes/create-livestream: 126: membership = ", memberships)
     let usingFixedClassPass = false;
     if (memberships && memberships.length > 0) {
       signupData.used_membership = memberships[0].id;
-      console.log("1: used_membership = ", signupData.used_membership)
       signupData.used_class_pass = null;
       signupData.class_pass_seat_spent = false;
     } else if (classPasses && classPasses.length > 0) {
@@ -143,8 +141,6 @@ module.exports = {
 
     signupData.createdAt = Date.now();
     signupData.updatedAt = Date.now();
-
-    console.log("classes/create-live: 147: signupData = ", signupData)
 
     let insertLivestreamSignupResult;
 
@@ -219,15 +215,11 @@ module.exports = {
 
     }
 
-    console.log("classes/create-live: 222: insertLivestreamSignupResult = ", insertLivestreamSignupResult)
-
     if (insertLivestreamSignupResult.affectedRows) {
 
       const insertedLivestreamSignup = await ClassLivestreamSignup.findOne(insertLivestreamSignupResult.insertId);
 
       await sails.helpers.classTypeEmails.checkAndSendForLivestreamSignup(insertedLivestreamSignup);
-
-      console.log("classes/create-live: 230: insertedLivestreamSignup = ", insertedLivestreamSignup)
 
       return exits.success(insertedLivestreamSignup);
 
@@ -240,8 +232,6 @@ module.exports = {
         archived: 0,
         cancelled_at: 0,
       });
-
-      console.log("classes/create-live: 244: existingSignup = ", existingSignup)
 
       return exits.success(existingSignup);
     }

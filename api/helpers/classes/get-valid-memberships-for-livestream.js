@@ -62,6 +62,7 @@ module.exports = {
         },
         membership_pauses: true,
       })
+      .orderBy('m.id')
 
 
     memberships = _.filter(
