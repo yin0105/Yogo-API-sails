@@ -10,6 +10,7 @@ describe('helpers.memberships.cancel-future-signups', async function () {
   });
 
   before(async () => {
+    await ClassSignup.destroy({});
     membership = await Membership.create({
       client: testClientId,
       user: fixtures.userAlice.id,
@@ -23,6 +24,8 @@ describe('helpers.memberships.cancel-future-signups', async function () {
   });
 
   it('should cancel class signups with no startTime specified', async () => {
+    let dbSignupsPre = await ClassSignup.find({});
+    console.log("dbSignupsPre = ", dbSignupsPre)
 
     const classes = await Class.createEach([
       {

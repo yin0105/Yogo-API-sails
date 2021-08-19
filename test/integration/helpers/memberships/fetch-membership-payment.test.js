@@ -44,7 +44,6 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     await PaymentSubscriptionTransaction.destroy({});
 
     await PaymentSubscription.destroy({});
-    await ClientSettings.destroy({});
 
     sinon.restore();
   });
