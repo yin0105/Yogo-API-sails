@@ -298,7 +298,6 @@ describe('create-livestream-signup', async function () {
 
     let newSignup = {};
 
-    console.log("membershipYogaActive.id = ", membershipYogaActive.id)
     await assertAsyncDbObject(
       async () => {
         newSignup = await sails.helpers.classes.createLivestreamSignup.with({

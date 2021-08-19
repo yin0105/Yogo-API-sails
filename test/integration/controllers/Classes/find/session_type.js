@@ -99,6 +99,10 @@ describe('session_type', () => {
     const response = await supertest(sails.hooks.http.app)
       .get('/classes').query(query).expect(200)
 
+    response.body.classes.sort((a, b) => {
+      return a.id > b.id ? 1: -1;
+    });
+
     comparePartialObject(
       response.body.classes,
       [

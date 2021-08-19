@@ -39,10 +39,6 @@ module.exports = {
           .usingConnection(dbConnection)
       ).rows[0]
 
-      console.log("memberships/lock: 42: membershipId = ", membershipId)
-      console.log("memberships/lock: 42: lockedMembership = ", lockedMembership)
-      console.log("memberships/lock: 42: lockedMembership.automatic_payment_processing_started = ", lockedMembership.automatic_payment_processing_started)
-
       if (lockedMembership.automatic_payment_processing_started) {
         await sails.helpers.cron.log(`Cannot set lock. Membership already locked at timestamp ${lockedMembership.automatic_payment_processing_started}`)
         throw 'processingAlreadyStarted'
@@ -59,7 +55,6 @@ module.exports = {
         ).usingConnection(dbConnection).fetch()
       )[0]
 
-      console.log("memberships/lock: 42: updatedMembership = ", updatedMembership)
       await sails.helpers.cron.log(`Lock was succesfully set on membership id ${updatedMembership.id}.`)
 
       return proceed(null, updatedMembership)

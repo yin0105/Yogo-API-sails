@@ -197,6 +197,10 @@ describe('controllers.ClassPasses.find', async function () {
         .use(authorizeUserAlice())
         .expect(200);
 
+      foundClassPasses.sort((a, b) => {
+        return a.id > b.id ? 1: -1;
+      })
+
       expect(foundClassPasses).to.matchPattern(`[{
         client: ${testClientId},
         id: ${classPasses.alice1.id},
