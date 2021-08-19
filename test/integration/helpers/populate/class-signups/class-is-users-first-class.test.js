@@ -4,9 +4,14 @@ const fixtures = require('../../../../fixtures/factory').fixtures;
 
 describe('helpers.populate.class-signups.class-is-on-users-birthday', async function () {
 
+  afterEach(async () => {
+    await ClassWaitingListSignup.destroy({});
+    await ClassSignup.destroy({});
+  });
+
 
   it('should populate class_is_users_first_class', async () => {
-
+    
     const classes = await Class.createEach([
       {
         client: testClientId,
@@ -81,8 +86,6 @@ describe('helpers.populate.class-signups.class-is-on-users-birthday', async func
       return a.class > b.class ? 1 : -1;
     });
 
-    console.log("classSignups = ", classSignups)
-
     expect(classSignups).to.matchPattern(`[
       {
         client: ${testClientId},
@@ -127,7 +130,7 @@ describe('helpers.populate.class-signups.class-is-on-users-birthday', async func
   });
 
   it('should work with livestream signups', async () => {
-
+    
     const classes = await Class.createEach([
       {
         client: testClientId,

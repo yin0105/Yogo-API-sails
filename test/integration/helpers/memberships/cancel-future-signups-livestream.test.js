@@ -5,6 +5,10 @@ describe('helpers.memberships.cancel-future-signups-livestream', async function 
 
   let membership;
 
+  beforeEach(async () => {
+    await ClassLivestreamSignup.destroy({});
+  });
+
   before(async () => {
     await ClassLivestreamSignup.destroy({});
     membership = await Membership.create({
@@ -17,7 +21,7 @@ describe('helpers.memberships.cancel-future-signups-livestream', async function 
 
   after(async () => {
     await Membership.destroy({id: membership.id});
-  });
+  });  
 
   it('should cancel class livestream signups with no startTime specified', async () => {
 

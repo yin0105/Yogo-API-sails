@@ -14,8 +14,15 @@ describe('helpers.memberships.setAutoPaymentProcessingLock', async function () {
 
     let paymentSubscription;
 
-    it('should set processing flag if membership needs auto payment', async () => {
+    afterEach(async() => {
+        await PaymentSubscription.destroy({});
+        await Membership.destroy({});
+    });
 
+    it('should set processing flag if membership needs auto payment', async () => {
+        await PaymentSubscription.destroy({});
+        await Membership.destroy({});
+        
         membership = await Membership.create({
             user: fixtures.userAlice.id,
             paid_until: '2018-05-15',
@@ -94,7 +101,8 @@ describe('helpers.memberships.setAutoPaymentProcessingLock', async function () {
 
 
     it('should throw "membershipArchived" if membership has been archived', async () => {
-
+        await PaymentSubscription.destroy({});
+        await Membership.destroy({});
 
         membership = await Membership.create({
             user: fixtures.userAlice.id,
@@ -131,7 +139,8 @@ describe('helpers.memberships.setAutoPaymentProcessingLock', async function () {
     });
 
     it('should throw "statusNotActiveOrCancelledRunning" if membership has been archived', async () => {
-
+        await PaymentSubscription.destroy({});
+        await Membership.destroy({});
 
         membership = await Membership.create({
             user: fixtures.userAlice.id,
@@ -167,7 +176,7 @@ describe('helpers.memberships.setAutoPaymentProcessingLock', async function () {
     });
 
     it('should throw "membershipCancelledAndExpired" if membership has been cancelled and has expired', async () => {
-
+        
         membership = await Membership.create({
             user: fixtures.userAlice.id,
             paid_until: '2018-05-05',

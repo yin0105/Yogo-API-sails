@@ -24,7 +24,7 @@ describe('helpers.email.send', async function () {
   });
 
   after(async () => {
-    emailTransportStubFactory.destroy();
+    emailTransportStubFactory.destroy({});
     await EmailLog.destroy({});
   });
 

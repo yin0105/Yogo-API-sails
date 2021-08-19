@@ -20,7 +20,8 @@ describe('helpers.sms.send', async function () {
     smsSendFake = smsFakeFactory.createFake();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await Sms.destroy({});
     sinon.restore();
   });
 

@@ -1,12 +1,15 @@
 const testClientId = require('../../../global-test-variables').TEST_CLIENT_ID;
 const fixtures = require('../../../fixtures/factory').fixtures;
 
-describe('helpers.memberships.cancel-future-signups-waiting-list', async function () {
+describe('helpers.memberships.cancel-future-signups', async function () {
 
   let membership;
 
+  afterEach(async () => {
+    await ClassSignup.destroy({});
+  });
+
   before(async () => {
-    await ClassWaitingListSignup.destroy({});
     membership = await Membership.create({
       client: testClientId,
       user: fixtures.userAlice.id,
@@ -19,7 +22,7 @@ describe('helpers.memberships.cancel-future-signups-waiting-list', async functio
     await Membership.destroy({id: membership.id});
   });
 
-  it('should cancel class waiting list signups with no startTime specified', async () => {
+  it('should cancel class signups with no startTime specified', async () => {
 
     const classes = await Class.createEach([
       {
@@ -59,7 +62,7 @@ describe('helpers.memberships.cancel-future-signups-waiting-list', async functio
       },
     ]).fetch();
 
-    await ClassWaitingListSignup.createEach([
+    await ClassSignup.createEach([
       {
         client: testClientId,
         class: classes[0].id,
@@ -106,7 +109,7 @@ describe('helpers.memberships.cancel-future-signups-waiting-list', async functio
     });
     const timestampAfterCall = Date.now() + 1;
 
-    let dbSignups = await ClassWaitingListSignup.find({});
+    let dbSignups = await ClassSignup.find({});
 
     dbSignups = _.map(dbSignups, cs => _.pick(cs, ['class','user','used_membership', 'cancelled_at', 'archived']));
 
@@ -167,12 +170,12 @@ describe('helpers.memberships.cancel-future-signups-waiting-list', async functio
     ]`);
 
     await Class.destroy({});
-    await ClassWaitingListSignup.destroy({});
+    await ClassSignup.destroy({});
 
   });
 
 
-  it('should cancel class waiting list signups with startTime specified', async () => {
+  it('should cancel class signups with startTime specified', async () => {
 
     const classes = await Class.createEach([
       {
@@ -212,7 +215,7 @@ describe('helpers.memberships.cancel-future-signups-waiting-list', async functio
       },
     ]).fetch();
 
-    await ClassWaitingListSignup.createEach([
+    await ClassSignup.createEach([
       {
         client: testClientId,
         class: classes[0].id,
@@ -260,7 +263,7 @@ describe('helpers.memberships.cancel-future-signups-waiting-list', async functio
     });
     const timestampAfterCall = Date.now() + 1;
 
-    let dbSignups = await ClassWaitingListSignup.find({});
+    let dbSignups = await ClassSignup.find({});
 
     dbSignups = _.map(dbSignups, cs => _.pick(cs, ['class','user','used_membership', 'cancelled_at', 'archived']));
 
@@ -321,11 +324,11 @@ describe('helpers.memberships.cancel-future-signups-waiting-list', async functio
     ]`);
 
     await Class.destroy({});
-    await ClassWaitingListSignup.destroy({});
+    await ClassSignup.destroy({});
 
   });
 
-  it('should cancel class waiting list signups that membership does not give access to', async () => {
+  it('should cancel class signups that membership does not give access to', async () => {
 
     const classes = await Class.createEach([
       {
@@ -358,7 +361,7 @@ describe('helpers.memberships.cancel-future-signups-waiting-list', async functio
       },
     ]).fetch();
 
-    await ClassWaitingListSignup.createEach([
+    await ClassSignup.createEach([
       {
         client: testClientId,
         class: classes[0].id,
@@ -394,7 +397,7 @@ describe('helpers.memberships.cancel-future-signups-waiting-list', async functio
     });
     const timestampAfterCall = Date.now() + 1;
 
-    let dbSignups = await ClassWaitingListSignup.find({});
+    let dbSignups = await ClassSignup.find({});
 
     dbSignups = _.map(dbSignups, cs => _.pick(cs, ['class','user','used_membership', 'cancelled_at', 'archived']));
 
@@ -441,8 +444,7 @@ describe('helpers.memberships.cancel-future-signups-waiting-list', async functio
     ]`);
 
     await Class.destroy({});
-    await ClassWaitingListSignup.destroy({});
-    await ClassWaitingListSignup.destroy({});
+    await ClassSignup.destroy({});
 
   });
 

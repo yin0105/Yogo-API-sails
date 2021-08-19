@@ -17,7 +17,7 @@ describe('helpers.email.welcome', async () => {
   })
 
   after(async () => {
-    emailTransportStubFactory.destroy();
+    emailTransportStubFactory.destroy({});
   })
 
 

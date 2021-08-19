@@ -17,6 +17,10 @@ describe('create-waiting-list-signup', async function () {
     classSignup,
     class2Signup;
 
+  afterEach(async () => {
+    await ClassWaitingListSignup.destroy({});
+  });
+
   before(async () => {
     // SET UP CLASS PASSES
     classPassUnlimitedAlice = await ClassPass.create({
@@ -429,6 +433,7 @@ describe('create-waiting-list-signup', async function () {
   });
 
   it('should use the fixed count class pass that expires first', async () => {
+    await ClassWaitingListSignup.destroy({});
 
     const classPassTenClassesDennis0 = await ClassPass.create({
       user: fixtures.userDennis.id,
@@ -498,6 +503,7 @@ describe('create-waiting-list-signup', async function () {
   });
 
   it('should only create one signup on two simultaneous requests', async () => {
+    await ClassWaitingListSignup.destroy({});
 
     const classPassDennis = await ClassPass.create({
       client: testClientId,
@@ -534,7 +540,7 @@ describe('create-waiting-list-signup', async function () {
   });
 
   it('should only create one signup on three simultaneous requests', async () => {
-
+    await ClassWaitingListSignup.destroy({});
 
     const classPassDennis = await ClassPass.create({
       client: testClientId,
@@ -575,7 +581,8 @@ describe('create-waiting-list-signup', async function () {
   });
 
   it('should only create one signup on two simultaneous requests if class pass has one class left', async () => {
-    console.log("stard")
+    
+
     const classPassDennis = await ClassPass.create({
       client: testClientId,
       user: fixtures.userDennis.id,
@@ -602,11 +609,8 @@ describe('create-waiting-list-signup', async function () {
       }),
     ]);
 
-    console.log("throwCount  = ", throwCount);
     // Depending on the timing inside createWaitingListSignup, it may throw zero or one time(s)
     expect(throwCount).to.be.at.most(1);
-
-    console.log(1)
 
     const createdSignupsForClass1 = await ClassWaitingListSignup.find({
       user: fixtures.userDennis.id,
@@ -617,12 +621,9 @@ describe('create-waiting-list-signup', async function () {
       class: class2.id,
     });
 
-    console.log(2)
     expect(createdSignupsForClass1.length + createdSignupsForClass2.length).to.equal(1);
-    console.log(3)
     const updatedClassPassDennis = await ClassPass.findOne(classPassDennis.id);
     expect(updatedClassPassDennis.classes_left).to.equal(0);
-    console.log(4)
     await ClassWaitingListSignup.destroy({id: _.map(createdSignupsForClass1, 'id')});
     await ClassPass.destroy({id: classPassDennis.id});
 
