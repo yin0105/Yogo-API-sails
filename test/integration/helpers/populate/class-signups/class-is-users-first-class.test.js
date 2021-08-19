@@ -98,7 +98,7 @@ describe('helpers.populate.class-signups.class-is-on-users-birthday', async func
         client: ${testClientId},
         class: ${classes[1].id},
         user: ${fixtures.userAlice.id},
-        class_is_users_first_class: false,
+        class_is_users_first_class: true,
         ...
       },
       {

@@ -123,7 +123,7 @@ module.exports = {
       classPasses = _.sortBy(classPasses, 'valid_until');
     }
 
-    console.log("membership = ", memberships)
+    console.log("classes/create-livestream: 126: membership = ", memberships)
     let usingFixedClassPass = false;
     if (memberships && memberships.length > 0) {
       signupData.used_membership = memberships[0].id;
