@@ -38,8 +38,6 @@ describe('helpers.sms.send', async function () {
       type: 'class_cancelled',
     });
 
-    console.log("smsSendFake.getCall(0).args[0] = ", smsSendFake.getCall(0).args[0])
-    
     expect(smsSendFake.getCall(0).args[0]).to.matchPattern({
       message: 'Test message, timestamp ' + timestamp,
       sender: 'Test client',

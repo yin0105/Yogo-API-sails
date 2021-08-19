@@ -135,7 +135,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     assert(createdOrders[0].paid < createdOrders[0].system_updated);
     assert(createdOrders[0].system_updated < moment().format('x'));
 
-    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id});
+    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id}).sort('item_type DESC');
 
     const orderItemName = fixtures.membershipTypeYogaUnlimited.name + '. Payment for 1 month from May 16, 2019 to June 15, 2019.';
 
@@ -251,7 +251,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     assert(createdOrders[0].paid < createdOrders[0].system_updated);
     assert(createdOrders[0].system_updated < moment().format('x'));
 
-    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id});
+    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id}).sort('item_type DESC');
 
     const orderItemName = fixtures.membershipTypeYogaUnlimited.name + ' - Test campaign. Payment for 1 month from May 16, 2019 to June 15, 2019.';
 
@@ -388,7 +388,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     assert(createdOrders[0].paid < createdOrders[0].system_updated);
     assert(createdOrders[0].system_updated < moment().format('x'));
 
-    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id});
+    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id}).sort('item_type DESC');
 
     const orderItemName = fixtures.membershipTypeYogaUnlimited.name + ' - Test campaign. Payment for 1 month from May 16, 2019 to June 15, 2019.';
 
@@ -490,7 +490,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     assert(createdOrders[0].paid < createdOrders[0].system_updated);
     assert(createdOrders[0].system_updated < moment().format('x'));
 
-    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id});
+    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id}).sort('item_type DESC');
 
     const orderItemName = fixtures.membershipTypeYogaUnlimited.name + '. Payment for 1 month from May 15, 2018 to June 14, 2018. Discount code: "test_discount_code".';
 
@@ -606,7 +606,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     assert(createdOrders[0].paid < createdOrders[0].system_updated);
     assert(createdOrders[0].system_updated < moment().format('x'));
 
-    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id});
+    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id}).sort('item_type DESC');
 
     const orderItemName = fixtures.membershipTypeYogaUnlimited.name + ' - Test campaign. Payment for 1 month from May 15, 2018 to June 14, 2018. Discount code: "test_discount_code".';
 
@@ -742,7 +742,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     assert(createdOrders[0].paid < createdOrders[0].system_updated);
     assert(createdOrders[0].system_updated < Date.now());
 
-    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id});
+    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id}).sort('item_type DESC');
 
     expect(createdOrderItems).to.matchPattern(`
       [
@@ -768,7 +768,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
           item_price: ${noShowFee.amount},
           total_price: ${noShowFee.amount},
           ...
-        }  
+        },  
       ]`,
     );
 
@@ -899,7 +899,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     assert(createdOrders[0].paid < createdOrders[0].system_updated);
     assert(createdOrders[0].system_updated < Date.now());
 
-    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id}).sort('item_type ASC');
+    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id}).sort('item_type DESC');
 
     // createdOrderItems.sort((a, b) => {
     //   return a.item_type > b.item_type ? 1 : -1;
@@ -908,17 +908,6 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
 
     expect(createdOrderItems).to.matchPattern(`
       [
-        {
-          client: ${testClientId},
-          order: ${createdOrders[0].id},
-          item_type: 'membership_no_show_fee',
-          item_id: ${noShowFee.id},
-          name: 'No-show fee for Yoga, Tuesday, May 14, 2019 10:00',
-          count: 1,
-          item_price: 30,
-          total_price: 30,
-          ...
-        },  
         {
           client: ${testClientId},
           order: ${createdOrders[0].id},
@@ -931,6 +920,17 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
           membership_renewal_membership_type: ${fixtures.membershipTypeYogaUnlimited.id},
           ...
         },
+        {
+          client: ${testClientId},
+          order: ${createdOrders[0].id},
+          item_type: 'membership_no_show_fee',
+          item_id: ${noShowFee.id},
+          name: 'No-show fee for Yoga, Tuesday, May 14, 2019 10:00',
+          count: 1,
+          item_price: 30,
+          total_price: 30,
+          ...
+        },  
       ]`,
     );
 
@@ -1054,7 +1054,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     assert(createdOrders[0].payment_failed < moment().format('x'));
 
 
-    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id});
+    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id}).sort('item_type DESC');
 
     const orderItemName = fixtures.membershipTypeYogaUnlimited.name + '. Payment for 6 months from May 16, 2019 to November 15, 2019.';
 
@@ -1272,6 +1272,8 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
       payment_subscription: paymentSubscription.id,
     });
 
+    console.log("memberships/fetch-membership: 1275: createdPaymentSubscriptionTransactions = ", createdPaymentSubscriptionTransactions)
+
     comparePartialObject(
       createdPaymentSubscriptionTransactions,
       [
@@ -1306,7 +1308,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
     assert(createdOrders[0].paid < createdOrders[0].system_updated);
     assert(createdOrders[0].system_updated < moment().format('x'));
 
-    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id});
+    const createdOrderItems = await OrderItem.find({order: createdOrders[0].id}).sort('item_type DESC');
 
     const orderItemName = fixtures.membershipTypeYogaUnlimited.name + '. Payment for 1 month from May 16, 2019 to June 15, 2019.';
 

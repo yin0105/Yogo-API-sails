@@ -25,7 +25,6 @@ describe('helpers.memberships.cancel-future-signups', async function () {
 
   it('should cancel class signups with no startTime specified', async () => {
     let dbSignupsPre = await ClassSignup.find({});
-    console.log("dbSignupsPre = ", dbSignupsPre)
 
     const classes = await Class.createEach([
       {

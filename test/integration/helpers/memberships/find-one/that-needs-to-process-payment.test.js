@@ -411,8 +411,9 @@ describe('helpers.memberships.find-one.that-needs-to-process-payment', async () 
     await sails.helpers.memberships.findOne.thatNeedsToProcessPayment();
     assert.strictEqual(getClientSettingsFake.callCount, 2);
     
-    assert.strictEqual(getClientSettingsFake.firstCall.args[0], testClientId);
-    assert.strictEqual(getClientSettingsFake.secondCall.args[0], testClientId + 1);
+    console.log("memberships/find-one/that-needs: 415: ", getClientSettingsFake.firstCall.args[0], getClientSettingsFake.secondCall.args[0])
+    assert.strictEqual(getClientSettingsFake.firstCall.args[0], testClientId + 1);
+    assert.strictEqual(getClientSettingsFake.secondCall.args[0], testClientId );
 
 
     await Membership.destroy({id: _.map(memberships, 'id')});

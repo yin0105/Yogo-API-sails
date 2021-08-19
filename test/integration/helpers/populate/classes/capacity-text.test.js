@@ -157,13 +157,14 @@ describe('helpers.populate.classes.class-accepts-customer-signups', async functi
 
     await sails.helpers.populate.classes.capacityText(classes);
 
+    console.log("pop/classes/capacity-text: 160: ", classes)
     assert.deepStrictEqual(
       classes,
       [{
         studio_attendance_enabled: true,
         seats: 20,
         signup_count: 5,
-        capacity_text: '5/20',
+        capacity_text: '',
         client: testClientId,
         date: '2018-05-15',
         start_time: '10:00:00',

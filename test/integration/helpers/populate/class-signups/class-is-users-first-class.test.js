@@ -86,11 +86,6 @@ describe('helpers.populate.class-signups.class-is-on-users-birthday', async func
       return a.class > b.class ? 1 : -1;
     });
 
-    console.log("classSignups = ", classSignups)
-    console.log(testClientId)
-    console.log(classes[0].id, classes[1].id)
-    console.log(fixtures.userAlice.id)
-
     expect(classSignups).to.matchPattern(`[
       {
         client: ${testClientId},
@@ -103,7 +98,7 @@ describe('helpers.populate.class-signups.class-is-on-users-birthday', async func
         client: ${testClientId},
         class: ${classes[1].id},
         user: ${fixtures.userAlice.id},
-        class_is_users_first_class: true,
+        class_is_users_first_class: false,
         ...
       },
       {

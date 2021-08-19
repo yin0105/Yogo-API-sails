@@ -105,8 +105,6 @@ describe('helpers.cart.calculate-discount-code-in-cart-price', async function ()
     ]
 
     const {price, vat} = await sails.helpers.cart.calculateDiscountCodeInCartPrice(cartItems)
-    console.log("price = ", price)
-    console.log("vat = ", vat)
 
     expect(price).to.equal(-500)
     expect(vat).to.equal(0)

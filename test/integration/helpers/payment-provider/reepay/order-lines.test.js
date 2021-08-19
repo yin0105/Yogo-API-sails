@@ -62,19 +62,19 @@ describe('helpers.payment-provider.order-lines', async () => {
 
     resultPattern = `[
       {
-        ordertext: 'Yoga Unlimited (Monthly)',
-        amount: 30000,
-        vat: 0,
-        quantity: 1,
-        totalAmount: 30000,
-        amount_incl_vat: true,
-      },
-      {
         ordertext: 'Yoga mat',
         amount: 22000,
         vat: 0.25,
         quantity: 1,
         totalAmount: 22000,
+        amount_incl_vat: true,
+      },
+      {
+        ordertext: 'Yoga Unlimited (Monthly)',
+        amount: 30000,
+        vat: 0,
+        quantity: 1,
+        totalAmount: 30000,
         amount_incl_vat: true,
       },
       {
@@ -105,6 +105,11 @@ describe('helpers.payment-provider.order-lines', async () => {
   it('should generate reepay order lines from order items', async () => {
 
     const orderLines = await sails.helpers.paymentProvider.reepay.orderLines.with({orderItems: orderItems})
+    
+    orderLines.sort((a,b) => {
+      return a.ordertext > b.ordertext ? -1: 1;
+    })
+
 
     expect(orderLines).to.matchPattern(resultPattern)
   })
@@ -112,6 +117,14 @@ describe('helpers.payment-provider.order-lines', async () => {
   it('should generate reepay order lines from order', async () => {
 
     const orderLines = await sails.helpers.paymentProvider.reepay.orderLines(order)
+
+    console.log("payment-provider/reepay/order-lines: 116: orderLines = ", orderLines)
+
+    orderLines.sort((a,b) => {
+      return a.ordertext > b.ordertext ? -1: 1;
+    })
+
+    console.log("payment-provider/reepay/order-lines: 122: orderLines = ", orderLines)
 
     expect(orderLines).to.matchPattern(resultPattern)
   })
