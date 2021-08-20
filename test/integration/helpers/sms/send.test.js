@@ -45,8 +45,6 @@ describe('helpers.sms.send', async function () {
 
   it('should send an sms', async () => {
     const smsSenderName = await sails.helpers.clientSettings.find(fixtures.userAlice.client, 'sms_sender_name');
-    console.log("fixtures.userAlice.client = ", fixtures.userAlice.client)
-    console.log("smsSenderName = ", smsSenderName)
 
     const timestamp = Date.now();
     await sails.helpers.sms.send.with({
