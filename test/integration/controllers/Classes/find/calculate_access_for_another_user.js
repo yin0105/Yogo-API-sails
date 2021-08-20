@@ -113,6 +113,10 @@ describe('calculate_access_for_another_user', () => {
     let response = await supertest(sails.hooks.http.app)
       .get('/classes').query(query).use(authorizeAdmin()).expect(200)
 
+      response.body.classes.sort((a, b) => {
+        return a.user_has_access_to_class ? -1: 1;
+      })
+
 
     comparePartialObject(
       response.body.classes,
