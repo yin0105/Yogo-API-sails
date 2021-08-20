@@ -587,7 +587,7 @@ describe('controllers.MembershipPauses.create', async function () {
     }`);
 
 
-    const logEntries = await MembershipLog.find({});
+    const logEntries = await MembershipLog.find({}).sort('entry ASC');
     expect(logEntries).to.matchPattern(`[
     {
       client: ${testClientId},
@@ -613,6 +613,8 @@ describe('controllers.MembershipPauses.create', async function () {
 
   it('should fail if fee is declined', async () => {
 
+    await Order.destroy({})
+    
     MockDate.set(moment.tz('2020-05-15', 'Europe/Copenhagen'));
     const membership = await Membership.create({
       client: testClientId,

@@ -201,7 +201,9 @@ describe('controllers.Cron.send-livestream-notification-emails', async () => {
         '?client=' + testClientId)
       .expect(200);
 
-    const calls = _.chain(emailSendFake.getCalls()).map('args').orderBy('user.id').value();
+    const calls = _.chain(emailSendFake.getCalls()).map('args').value();
+    
+    // const calls = _.map(emailSendFake.getCalls(), call => call.args[0]);
 
     const livestreamLink = 'https://test-client.yogo.dk/frontend/index.html#/livestream/class/' + class1.id + '/preloader';
 
@@ -209,7 +211,8 @@ describe('controllers.Cron.send-livestream-notification-emails', async () => {
       return a.id > b.id ? 1: -1;
     })
 
-    expect(calls).to.matchPattern(`
+    // expect(calls).to.matchPattern(`
+    expect(_.sortBy(calls, ([c]) => c.user.id)).to.matchPattern(`
       [
         [{
           user: {id: ${fixtures.userAlice.id}, ... },

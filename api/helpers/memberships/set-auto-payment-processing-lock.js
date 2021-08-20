@@ -66,19 +66,24 @@ module.exports = {
 
             // Now that we have a db lock, check that the membership was not paid in the meantime and that other criteria are also still valid
             if (membershipThatNeedsPaymentNow.automatic_payment_processing_started > 0) throw 'failLockAlreadySet';
+            const offset = new Date().getTimezoneOffset();
 
-            if (moment(membershipThatNeedsPaymentNow.paid_until, 'YYYY-MM-DD').isSameOrAfter(moment(), 'day')) throw 'failMembershipIsPaidFor';
-
+            if (moment(membershipThatNeedsPaymentNow.paid_until, 'YYYY-MM-DD').add(offset, 'minutes').isSameOrAfter(moment().local(), 'day')) throw 'failMembershipIsPaidFor';
+            console.log(1)
             if (membershipThatNeedsPaymentNow.archived) throw 'failMembershipArchived';
-
+            console.log(2)
             if (membershipThatNeedsPaymentNow.status !== 'active' && membershipThatNeedsPaymentNow.status !== 'cancelled_running') throw 'failStatusNotActiveOrCancelledRunning';
-
+            console.log(3, membershipThatNeedsPaymentNow.status)
             if (
                 membershipThatNeedsPaymentNow.status === 'cancelled_running' &&
-                moment(membershipThatNeedsPaymentNow.cancelled_from_date, 'YYYY-MM-DD').isSameOrBefore(moment(), 'day')
+                moment(membershipThatNeedsPaymentNow.cancelled_from_date, 'YYYY-MM-DD').add(offset, 'minutes').isSameOrBefore(moment().local(), 'day')
             ) throw 'failMembershipCancelledAndExpired';
 
+            console.log(4)
+            
+
             if (membershipThatNeedsPaymentNow.renewal_failed) throw 'failRenewalFailed';
+            console.log(5)
 
             // See if there is still an active subscription
             let subscriptions = await PaymentSubscription.find({
@@ -87,6 +92,7 @@ module.exports = {
                 archived: false
             }).usingConnection(dbConnection);
             if (!subscriptions.length) throw 'failNoPaymentSubscriptions';
+            console.log(6)
 
             // Everything looks good. Set flag on membership so other processes won't try to fetch the same payment
             await Membership.update({
@@ -94,11 +100,12 @@ module.exports = {
             }, {
                 automatic_payment_processing_started: new Date()
             }).usingConnection(dbConnection);
-
+            console.log(7)
 
             return proceed(null, true)
 
         });
+        console.log(8)
 
         return exits.success(transactionResult);
 
