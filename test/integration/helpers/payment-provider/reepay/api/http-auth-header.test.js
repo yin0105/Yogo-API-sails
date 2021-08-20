@@ -4,6 +4,10 @@ const assert = require('assert')
 
 describe('helpers.payment-provider.reepay.api.http-auth-header', () => {
 
+  beforeEach(async () => {
+    await ClientSettings.destroy({});
+  })
+
   it('should return Reepay auth header with test credentials', async () => {
 
     sails.config.paymentProviders.reepay.testAccount.privateApiKey = 'priv_test_123456789'

@@ -2,6 +2,10 @@ const assert = require('assert');
 
 describe('t (translate)', () => {
 
+  beforeEach(async () => {
+    await ClientSettings.destroy({});
+  })
+
   it('should throw an error if key does not exist', () => {
     assert.throws(() => {
         sails.helpers.t('test.keyDoesNotExist');

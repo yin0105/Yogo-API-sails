@@ -29,7 +29,9 @@ describe('helpers.memberships.payment-failed-because-no-payment-subscriptions', 
 
   beforeEach(async () => {
     await MembershipLog.destroy({})
-    emailSendFake = emailSendFakeFactory.installEmailSendFake()
+    await Membership.destroy({})
+    emailSendFake = emailSendFakeFactory.installEmailSendFake()    
+    await ClientSettings.destroy({});
   })
 
   afterEach(async () => {

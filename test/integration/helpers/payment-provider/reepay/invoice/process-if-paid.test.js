@@ -10,6 +10,10 @@ describe('helpers.payment-provider.reepay.invoice.process-if-paid', async () => 
     order,
     orderItem
 
+  beforeEach(async () => {
+    await ClientSettings.destroy({});
+  })
+
   async function buildOrder() {
     order = await Order.create({
       client: testClientId,
