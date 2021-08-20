@@ -11,6 +11,10 @@ describe('helpers.populate.classes.class-signoff-warning', async function () {
     privateClass1,
     allClasses;
 
+  beforeEach(async () => {
+    await ClientSettings.destroy({});
+  })
+
   before(async () => {
 
     class1 = await Class.create({
