@@ -116,7 +116,10 @@ describe('controllers.MembershipTypes.update', () => {
       .use(authorizeAdmin())
       .expect(200)
 
-    const returnedMembershipType = response.body
+    const returnedMembershipType = response.body.sort((a,b) => {
+      return a.id > b.id ? 1: -1;
+    })
+
 
     const expectedData = {
       name: 'Updated name',
