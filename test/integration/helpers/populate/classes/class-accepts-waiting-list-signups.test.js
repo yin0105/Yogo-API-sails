@@ -6,6 +6,9 @@ const moment = require('moment-timezone')
 
 describe('helpers.populate.classes.class-accepts-waiting-list-signups', async function () {
 
+  beforeEach(async () => {
+    await ClientSettings.destroy({});
+  })
 
   before(async () => {
 

@@ -6,6 +6,10 @@ const moment = require('moment-timezone');
 
 describe('helpers.populate.classes.class-signoff-deadline-has-been-exceeded', async function () {
 
+  beforeEach(async () => {
+    await ClientSettings.destroy({});
+  })
+
   it('should return an empty array if input is empty', async () => {
 
     const result = await sails.helpers.populate.classes.classSignoffDeadlineHasBeenExceeded([]);

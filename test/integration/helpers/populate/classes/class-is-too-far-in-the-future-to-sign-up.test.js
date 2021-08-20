@@ -16,6 +16,10 @@ describe('helpers.populate.classes.class-is-too-far-in-the-future-to-sign-up', a
     yogaClass2,
     allClasses
 
+  beforeEach(async () => {
+    await ClientSettings.destroy({});
+  })
+
   before(async () => {
     yogaClass1 = await Class.create({
       client: testClientId,

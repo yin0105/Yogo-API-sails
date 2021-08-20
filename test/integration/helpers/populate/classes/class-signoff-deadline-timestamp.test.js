@@ -3,6 +3,10 @@ const testClientId = require('../../../../global-test-variables').TEST_CLIENT_ID
 const assert = require('assert');
 
 describe('helpers.populate.classes.class-signoff-deadline-timestamp', async function () {
+  
+  beforeEach(async () => {
+    await ClientSettings.destroy({});
+  })
 
   it('should return an empty array if input is empty', async () => {
 

@@ -14,6 +14,7 @@ describe('helpers.populate.classes.class-accepts-customer-signups', async functi
 
   beforeEach(async () => {
     MockDate.set(moment.tz('2018-05-05', 'Europe/Copenhagen'));
+    await ClientSettings.destroy({});
 
   });
 
