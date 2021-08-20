@@ -205,6 +205,10 @@ describe('controllers.Cron.send-livestream-notification-emails', async () => {
 
     const livestreamLink = 'https://test-client.yogo.dk/frontend/index.html#/livestream/class/' + class1.id + '/preloader';
 
+    calls.sort((a, b) => {
+      return a.id > b.id ? 1: -1;
+    })
+
     expect(calls).to.matchPattern(`
       [
         [{
