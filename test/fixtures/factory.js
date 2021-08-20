@@ -43,6 +43,7 @@ module.exports = {
 
 
     // CLIENT SETTINGS
+    console.log("== create clientsettings")
     await ClientSettings.createEach(
       [
         {

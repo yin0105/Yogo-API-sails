@@ -320,6 +320,16 @@ describe('controllers.ClassSignups.find', () => {
               .uniqBy('id')
               .value()
 
+            rooms.sort((a, b) => {
+              if (a == null) {
+                return 1;
+              } else if (b == null) {
+                return -1
+              } else {
+                return a > b ? 1 : -1;
+              }
+            })
+
             expect(rooms).to.deep.equal([room1, room2, null])
           })
 

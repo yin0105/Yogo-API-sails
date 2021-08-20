@@ -13,6 +13,20 @@ describe('helpers.sms.send', async function () {
 
     // A bit dangerous, but since we fake the transport mechanism...
     sails.config.sms.sendRealSms = true;
+    await ClientSettings.createEach(
+      [
+        {
+          key: 'payment_service_provider',
+          value: 'dibs',
+          client: testClientId,
+        },
+        {
+          key: 'sms_sender_name',
+          value: 'Test client',
+          client: testClientId,
+        },
+      ],
+    );
 
   });
 
@@ -30,6 +44,9 @@ describe('helpers.sms.send', async function () {
   });
 
   it('should send an sms', async () => {
+    const smsSenderName = await sails.helpers.clientSettings.find(fixtures.userAlice.client, 'sms_sender_name');
+    console.log("fixtures.userAlice.client = ", fixtures.userAlice.client)
+    console.log("smsSenderName = ", smsSenderName)
 
     const timestamp = Date.now();
     await sails.helpers.sms.send.with({
