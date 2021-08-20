@@ -24,6 +24,8 @@ describe('controllers.MembershipPauses.update', async function () {
   });
 
   beforeEach(async () => {
+    await MembershipPause.destroy({});
+    
     emailSendFake = emailSendFakeFactory.installEmailSendFake();
 
     pdfReceiptFake = sinon.fake.returns(Buffer.from('Test'));

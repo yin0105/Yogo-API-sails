@@ -24,6 +24,8 @@ describe('controllers.MembershipPauses.create', async function () {
   });
 
   beforeEach(async () => {
+    await MembershipPause.destroy({});
+    
     emailSendFake = emailSendFakeFactory.installEmailSendFake();
 
     pdfReceiptFake = sinon.fake.returns(Buffer.from('Test'));
@@ -746,7 +748,7 @@ describe('controllers.MembershipPauses.create', async function () {
   });
 
   it('should schedule membership pause', async () => {
-
+    
     MockDate.set(moment.tz('2020-05-15', 'Europe/Copenhagen'));
     const membership = await Membership.create({
       client: testClientId,

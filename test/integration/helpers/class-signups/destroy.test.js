@@ -696,6 +696,7 @@ describe('helpers.classSignups.destroy', async function () {
     await ClientSettings.destroy({id: _.map(clientSettingsRows, 'id')});
     await Membership.destroy({id: membership.id});
     await NoShowFee.destroy({id: createdNoShowFee.id});
+    await ClassSignup.destroy({})
 
   });
 
