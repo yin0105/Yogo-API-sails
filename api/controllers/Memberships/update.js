@@ -36,7 +36,6 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
-    console.log("================  update()")
 
     const locale = this.req.i18n.getLocale();
 
@@ -56,7 +55,6 @@ module.exports = {
     const currentUserName = this.req.user.first_name + ' ' + this.req.user.last_name;
 
     moment.locale(locale);
-    console.log(1)
     if (updateData.status && updateData.status === 'cancelled_running') {
 
       if (membership.status === 'cancelled_running') {
@@ -83,7 +81,6 @@ module.exports = {
       await sails.helpers.populate.memberships.currentOrUpcomingMembershipPause([membership]);
       await sails.helpers.populate.memberships.membershipPauseLength([membership]);
       
-      console.log(2)
       let cancelledFromDateIncludingMembershipPause;
       let membershipPauseArchived = false;
       if (membership.current_or_upcoming_membership_pause) {
@@ -110,7 +107,6 @@ module.exports = {
         userGetsRefundAfterDeadline: true,
       });
 
-      console.log(3)
       let logEntry;
       if (this.req.authorizedRequestContext === 'admin') {
         logEntry = sails.helpers.t('membershipLog.MembershipCancelledByAdmin', [
@@ -142,7 +138,6 @@ module.exports = {
       return exits.success();
     }
 
-    console.log(4)
     if (updateData.status && updateData.status === 'active') {
       if (membership.status === 'active') {
         return exits.success();
@@ -280,7 +275,6 @@ module.exports = {
       return exits.success();
 
     }
-    console.log(5)
 
     if (typeof updateData.discount_code !== 'undefined') {
 

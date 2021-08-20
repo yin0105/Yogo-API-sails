@@ -455,7 +455,7 @@ describe('controllers.MembershipPauses.create', async function () {
     const membershipPauses = await MembershipPauseObjection.query();
 
     membershipPauses.sort((a, b) => {
-      return a.membership_id > b.membership_id ? 1 : -1;
+      return a.start_date > b.start_date ? 1 : -1;
     })
 
     expect(membershipPauses).to.matchPattern(`[

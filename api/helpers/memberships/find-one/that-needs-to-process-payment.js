@@ -42,7 +42,8 @@ module.exports = {
             this.whereNull('end_date')
               .orWhere('end_date', '>', todayIsoDate);
           });
-      });
+      })
+      .orderBy('client');
 
 
     const clientSettings = {};
