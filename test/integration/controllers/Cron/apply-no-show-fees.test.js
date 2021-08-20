@@ -558,7 +558,7 @@ describe('controllers.Cron.apply-no-show-fees', async () => {
       },      
     ]`);
 
-    const createdNoShowFees = await NoShowFee.find({});
+    const createdNoShowFees = await NoShowFee.find({}).sort('class_signup_id ASC');
     expect(createdNoShowFees).to.matchPattern(`[
       {        
         amount: 0,
@@ -606,6 +606,7 @@ describe('controllers.Cron.apply-no-show-fees', async () => {
   });
 
   it('should use different settings for different clients', async () => {
+    await ClassSignup.destroy({})
 
     const clientSettingsRows = await ClientSettings.createEach(
       [

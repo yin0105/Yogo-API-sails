@@ -58,9 +58,6 @@ describe('helpers.memberships.payment-failed-because-no-payment-subscriptions', 
 
     const now = moment().format('x')
 
-    console.log("updatedMembership.renewal_failed_last_time_at = ", updatedMembership.renewal_failed_last_time_at)
-    console.log("now = ", now)
-    console.log(" now() - updatedMembership.renewal_failed_last_time_at = ", now - updatedMembership.renewal_failed_last_time_at)
     assert(updatedMembership.renewal_failed_last_time_at < now)
     assert(updatedMembership.renewal_failed_last_time_at > now - 1000)
 
