@@ -8,6 +8,7 @@ describe('helpers.email.customer.your-waiting-list-class-has-been-cancelled', as
   let emailSendFake
 
   beforeEach(async () => {
+    await ClientSettings.destroy({});
     emailSendFake = emailSendFakeFactory.installEmailSendFake()
   });
 
@@ -16,7 +17,7 @@ describe('helpers.email.customer.your-waiting-list-class-has-been-cancelled', as
   });
 
   it('should send an email in English', async () => {
-
+    
     const classItem = await Class.create({
       date: '2020-02-24',
       start_time: '10:00:00',

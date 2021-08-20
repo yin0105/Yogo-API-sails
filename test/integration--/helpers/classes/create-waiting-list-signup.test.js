@@ -19,6 +19,8 @@ describe('create-waiting-list-signup', async function () {
 
   afterEach(async () => {
     await ClassWaitingListSignup.destroy({});
+    await ClientSettings.destroy({});
+    await ClassPass.destroy({});
   });
 
   before(async () => {
@@ -100,6 +102,7 @@ describe('create-waiting-list-signup', async function () {
     await Membership.destroy({id: [membershipAlice.id, membershipBill.id]});
     await Class.destroy({id: [class1.id, class2.id]});
     await ClassSignup.destroy({id: [classSignup.id, class2Signup.id]});
+    await ClassWaitingListSignup.destroy({})
   });
 
 
@@ -367,6 +370,7 @@ describe('create-waiting-list-signup', async function () {
 
 
   it('should find and use a valid class pass if one is available. And decrease classes_left', async () => {
+    await ClassPass.destroy({})
 
     const classPassTenClassesDennis = await ClassPass.create({
       user: fixtures.userDennis.id,
@@ -502,8 +506,7 @@ describe('create-waiting-list-signup', async function () {
     );
   });
 
-  it('should only create one signup on two simultaneous requests', async () => {
-    await ClassWaitingListSignup.destroy({});
+  it('should only create one signup on two simultaneous requests', async () => {    
 
     const classPassDennis = await ClassPass.create({
       client: testClientId,

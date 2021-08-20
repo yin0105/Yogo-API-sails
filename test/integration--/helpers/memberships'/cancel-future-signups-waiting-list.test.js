@@ -327,6 +327,7 @@ describe('helpers.memberships.cancel-future-signups-waiting-list', async functio
 
   it('should cancel class waiting list signups that membership does not give access to', async () => {
     await ClassWaitingListSignup.destroy({});
+    await ClientSetttings.destroy({});
 
     const classes = await Class.createEach([
       {

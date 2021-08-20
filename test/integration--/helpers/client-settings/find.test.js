@@ -11,6 +11,10 @@ const moment = require('moment-timezone')
 
 describe('helpers.client-settings.find', async () => {
 
+  beforeEach(async () => {
+    await ClientSettings.destroy({});
+  })
+
   it('should return the requested keys if keys are an array', async () => {
     const values = await sails.helpers.clientSettings.find(testClientId, ['theme', 'theme_primary_color'])
 

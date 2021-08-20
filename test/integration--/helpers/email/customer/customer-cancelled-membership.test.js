@@ -11,6 +11,8 @@ describe('helpers.email.customer.customer-cancelled-membership', async () => {
 
   beforeEach(async () => {
     emailSendFake = emailSendFakeFactory.installEmailSendFake();
+    await Membership.destroy({});
+    await ClientSettings.destroy({});
   });
 
   afterEach(() => {

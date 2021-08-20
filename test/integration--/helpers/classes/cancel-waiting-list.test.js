@@ -9,6 +9,7 @@ describe('helpers.classes.cancel-waiting-list', async () => {
 
   beforeEach(async () => {
     emailSendFake = emailSendFakeFactory.installEmailSendFake();
+    await ClassWaitingListSignup.destroy({})
   });
 
   afterEach(() => {

@@ -21,6 +21,11 @@ describe('create-signup', async function () {
     danceClass,
     signupWithMembership;
 
+  beforeEach(async () => {
+    await ClassPass.destroy({})
+    await ClassTypeEmail.destroy({})
+  })
+
   before(async () => {
     await ClassPass.destroy({});
     await Membership.destroy({});

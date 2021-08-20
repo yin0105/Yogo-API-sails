@@ -14,6 +14,7 @@ describe('helpers.email.welcome', async () => {
   afterEach(async () => {
     emailTransportSendStub.resetHistory();
     await EmailLog.destroy({})
+    await ClientSettings.destroy({})
   })
 
   after(async () => {

@@ -12,6 +12,7 @@ describe('helpers.email.password-reset', async () => {
   beforeEach(async () => {
 
     emailSendFake = emailSendFakeFactory.installEmailSendFake()
+    await ClientSettings.destroy({})
 
   })
 

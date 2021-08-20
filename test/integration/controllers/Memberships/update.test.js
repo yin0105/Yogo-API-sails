@@ -187,7 +187,7 @@ describe('controllers.Memberships.update', () => {
       ...
     }`);
 
-    const updatedSignups = await ClassSignup.find({});
+    const updatedSignups = await ClassSignup.find({}).sort('class ASC');
 
     expect(updatedSignups).to.matchPattern(`[
       {
@@ -231,6 +231,7 @@ describe('controllers.Memberships.update', () => {
   });
 
   it('should cancel the membership by admin, Danish locale', async () => {
+    await ClassSignup.destroy({})
 
     const clientSettingsRow = await ClientSettings.create({
       client: testClientId,
@@ -308,7 +309,7 @@ describe('controllers.Memberships.update', () => {
       ...
     }`);
 
-    const updatedSignups = await ClassSignup.find({});
+    const updatedSignups = await ClassSignup.find({}).sort('class ASC');
 
     expect(updatedSignups).to.matchPattern(`[
       {
@@ -353,6 +354,7 @@ describe('controllers.Memberships.update', () => {
   });
 
   it('should cancel the membership by customer', async () => {
+    await ClassSignup.destroy({})
 
     const membership = await Membership.create({
       user: fixtures.userAlice.id,
@@ -424,7 +426,7 @@ describe('controllers.Memberships.update', () => {
       ...
     }`);
 
-    const updatedSignups = await ClassSignup.find({});
+    const updatedSignups = await ClassSignup.find({}).sort('class ASC');
 
     expect(updatedSignups).to.matchPattern(`[
       {
@@ -546,7 +548,7 @@ describe('controllers.Memberships.update', () => {
       ...
     }`);
 
-    const updatedSignups = await ClassSignup.find({});
+    const updatedSignups = await ClassSignup.find({}).sort('class ASC');
 
     expect(updatedSignups).to.matchPattern(`[
       {
@@ -591,6 +593,7 @@ describe('controllers.Memberships.update', () => {
   });
 
   it('should cancel without the extra month if payment option is more than one month', async () => {
+    await ClassSignup.destroy({})
 
     const membership = await Membership.create({
       user: fixtures.userAlice.id,
@@ -662,7 +665,7 @@ describe('controllers.Memberships.update', () => {
       ...
     }`);
 
-    const updatedSignups = await ClassSignup.find({});
+    const updatedSignups = await ClassSignup.find({}).sort('class ASC');
 
     expect(updatedSignups).to.matchPattern(`[
       {

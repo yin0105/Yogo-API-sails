@@ -21,6 +21,12 @@ describe('controllers.membership-pause.collect-fee', async function () {
     sinon.replace(sails.helpers.order, 'pdfReceipt', pdfReceiptFake);
     await MembershipLog.destroy({});
     await CronLog.destroy({});
+
+    await Membership.destroy({});
+    await MembershipPause.destroy({});
+    await PaymentSubscription.destroy({});
+    await Order.destroy({});
+    await OrderItem.destroy({});
   });
 
   afterEach(async () => {

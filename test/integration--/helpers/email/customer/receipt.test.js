@@ -37,6 +37,7 @@ describe('helpers.email.customer.receipt', async () => {
 
   beforeEach(async () => {
     emailSendFake = emailSendFakeFactory.installEmailSendFake();
+    await ClientSettings.destroy({})
 
   })
 

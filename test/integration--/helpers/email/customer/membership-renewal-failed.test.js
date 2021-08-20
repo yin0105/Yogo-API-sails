@@ -22,6 +22,7 @@ describe('helpers.email.customer.membership-renewal-failed', async () => {
 
   beforeEach(async () => {
     emailSendFake = emailSendFakeFactory.installEmailSendFake()
+    await ClientSettings.destroy({})
   })
 
   afterEach(async () => {

@@ -295,6 +295,7 @@ describe('create-livestream-signup', async function () {
 
   // No need to test all variants of which membership is selected here. There are separate tests for "getValidMembershipsForClass" and "getValidClassPassesForClass".
   it('should find and use a valid membership if one is available.', async () => {
+    await ClassLivestreamSignup.destroy({})
 
     let newSignup = {};
 
@@ -556,6 +557,8 @@ describe('create-livestream-signup', async function () {
   });
 
   it('should only create one signup on two simultaneous requests if class pass has one class left', async () => {
+    await ClassPass.destroy({})
+    await ClassTypeEmail.destroy({})
 
     const classPassDennis = await ClassPass.create({
       client: testClientId,
