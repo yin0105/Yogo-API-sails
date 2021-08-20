@@ -7,6 +7,7 @@ describe('helpers.memberships.cancel-future-signups', async function () {
 
   afterEach(async () => {
     await ClassSignup.destroy({});
+    await ClientSettings.destroy({});
   });
 
   before(async () => {

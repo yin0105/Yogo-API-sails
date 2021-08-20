@@ -237,7 +237,7 @@ describe('helpers.class-pass.apply-no-show-fee-type-unlimited', async function (
       no_show_fee_cancelled: true,
       reason: 'no_show',
     });
-    const timestampAfterCall = Date.now();
+    const timestampAfterCall = Date.now() + 1;
 
 
     const updatedSignup = await ClassSignup.findOne(signup.id);
@@ -329,7 +329,7 @@ describe('helpers.class-pass.apply-no-show-fee-type-unlimited', async function (
       no_show_fee_cancelled: true,
       reason: 'no_show',
     });
-    const timestampAfterCall = Date.now();
+    const timestampAfterCall = Date.now() + 1;
 
 
     const updatedSignup = await ClassSignup.findOne(signup.id);

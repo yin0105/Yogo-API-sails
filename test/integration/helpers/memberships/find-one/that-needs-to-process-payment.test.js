@@ -11,6 +11,10 @@ describe('helpers.memberships.find-one.that-needs-to-process-payment', async () 
 
   let memberships;
 
+  beforeEach(async () => {
+    await ClientSettings.destroy({});
+  })
+
   before(async () => {
 
     MockDate.set(moment.tz('2019-05-16 12:00:00', 'Europe/Copenhagen'));

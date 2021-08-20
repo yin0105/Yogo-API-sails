@@ -41,6 +41,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
   afterEach(async () => {
     await Order.destroy({});
     await OrderItem.destroy({});
+    await ClientSettings.destroy({});
     await PaymentSubscriptionTransaction.destroy({});
 
     await PaymentSubscription.destroy({});
@@ -69,7 +70,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
 
     apiRequestFake = dibsApiRequestFakeFactory.replace();
 
-    const timestampBeforeRunnningTest = moment().format('x');
+    const timestampBeforeRunnningTest = moment().tz('Europe/Copenhagen').format('x');
 
     ////////////////////
     await sails.helpers.memberships.fetchMembershipPayment(membership);
@@ -208,7 +209,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
 
     apiRequestFake = dibsApiRequestFakeFactory.replace();
 
-    const timestampBeforeRunnningTest = moment().format('x');
+    const timestampBeforeRunnningTest = moment().tz('Europe/Copenhagen').format('x');
 
     ////////////////////
     await sails.helpers.memberships.fetchMembershipPayment(membership);
@@ -320,7 +321,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
 
     apiRequestFake = dibsApiRequestFakeFactory.replace();
 
-    const timestampBeforeRunnningTest = moment().format('x');
+    const timestampBeforeRunnningTest = moment().tz('Europe/Copenhagen').format('x');
 
     ////////////////////
     await sails.helpers.memberships.fetchMembershipPayment(membership);
@@ -462,7 +463,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
 
     apiRequestFake = dibsApiRequestFakeFactory.replace();
 
-    const timestampBeforeRunnningTest = moment().format('x');
+    const timestampBeforeRunnningTest = moment().tz('Europe/Copenhagen').format('x');
 
     ////////////////////
     await sails.helpers.memberships.fetchMembershipPayment(membership);
@@ -578,7 +579,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
 
     apiRequestFake = dibsApiRequestFakeFactory.replace();
 
-    const timestampBeforeRunnningTest = moment().format('x');
+    const timestampBeforeRunnningTest = moment().tz('Europe/Copenhagen').format('x');
 
     ////////////////////
     await sails.helpers.memberships.fetchMembershipPayment(membership);
@@ -701,7 +702,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
 
     apiRequestFake = dibsApiRequestFakeFactory.replace();
 
-    const timestampBeforeRunnningTest = moment().format('x');
+    const timestampBeforeRunnningTest = moment().tz('Europe/Copenhagen').format('x');
 
     ////////////////////
     await sails.helpers.memberships.fetchMembershipPayment(membership);
@@ -859,7 +860,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
 
     apiRequestFake = dibsApiRequestFakeFactory.replace();
 
-    const timestampBeforeRunnningTest = moment().format('x');
+    const timestampBeforeRunnningTest = moment().tz('Europe/Copenhagen').format('x');
 
     ////////////////////
     await sails.helpers.memberships.fetchMembershipPayment(membership);
@@ -1127,7 +1128,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
 
     dibsApiRequestFakeFactory.replace({status: 'DECLINED'});
 
-    const timestampBeforeRunnningTest = moment().format('x');
+    const timestampBeforeRunnningTest = moment().tz('Europe/Copenhagen').format('x');
 
     ////////////////////
     await sails.helpers.memberships.fetchMembershipPayment(membership);
@@ -1167,7 +1168,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
       renewal_failed_last_time: 0,
     });
 
-    const timestampBeforeRunnningTest = moment().format('x');
+    const timestampBeforeRunnningTest = moment().tz('Europe/Copenhagen').format('x');
 
     ////////////////////
     await sails.helpers.memberships.fetchMembershipPayment(membership);
@@ -1242,7 +1243,7 @@ describe('helpers.memberships.fetch-membership-payment', async () => {
 
     apiRequestFake = dibsApiRequestFakeFactory.replace();
 
-    const timestampBeforeRunnningTest = moment().format('x');
+    const timestampBeforeRunnningTest = moment().tz('Europe/Copenhagen').format('x');
 
     ////////////////////
     await sails.helpers.memberships.fetchMembershipPayment(membership);

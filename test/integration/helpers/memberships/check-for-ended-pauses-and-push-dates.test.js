@@ -599,7 +599,7 @@ describe('helpers.memberships.check-for-ended-pauses-and-push-dates', async func
     }
     ]`);
 
-    const membershipLogEntries = await MembershipLog.find();
+    const membershipLogEntries = await MembershipLog.find().sort('client ASC');
     expect(membershipLogEntries).to.matchPattern(`[
       {
         client: ${testClientId},
@@ -732,7 +732,7 @@ describe('helpers.memberships.check-for-ended-pauses-and-push-dates', async func
     }
     ]`);
 
-    const membershipLogEntries = await MembershipLog.find();
+    const membershipLogEntries = await MembershipLog.find().sort('client ASC');;
     expect(membershipLogEntries).to.matchPattern(`[
       {
         client: ${testClientId},
