@@ -1089,7 +1089,7 @@ describe('controllers.Memberships.update', () => {
       ...
     }`);
 
-    const updatedSignups = await ClassSignup.find({});
+    const updatedSignups = await ClassSignup.find({}).sort('class ASC');
 
     expect(updatedSignups).to.matchPattern(`[
       {
@@ -1154,6 +1154,7 @@ describe('controllers.Memberships.update', () => {
   });
 
   it('should add a discount code to membership', async () => {
+    await MembershipLog.destroy({});
 
     const membership = await Membership.create({
       user: fixtures.userAlice.id,

@@ -417,6 +417,7 @@ describe('controllers.MembershipPauses.update', async function () {
   });
 
   it('should succeed if fee is specified and no previous fee has been charged', async () => {
+    await Order.destroy({})
 
     const membership = await Membership.create({
       client: testClientId,
@@ -542,6 +543,7 @@ describe('controllers.MembershipPauses.update', async function () {
   });
 
   it('should fail if fee is declined', async () => {
+    await Order.destroy({})
 
     const membership = await Membership.create({
       client: testClientId,
