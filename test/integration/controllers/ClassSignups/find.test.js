@@ -326,7 +326,7 @@ describe('controllers.ClassSignups.find', () => {
               } else if (b == null) {
                 return -1
               } else {
-                return a > b ? 1 : -1;
+                return a.branch > b.branch ? 1 : -1;
               }
             })
 
