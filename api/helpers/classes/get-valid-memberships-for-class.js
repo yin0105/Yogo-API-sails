@@ -60,7 +60,8 @@ module.exports = {
           class_types: true,
         },
         membership_pauses: true,
-      });
+      })
+      .orderBy('m.id');
 
     ///////////////////////
     // Membership valid for class type?
