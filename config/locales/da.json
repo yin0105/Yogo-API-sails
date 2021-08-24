@@ -17,6 +17,7 @@
   "global.TeacherID": "lærer-id",
 	"global.TeacherName": "lærerens navn",
   "global.SalaryReport": "Lønrapport",
+  "global.ClassReport": "Klasserapport",
   "capacityText.Fully booked": "Fuldt booket",
   "capacityText.%s available seats": "%s ledige pladser",
   "capacityText.1 available seat": "1 ledig plads",

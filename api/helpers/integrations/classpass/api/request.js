@@ -2,6 +2,7 @@ const API_ROOT = 'https://sandbox-api.classpass.com'
 
 const request = require('request-promise')
 const errors = require('request-promise/errors')
+const got = require('got');  
 
 // const AWS = require('aws-sdk');
 // console.log("sqs = ", sails.config.sqs);
@@ -44,8 +45,35 @@ module.exports = {
 
   fn: async (inputs, exits) => {   
     const accessToken = inputs.accessToken || (sails.config.integrations.classpass_com.classpass_com_access_token)
-    console.log("token = ", sails.config.integrations.classpass_com.classpass_com_access_token);
-    console.log("token = ", accessToken);
+
+    // const url = API_ROOT + inputs.endpoint;
+    // const requestOptions = {
+    //   method: inputs.method,      
+    //   headers: {
+    //     'content-type': 'application/json',
+    //     Authorization: `Token ${accessToken}`,
+    //   },
+    //   json: inputs.body,      
+    // }
+
+    // const result = await got(url, requestOptions)
+    // .then(response => {
+    //   return exits.success(response)
+    // })
+    // .catch(e => {
+    //   console.log("e ========== ", e);
+    //   console.log("e.message ========== ", e.message);
+    //   console.log("jj = ", e.message.substr(e.message.indexOf("{")));
+    //   let errorMessage = JSON.parse(e.message.substr(e.message.indexOf("{")));
+    //   if (errorMessage.error) {
+    //     console.log("errorMessage.error = ", errorMessage.error);
+    //     errorMessage = errorMessage.error;
+    //   }
+    //   console.log("errorMessage = ", errorMessage);
+    //   return exits.success(errorMessage);
+    // })
+
+    // /////////////////////////////////////
 
     const requestOptions = {
       method: inputs.method,
@@ -58,6 +86,7 @@ module.exports = {
       body: inputs.body,      
     }
 
+  
     request(requestOptions)
       .then(response => {
         return exits.success(response)
