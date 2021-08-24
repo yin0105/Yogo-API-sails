@@ -73,6 +73,9 @@ module.exports = {
     populate: {
       type: 'json',
     },
+    ignoreArchived: {
+      type: 'boolean',
+    },
   },
 
   fn: async function (inputs, exits) {
@@ -81,11 +84,19 @@ module.exports = {
       return this.res.forbidden();
     }
 
-    const query = UserObj.query().alias('u')
-      .where({
-        'u.client': this.req.client.id,
-        'u.archived': 0,
-      });
+    let query;
+    if (inputs.ignoreArchived) {
+      query = UserObj.query().alias('u')
+        .where({
+          'u.client': this.req.client.id,
+        });  
+    } else {
+      query = UserObj.query().alias('u')
+        .where({
+          'u.client': this.req.client.id,
+          'u.archived': 0,
+        });
+    }
 
 
     if (inputs.id) {

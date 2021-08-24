@@ -214,7 +214,10 @@ module.exports = {
     classpass_com_number_of_seats_allowed: {
       type: 'number',
       required: false,
-    }
+    },
+    ignoreArchived: {
+      type: 'boolean',
+    },
   },
 
   exits: {
@@ -338,7 +341,7 @@ module.exports = {
         .innerJoin({ctutc: 'class_teachers__user_teaching_classes'}, 'ctutc.class_teachers', 'c.id')
         .innerJoin({u_teacher: 'user'}, 'ctutc.user_teaching_classes', 'u_teacher.id')
         .andWhere('ctutc.user_teaching_classes', 'in', teachers)
-        .andWhere('u_teacher.archived', false);
+        .andWhere('u_teacher.archived', false)      
     }
 
     if (inputs.class_type) {
@@ -600,9 +603,16 @@ module.exports = {
       ];
 
     classesQuery.modifyEager('teachers', teacherBuilder => {
-      teacherBuilder
-        .select(teacherReturnFields)
-        .where('archived', false);
+      if (inputs.ignoreArchived) {
+        console.log("ok");
+        teacherBuilder
+          .select(teacherReturnFields)
+      } else {
+        teacherBuilder
+          .select(teacherReturnFields)
+          .where('archived', false);
+      }
+      
     });
 
     let classes = await classesQuery;
