@@ -18,6 +18,10 @@
 	"global.Room": "Room",
 	"global.TeacherID": "Teacher ID",
 	"global.TeacherName": "Teacher name",
+	"global.Start": "Start",
+	"global.End": "End",
+
+
 	"capacityText.Fully booked": "Fully booked",
 	"capacityText.%s available seats": "%s available seats",
 	"capacityText.1 available seat": "1 available seat",

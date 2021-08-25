@@ -18,6 +18,9 @@
 	"global.TeacherName": "lærerens navn",
   "global.SalaryReport": "Lønrapport",
   "global.ClassReport": "Klasserapport",
+  "global.Start": "Start",
+	"global.End": "Ende",
+
   "capacityText.Fully booked": "Fuldt booket",
   "capacityText.%s available seats": "%s ledige pladser",
   "capacityText.1 available seat": "1 ledig plads",

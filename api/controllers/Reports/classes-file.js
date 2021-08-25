@@ -41,6 +41,7 @@ module.exports = async (req, res) => {
   let reportParams = await sails.helpers.reports.unpackReportToken(req.query.reportToken, req)
   if (!reportParams) return res.forbidden()
   console.log("reportParams = ", reportParams);
+
   reportParams.fromDate = moment(reportParams.fromDate).format("YYYY-MM-DD");
   reportParams.endDate = moment(reportParams.endDate).format("YYYY-MM-DD");
 
@@ -64,7 +65,8 @@ module.exports = async (req, res) => {
     [
       sails.helpers.t('global.ID'),
       sails.helpers.t('global.Date'),
-      sails.helpers.t('global.Time'),
+      sails.helpers.t('global.Start'),
+      sails.helpers.t('global.End'),
       sails.helpers.t('global.Class'),
       sails.helpers.t('global.Duration'),
       sails.helpers.t('global.SignUps'),
@@ -97,8 +99,12 @@ module.exports = async (req, res) => {
             header: sails.helpers.t('global.Date'),
           },
           {
-            key: 'time',
-            header: sails.helpers.t('global.Time'),
+            key: 'start',
+            header: sails.helpers.t('global.Start'),
+          },
+          {
+            key: 'end',
+            header: sails.helpers.t('global.End'),
           },
           {
             key: 'class',
@@ -182,8 +188,13 @@ module.exports = async (req, res) => {
           headerStyle: styles.headerDark, 
           width: 120 
         },
-        time: { 
-          displayName: sails.helpers.t('global.Time'),
+        start: { 
+          displayName: sails.helpers.t('global.Start'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        end: { 
+          displayName: sails.helpers.t('global.End'),
           headerStyle: styles.headerDark, 
           width: 120 
         },

@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     clientId: req.client.id,
     teachers: req.body.teachers || req.query.teachers,
     classTypes: req.body.classTypes || req.query.classTypes,
-    allTeachers: req.body.allTeachers || req.query.allTeachers,
+    // allTeachers: req.body.allTeachers || req.query.allTeachers,
     allClassTypes: req.body.allClassTypes || req.query.allClassTypes,
     fromDate: req.body.fromDate || req.query.fromDate,
     endDate: req.body.endDate || req.query.endDate,

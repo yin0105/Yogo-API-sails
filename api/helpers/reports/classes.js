@@ -2,7 +2,8 @@ const knex = require('../../services/knex');
 const moment = require('moment-timezone');
 
 
-const getClassesData = async (client, teachers, fromDate, endDate) => {
+const getClassesData = async (client, fromDate, endDate) => {
+  console.log("fromDate = ", fromDate)
   fromDate = fromDate.format("YYYY-MM-DD");
   endDate = endDate.format("YYYY-MM-DD");
   let classes = await 
@@ -17,7 +18,9 @@ const getClassesData = async (client, teachers, fromDate, endDate) => {
     .select(
       knex.raw("cs.id AS id"), 
       knex.raw("cs.date AS date"), 
-      knex.raw("CONCAT(LEFT(start_time,5), '-',  LEFT(end_time, 5)) AS time"), 
+      knex.raw("cs.start_time AS start"), 
+      knex.raw("cs.end_time AS end"), 
+      // knex.raw("CONCAT(LEFT(start_time,5), '-',  LEFT(end_time, 5)) AS time"), 
       knex.raw("ctype.name as class"),
       knex.raw("TIMEDIFF(end_time, start_time) AS duration"),
       knex.raw("r.name as room"),
@@ -60,6 +63,10 @@ const getClassesData = async (client, teachers, fromDate, endDate) => {
     classes[i]['signup_count'] = 0;
     classes[i]['checkedin_count'] = 0;
     classes[i]['livestream_signup_count'] = 0;
+    classes[i]['start'] = moment(classes[i]['start'], "HH:mm:ss").format("HH:mm");
+    classes[i]['end'] = moment(classes[i]['end'], "HH:mm:ss").format("HH:mm");
+    classes[i]['duration'] = moment(classes[i]['duration'], "HH:mm:ss").format("HH:mm");
+
     for (var j in signups) {
       if (classes[i]['id'] == signups[j]['class']) {
         classes[i]['signup_count'] = signups[j]['signups'];
@@ -116,10 +123,10 @@ module.exports = {
       required: false,
     },
 
-    allTeachers: {
-      type: 'boolean',
-      required: true,
-    },
+    // allTeachers: {
+    //   type: 'boolean',
+    //   required: true,
+    // },
 
     allClassTypes: {
       type: 'boolean',
@@ -132,22 +139,28 @@ module.exports = {
 
     const fromDate = moment(inputs.fromDate, 'YYYY-MM-DD');
     const endDate = moment(inputs.endDate, 'YYYY-MM-DD');
+
+    console.log("inputs.fromDate = ", inputs.fromDate)
+    console.log("fromDate = ", fromDate)
     if (!fromDate || !endDate) throw new Error('Classes report: date is invalid.');
 
     let classesDataItems = await getClassesData(
       inputs.clientId,
-      inputs.teachers,
+      // inputs.teachers,
+      // inputs.classType,
+      // inputs.allTeachers,
+      // inputs.allClassTypes,
       fromDate,
       endDate,
     );
 
-      classesData = {
-        label: fromDate.format('DD.MM.YYYY'),
-        fromDate: fromDate.format('YYYY-MM-DD'),
-        endDate: endDate.format('YYYY-MM-DD'),
-        items: classesDataItems,
-      };
+    classesData = {
+      label: fromDate.format('DD.MM.YYYY'),
+      fromDate: fromDate.format('YYYY-MM-DD'),
+      endDate: endDate.format('YYYY-MM-DD'),
+      items: classesDataItems,
+    };
 
-      return exits.success(classesData);
+    return exits.success(classesData);
   },
 };
