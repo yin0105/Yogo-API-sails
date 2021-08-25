@@ -40,6 +40,7 @@ module.exports = async (req, res) => {
 
   let reportParams = await sails.helpers.reports.unpackReportToken(req.query.reportToken, req)
   if (!reportParams) return res.forbidden()
+  console.log("reportParams = ", reportParams);
   reportParams.fromDate = moment(reportParams.fromDate).format("YYYY-MM-DD");
   reportParams.endDate = moment(reportParams.endDate).format("YYYY-MM-DD");
 

@@ -101,6 +101,11 @@ module.exports = {
       required: true,
     },
 
+    classTypes: {
+      type: 'ref',
+      required: true,
+    },
+
     fromDate: {
       type: 'string',
       required: false,
@@ -109,6 +114,16 @@ module.exports = {
     endDate: {
       type: 'string',
       required: false,
+    },
+
+    allTeachers: {
+      type: 'boolean',
+      required: true,
+    },
+
+    allClassTypes: {
+      type: 'boolean',
+      required: true,
     },
 
   },
