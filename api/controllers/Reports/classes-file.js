@@ -61,6 +61,17 @@ module.exports = async (req, res) => {
   // const fileName = 'Omsætning ' + moment(reportParams.fromDate).format('DD.MM.YYYY') + '-' + moment(reportParams.endDate).format('DD.MM.YYYY') + '.' + format
   const fileName = 'Classes Reports ' + moment(classesData.fromDate).format('DD.MM.YYYY') + '-' + moment(classesData.endDate).format('DD.MM.YYYY') + '.' + format
 
+  const settings = await sails.helpers.clientSettings.find.with({
+    keys: ['classpass_com_integration_enabled', 'livestream_enabled'],
+    client: req.client.id,
+    includeSecrets: true,
+  })
+
+  const branches = await Branch.find({client: req.client.id, archived: false}).sort('sort ASC').sort('id ASC')
+  const bBranches = branches.length > 1 ? true: false;
+
+  console.log("settings = ", settings);
+
   const heading = [
     [
       sails.helpers.t('global.ID'),
@@ -87,79 +98,88 @@ module.exports = async (req, res) => {
           }
         })
       })
+
+      let columns = [
+        {
+          key: 'id',
+          header: sails.helpers.t('global.ID'),
+        },
+        {
+          key: 'date',
+          header: sails.helpers.t('global.Date'),
+        },
+        {
+          key: 'start',
+          header: sails.helpers.t('global.Start'),
+        },
+        {
+          key: 'end',
+          header: sails.helpers.t('global.End'),
+        },
+        {
+          key: 'duration',
+          header: sails.helpers.t('global.Duration'),
+        },
+        {
+          key: 'class',
+          header: sails.helpers.t('global.Class'),
+        },
+        {
+          key: 'teacher_name',
+          header: sails.helpers.t('global.Teacher'),
+        },
+        {
+          key: 'room',
+          header: sails.helpers.t('global.Room'),
+        },
+        {
+          key: 'branch',
+          header: sails.helpers.t('global.Branch'),
+        },
+        {
+          key: 'physical_attendance',
+          header: sails.helpers.t('global.PhysicalAttendance'),
+        },
+        {
+          key: 'livestream',
+          header: sails.helpers.t('global.Livestream'),
+        },
+        {
+          key: 'classpass_com_enabled',
+          header: sails.helpers.t('global.ClasspassEnabled'),
+        },
+        {
+          key: 'cancelled',
+          header: sails.helpers.t('global.Cancelled'),
+        },
+        {
+          key: 'signup_count',
+          header: sails.helpers.t('global.SignUps'),
+        },
+        {
+          key: 'checkedin_count',
+          header: sails.helpers.t('global.CheckedIn'),
+        },
+        {
+          key: 'livestream_signup_count',
+          header: sails.helpers.t('global.LivestreamSignups'),
+        },
+        {
+          key: 'classpass_signup_count',
+          header: sails.helpers.t('global.ClasspassSignups'),
+        },        
+      ];
+
+      if (!settings.classpass_com_integration_enabled) columns.splice(16, 1);
+      if (!settings.livestream_enabled) columns.splice(15, 1);
+      if (!settings.classpass_com_integration_enabled) columns.splice(11, 1);
+      if (!settings.livestream_enabled) columns.splice(10, 1);
+      if (!settings.livestream_enabled) columns.splice(9, 1);
+      if (!bBranches) columns.splice(8, 1);
+
       const csvContentString = stringify(reportDataCSV, {
         header: true,
-        columns: [
-          {
-            key: 'id',
-            header: sails.helpers.t('global.ID'),
-          },
-          {
-            key: 'date',
-            header: sails.helpers.t('global.Date'),
-          },
-          {
-            key: 'start',
-            header: sails.helpers.t('global.Start'),
-          },
-          {
-            key: 'end',
-            header: sails.helpers.t('global.End'),
-          },
-          {
-            key: 'duration',
-            header: sails.helpers.t('global.Duration'),
-          },
-          {
-            key: 'class',
-            header: sails.helpers.t('global.Class'),
-          },
-          {
-            key: 'teacher_name',
-            header: sails.helpers.t('global.Teacher'),
-          },
-          {
-            key: 'room',
-            header: sails.helpers.t('global.Room'),
-          },
-          {
-            key: 'branch',
-            header: sails.helpers.t('global.Branch'),
-          },
-          {
-            key: 'physical_attendance',
-            header: sails.helpers.t('global.PhysicalAttendance'),
-          },
-          {
-            key: 'livestream',
-            header: sails.helpers.t('global.Livestream'),
-          },
-          {
-            key: 'classpass_com_enabled',
-            header: sails.helpers.t('global.ClasspassEnabled'),
-          },
-          {
-            key: 'cancelled',
-            header: sails.helpers.t('global.Cancelled'),
-          },
-          {
-            key: 'signup_count',
-            header: sails.helpers.t('global.SignUps'),
-          },
-          {
-            key: 'checkedin_count',
-            header: sails.helpers.t('global.CheckedIn'),
-          },
-          {
-            key: 'livestream_signup_count',
-            header: sails.helpers.t('global.LivestreamSignups'),
-          },
-          {
-            key: 'teacher_id',
-            header: sails.helpers.t('global.TeacherID'),
-          },
-          
-        ],
+        columns: columns,
       })
       res.attachment(fileName)
       return res.end(csvContentString, 'UTF-8')
@@ -278,17 +298,27 @@ module.exports = async (req, res) => {
           headerStyle: styles.headerDark, 
           width: 150 
         },
+        classpass_signup_count: {
+          displayName: sails.helpers.t('global.ClasspassSignups'),
+          headerStyle: styles.headerDark, 
+          width: 150 
+        },
       }
 
-      // const merges = [
-      //   { start: { row: 1, column: 1 }, end: { row: 1, column: 10 } },
-      //   { start: { row: 2, column: 1 }, end: { row: 2, column: 5 } },
-      //   { start: { row: 2, column: 6 }, end: { row: 2, column: 10 } }
-      // ]
+      if (!settings.classpass_com_integration_enabled) {
+        delete specification["classpass_signup_count"];
+        delete specification["classpass_com_enabled"];
+      }
+      if (!settings.livestream_enabled) {
+        delete specification["livestream_signup_count"];
+        delete specification["livestream"];
+        delete specification["physical_attendance"];
+      }
+      if (!bBranches) delete specification["branch"];
      
       const reportData = reportParams.teachers.map(teacher => {
         let subItems = [];
-        let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0
+        let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0, total_classpass_signup_count = 0;
         classesData.items.map(item => {          
           if (item.teacher_id == teacher.id) {                        
             total_classes++;
@@ -296,6 +326,7 @@ module.exports = async (req, res) => {
             total_signup_count += item.signup_count;
             total_checkedin_count += item.checkedin_count;
             total_livestream_signup_count += item.livestream_signup_count;
+            total_classpass_signup_count += item.classpass_signup_count;
 
             subItems.push(item);
             item.duration = minsToStr(strToMins(item.duration));
@@ -308,6 +339,7 @@ module.exports = async (req, res) => {
             "signup_count": total_signup_count,
             "checkedin_count": total_checkedin_count,
             "livestream_signup_count": total_livestream_signup_count,
+            "classpass_signup_count": total_classpass_signup_count,
             "room": "",
           })
         } else {
@@ -317,6 +349,7 @@ module.exports = async (req, res) => {
             "signup_count": "",
             "checkedin_count": "",
             "livestream_signup_count": "",
+            "classpass_signup_count": "",
             "room": "",
           })
         }
@@ -342,16 +375,6 @@ module.exports = async (req, res) => {
       let receiptTemplatePath = path.resolve(__dirname, '../../../assets/templates/report-classes.ejs')
 
       const receiptTemplateContent = await readFile(receiptTemplatePath, 'utf-8')
-
-      // const clientLogoUrl = req.client.logo ?
-      //   await sails.helpers.images.url.with({
-      //     image: req.client.logo,
-      //     width: 200,
-      //     height: 200,
-      //   }) :
-      //   null
-
-      // const clientLogoImgTagClass = clientLogoUrl.indexOf('.svg') > -1 ? 'svg' : 'bitmap'
 
       let reportDataPDF = reportParams.teachers.map(teacher => {
         let subItems = [];

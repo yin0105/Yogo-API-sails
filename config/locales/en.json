@@ -28,6 +28,7 @@
 	"global.No": "No",
 	"global.ClasspassEnabled": "Classpass.com enabled",
 	"global.Cancelled": "Cancelled",
+	"global.ClasspassSignups": "Classpass.com Signups",
 
 	"capacityText.Fully booked": "Fully booked",
 	"capacityText.%s available seats": "%s available seats",

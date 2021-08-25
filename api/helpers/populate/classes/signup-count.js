@@ -38,7 +38,22 @@ module.exports = {
         .andWhere('cs.archived', 0)
         .andWhere('cs.cancelled_at', 0)
         .groupBy('c.id')
+      console.log("== 1 ")
+      let classpassSignupCounts = await knex({c: 'class'})
+        .column(knex.raw(`
+        c.id,
+        IFNULL(COUNT(cs.id), 0) AS classpass_signup_count
+        `,
+        ))
+        .leftJoin({cs: 'class_signup'}, 'c.id', 'cs.class')
+        .where('c.id', 'in', _.map(inputs.classes, 'id'))
+        .andWhere('c.archived', 0)
+        .andWhere('cs.archived', 0)
+        .andWhere('cs.cancelled_at', 0)
+        .andWhere(knex.raw('cs.classpass_com_reservation_id is not null'))
+        .groupBy('c.id')
 
+      console.log("== 2 ")
       let checkedinCounts = await knex({c: 'class'})
         .column(knex.raw(`
         c.id,
@@ -55,10 +70,13 @@ module.exports = {
 
       signupCounts = _.keyBy(signupCounts, 'id')
       checkedinCounts = _.keyBy(checkedinCounts, 'id')
+      classpassSignupCounts = _.keyBy(classpassSignupCounts, 'id')
 
       _.each(inputs.classes, (cls => {
         cls.signup_count = signupCounts[cls.id] ? signupCounts[cls.id].signup_count : 0;
         cls.checkedin_count = checkedinCounts[cls.id] ? checkedinCounts[cls.id].checkedin_count : 0;
+        cls.classpass_signup_count = classpassSignupCounts[cls.id] ? classpassSignupCounts[cls.id].classpass_signup_count : 0;
+        
       }))
     }
 

@@ -44,6 +44,17 @@ const getClassesData = async (client, fromDate, endDate, allClassTypes, classTyp
       knex.raw("COUNT(id) as signups"))
     .groupBy('class');
 
+  let classpass_signups = await 
+    knex({cs: 'class_signup'})
+    .where({
+      'cancelled_at': 0
+    })
+    .andWhere(knex.raw('cs.classpass_com_reservation_id is not null'))
+    .select(
+      'class', 
+      knex.raw("COUNT(id) as classpass_signups"))
+    .groupBy('class');
+
   let checked_ins = await 
     knex({cs: 'class_signup'})
     .where({
@@ -93,6 +104,13 @@ const getClassesData = async (client, fromDate, endDate, allClassTypes, classTyp
     for (const j in livestream_signups) {
       if (classes[i]['id'] == livestream_signups[j]['class']) {
         classes[i]['livestream_signup_count'] = livestream_signups[j]['livestream_signups'];
+        break;
+      }
+    } 
+    classes[i]['classpass_signup_count'] = 0;
+    for (const j in classpass_signups) {
+      if (classes[i]['id'] == classpass_signups[j]['class']) {
+        classes[i]['classpass_signup_count'] = classpass_signups[j]['classpass_signups'];
         break;
       }
     }   
