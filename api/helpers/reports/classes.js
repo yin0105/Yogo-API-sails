@@ -1,9 +1,25 @@
 const knex = require('../../services/knex');
 const moment = require('moment-timezone');
 
+const FORMAT = {
+  da: {
+    HUMAN_DATE: 'D. MMM. YYYY',
+    HUMAN_DATE_TIME: 'D. MMM. YYYY [kl.] HH:mm',
+    HUMAN_SHORT_WEEKDAY_DATE: 'ddd D. MMM. YYYY',
+    HUMAN_SHORT_WEEKDAY_DATE_TIME: 'ddd D. MMM. YYYY [kl.] HH:mm',
+  },
+  en: {
+    HUMAN_DATE: 'MMM. D, YYYY',
+    HUMAN_DATE_TIME: 'MMM. D, YYYY, HH:mm',
+    HUMAN_SHORT_WEEKDAY_DATE: 'ddd, MMM. D, YYYY',
+    HUMAN_SHORT_WEEKDAY_DATE_TIME: 'ddd, MMM. D, YYYY, HH:mm',
+  },
+};
+
 
 const getClassesData = async (client, fromDate, endDate, allClassTypes, classTypes, onlyPhysicalAttendance, onlyLivestream, onlyClassPassEnabled) => {
-  console.log("fromDate = ", fromDate)
+  const locale = await sails.helpers.clientSettings.find(client, 'locale');
+
   fromDate = fromDate.format("YYYY-MM-DD");
   endDate = endDate.format("YYYY-MM-DD");
   let classes = await 
@@ -75,9 +91,9 @@ const getClassesData = async (client, fromDate, endDate, allClassTypes, classTyp
       'class', 
       knex.raw("COUNT(id) as livestream_signups"))
     .groupBy('class');
-  
+
   for (const i in classes) {
-    classes[i]['date'] = moment(classes[i]['date']).format("YYYY-MM-DD");
+    classes[i]['date'] = moment.tz(classes[i]['date'], 'YYYY-MM-DD', 'Europe/Copenhagen').format(FORMAT[locale].HUMAN_DATE);
     classes[i]['signup_count'] = 0;
     classes[i]['checkedin_count'] = 0;
     classes[i]['livestream_signup_count'] = 0;
@@ -212,14 +228,10 @@ module.exports = {
     const fromDate = moment(inputs.fromDate, 'YYYY-MM-DD');
     const endDate = moment(inputs.endDate, 'YYYY-MM-DD');
 
-    console.log("inputs.fromDate = ", inputs.fromDate)
-    console.log("fromDate = ", fromDate)
     if (!fromDate || !endDate) throw new Error('Classes report: date is invalid.');
 
     let classesDataItems = await getClassesData(
       inputs.clientId,
-      // inputs.teachers,
-      // inputs.allTeachers,
       fromDate,
       endDate,
       inputs.allClassTypes,

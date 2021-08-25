@@ -21,26 +21,18 @@ function minsToStr(mins) {
   const hh = Math.floor(mins / 60);
   const mm = Math.floor(mins % 60);
 
-  let val =_.padStart(hh, 2, '0') + (hh > 1 ? sails.helpers.t('time.hours') : sails.helpers.t('time.hour'));
-  if (mm > 0) {
-    val += " " + _.padStart(mm, 2, '0') + (mm > 1 ? sails.helpers.t('time.minutes') : sails.helpers.t('time.minute'));
-  }
-  return val;
+  // let val =_.padStart(hh, 2, '0') + (hh > 1 ? sails.helpers.t('time.hours') : sails.helpers.t('time.hour'));
+  // if (mm > 0) {
+  //   val += " " + _.padStart(mm, 2, '0') + (mm > 1 ? sails.helpers.t('time.minutes') : sails.helpers.t('time.minute'));
+  // }
+  // return val;
+  return _.padStart(hh, 2, '0') + ":" + _.padStart(mm, 2, '0')
 }
-// function secToStr(sec) {
-//   return [_.padStart(Math.floor(sec / 3600), 2, '0') +
-//           sails.helpers.t('time.hours') ,
-//           _.padStart(Math.floor((sec % 3600) / 60), 2, '0') +
-//           sails.helpers.t('time.minutes') ,
-//           _.padStart(sec % 60, 2, '0') +
-//           sails.helpers.t('time.seconds')].join(" ");
-// }
 
 module.exports = async (req, res) => {
 
   let reportParams = await sails.helpers.reports.unpackReportToken(req.query.reportToken, req)
   if (!reportParams) return res.forbidden()
-  console.log("reportParams = ", reportParams);
 
   reportParams.fromDate = moment(reportParams.fromDate).format("YYYY-MM-DD");
   reportParams.endDate = moment(reportParams.endDate).format("YYYY-MM-DD");
@@ -70,9 +62,7 @@ module.exports = async (req, res) => {
   const branches = await Branch.find({client: req.client.id, archived: false}).sort('sort ASC').sort('id ASC')
   const bBranches = branches.length > 1 ? true: false;
 
-  console.log("settings = ", settings);
-
-  const heading = [
+  let heading = [
     [
       sails.helpers.t('global.ID'),
       sails.helpers.t('global.Date'),
@@ -80,10 +70,17 @@ module.exports = async (req, res) => {
       sails.helpers.t('global.End'),
       sails.helpers.t('global.Duration'),
       sails.helpers.t('global.Class'),
+      sails.helpers.t('global.Teacher'),
+      sails.helpers.t('global.Room'),
+      sails.helpers.t('global.Branch'),
+      sails.helpers.t('global.PhysicalAttendance'),
+      sails.helpers.t('global.Livestream'),
+      sails.helpers.t('global.ClasspassEnabled'),
+      sails.helpers.t('global.Cancelled'),
       sails.helpers.t('global.SignUps'),
       sails.helpers.t('global.CheckedIn'),
       sails.helpers.t('global.LivestreamSignups'),
-      sails.helpers.t('global.Room')
+      sails.helpers.t('global.ClasspassSignups')
     ],
   ];
 
@@ -329,7 +326,7 @@ module.exports = async (req, res) => {
             total_classpass_signup_count += item.classpass_signup_count;
 
             subItems.push(item);
-            item.duration = minsToStr(strToMins(item.duration));
+            // item.duration = minsToStr(strToMins(item.duration));
           }
         })
         if (subItems.length > 0) {
@@ -378,7 +375,7 @@ module.exports = async (req, res) => {
 
       let reportDataPDF = reportParams.teachers.map(teacher => {
         let subItems = [];
-        let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0
+        let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0, total_classpass_signup_count = 0;
         classesData.items.map(item => {          
           if (item.teacher_id == teacher.id) {                        
             total_classes++;
@@ -386,6 +383,7 @@ module.exports = async (req, res) => {
             total_signup_count += item.signup_count;
             total_checkedin_count += item.checkedin_count;
             total_livestream_signup_count += item.livestream_signup_count;
+            total_classpass_signup_count += item.classpass_signup_count;
 
             subItems.push(item);
             item.duration = minsToStr(strToMins(item.duration));
@@ -398,6 +396,7 @@ module.exports = async (req, res) => {
             "signup_count": total_signup_count,
             "checkedin_count": total_checkedin_count,
             "livestream_signup_count": total_livestream_signup_count,
+            "classpass_signup_count": total_classpass_signup_count,
             "room": "",
           })
         } else {
@@ -407,9 +406,11 @@ module.exports = async (req, res) => {
             "signup_count": "",
             "checkedin_count": "",
             "livestream_signup_count": "",
+            "classpass_signup_count": "",
             "room": "",
           })
         }
+
         return {
           name: teacher.name, 
           data: subItems,
@@ -419,13 +420,23 @@ module.exports = async (req, res) => {
       });
       // reportDataPDF[reportDataPDF.length - 1].margin = "0px";
 
+      if (!settings.classpass_com_integration_enabled) heading[0].splice(16, 1);
+      if (!settings.livestream_enabled) heading[0].splice(15, 1);
+      if (!settings.classpass_com_integration_enabled) heading[0].splice(11, 1);
+      if (!settings.livestream_enabled) heading[0].splice(10, 1);
+      if (!settings.livestream_enabled) heading[0].splice(9, 1);
+      if (!bBranches) heading[0].splice(8, 1);
+
       let html = ejs.render(receiptTemplateContent, {
         fromDateFormatted: moment(classesData.fromDate).format('DD.MM.YYYY'),
         endDateFormatted: moment(classesData.endDate).format('DD.MM.YYYY'),
         heading: heading,
         reportData: reportDataPDF,
         currencyDkk: currencyDkk,
-        title: sails.helpers.t('global.ClassesReport'),
+        title: sails.helpers.t('global.ClassReport'), 
+        classpass_com_integration_enabled: settings.classpass_com_integration_enabled,
+        livestream_enabled: settings.livestream_enabled,
+        bBranches: bBranches,
       })
 
       const pdf = await new Promise((resolve, reject) => {

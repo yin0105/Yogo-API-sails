@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title><%= title %> <%= fromDateFormatted %> - <%= endDateFormatted %></title>
+
+  <style>
+
+    body {
+      margin: 0 1cm;
+      font-size: 8pt;
+      line-height: 16px;
+      font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      line-height: inherit;
+      text-align: left;
+      border-spacing: 0;
+      border-collapse: collapse;
+      border-bottom: 1px solid #555;
+    }
+
+    table.title-table {
+      font-size: 14pt;
+      line-height: 26px;
+      border-bottom: none;
+    }
+
+    table.title-table td.logo {
+      width: 100px;
+    }
+
+    table.title-table td.logo img.svg {
+      width: 100px;
+      height: 100px;
+    }
+
+    table.title-table td.logo img.bitmap {
+      width: 100px;
+      height: auto;
+    }
+
+    table.title-table td.title {
+      vertical-align: middle;
+      padding-left: 20px;
+    }
+
+    td {
+      padding: 5px;
+      vertical-align: top;
+    }
+
+    table.data {
+      page-break-inside: avoid;
+    }
+
+    /* table.data td:nth-of-type(1),
+    table.total td:nth-of-type(1) {
+      width: 50%;
+    }
+
+    table.data td:nth-of-type(2),
+    table.total td:nth-of-type(2) {
+      width: 15%;
+    }
+
+    table.data td:nth-of-type(3),
+    table.total td:nth-of-type(3) {
+      width: 35%;
+    }
+
+    table.data tr:nth-of-type(2n) {
+      background: #f8f8f8;
+    } */
+
+    td.amount,
+    td.item-count {
+      text-align: right;
+    }
+
+    tr.category-title td {
+      font-weight: 900;
+      padding-top: 20px;
+      border-bottom: .3mm solid #bbb;
+    }
+
+    tr.sub-total td {
+      background: #ddd;
+      font-weight: bold;
+    }
+
+    table.total {
+      border-top: 1px solid #555;
+      background: #ddd;
+      margin-top: 10px;
+      font-size: 10pt;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    @media print {
+      .page {
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<%
+for (let i = 0; i < reportData.length; i++) {
+%>
+<div class="page" style="page-break-after:always;">
+  <div class="bottom">
+    <h1 class="text-center"><%= reportData[i].name %></h1>
+    <table class="data">
+      <tr>
+        <% for (let j = 0; j < heading[0].length; j++) { %>
+          <th><%= heading[0][j]%></th>
+        <% } %>
+      </tr>
+      <%
+      for (let j = 0; j < reportData[i].data.length; j++) {
+        const row = reportData[i].data[j]
+      %>
+      <tr>
+        <td>
+          <%= row.id %>
+        </td>
+        <td>
+          <%= row.date %>
+        </td>
+        <td>
+          <%= row.start %>
+        </td>
+        <td>
+          <%= row.end %>
+        </td>
+        <td>
+          <%= row.duration %>
+        </td>
+        <td>
+          <%= row.class %>
+        </td>
+        <td>
+          <%= row.teacher_name %>
+        </td>
+        <td>
+          <%= row.room %>
+        </td>
+        <% if (bBranches) { %>
+          <td>
+            <%= row.branch %>
+          </td>
+        <% } %>
+
+        <% if (livestream_enabled) { %>
+          <td>
+            <%= row.physical_attendance %>
+          </td>
+        <% } %>
+
+        <% if (livestream_enabled) { %>
+          <td>
+            <%= row.livestream %>
+          </td>
+        <% } %>
+
+        <% if (classpass_com_integration_enabled) { %>
+          <td>
+            <%= row.classpass_com_enabled %>
+          </td>
+        <% } %>
+
+        <td>
+          <%= row.cancelled %>
+        </td>
+        <td>
+          <%= row.signup_count %>
+        </td>
+        <td>
+          <%= row.checkedin_count %>
+        </td>
+
+        <% if (livestream_enabled) { %>
+          <td>
+            <%= row.livestream_signup_count %>
+          </td>
+        <% } %>
+
+        <% if (classpass_com_integration_enabled) { %>
+          <td>
+            <%= row.classpass_signup_count %>
+          </td>
+        <% } %>
+      </tr>
+      
+    
+    <% } %>
+    </table>
+  </div>
+</div>
+<% } %>
+
+</body>
+</html>

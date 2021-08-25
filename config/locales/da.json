@@ -28,7 +28,7 @@
 	"global.No": "Ingen",
   "global.ClasspassEnabled": "Classpass.com aktiveret",
 	"global.Cancelled": "Annulleret",
-  "global.ClasspassSignups": "Classpass.com Signups",
+  "global.ClasspassSignups": "Classpass.com -tilmeldinger",
 
   "capacityText.Fully booked": "Fuldt booket",
   "capacityText.%s available seats": "%s ledige pladser",
