@@ -21,6 +21,8 @@
   "global.ClassReport": "Klasserapport",
   "global.Start": "Start",
 	"global.End": "Ende",
+  "global.Branch": "Afdeling",
+  "global.PhysicalAttendance": "Fysisk fremmøde",
 
   "capacityText.Fully booked": "Fuldt booket",
   "capacityText.%s available seats": "%s ledige pladser",

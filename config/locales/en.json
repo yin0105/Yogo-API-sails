@@ -21,7 +21,8 @@
 	"global.TeacherName": "Teacher name",
 	"global.Start": "Start",
 	"global.End": "End",
-
+	"global.Branch": "Branch",
+	"global.PhysicalAttendance": "Physical attendance",
 
 	"capacityText.Fully booked": "Fully booked",
 	"capacityText.%s available seats": "%s available seats",

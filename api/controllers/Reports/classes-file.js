@@ -123,6 +123,14 @@ module.exports = async (req, res) => {
             header: sails.helpers.t('global.Room'),
           },
           {
+            key: 'branch',
+            header: sails.helpers.t('global.Branch'),
+          },
+          {
+            key: 'physical_attendance',
+            header: sails.helpers.t('global.PhysicalAttendance'),
+          },
+          {
             key: 'signup_count',
             header: sails.helpers.t('global.SignUps'),
           },
@@ -218,6 +226,16 @@ module.exports = async (req, res) => {
           headerStyle: styles.headerDark, 
           width: 120 
         },
+        branch: {
+          displayName: sails.helpers.t('global.Branch'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        physical_attendance: {
+          displayName: sails.helpers.t('global.PhysicalAttendance'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
         signup_count: {
           displayName: sails.helpers.t('global.SignUps'),
           headerStyle: styles.headerDark, 
@@ -275,7 +293,7 @@ module.exports = async (req, res) => {
             "room": "",
           })
         }
-        console.log("teacher name = ", teacher.name);
+
         return {
           name: teacher.name, 
           specification: specification, 
