@@ -26,6 +26,8 @@
 	"global.Livestream": "Livestream",
 	"global.Yes": "Yes",
 	"global.No": "No",
+	"global.ClasspassEnabled": "Classpass.com enabled",
+	"global.Cancelled": "Cancelled",
 
 	"capacityText.Fully booked": "Fully booked",
 	"capacityText.%s available seats": "%s available seats",

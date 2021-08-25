@@ -17,6 +17,9 @@ module.exports = async (req, res) => {
     allClassTypes: req.body.allClassTypes || req.query.allClassTypes,
     fromDate: req.body.fromDate || req.query.fromDate,
     endDate: req.body.endDate || req.query.endDate,
+    onlyPhysicalAttendance: req.body.onlyPhysicalAttendance || req.query.onlyPhysicalAttendance,
+    onlyLivestream: req.body.onlyLivestream || req.query.onlyLivestream,
+    onlyClassPassEnabled: req.body.onlyClassPassEnabled || req.query.onlyClassPassEnabled,
   }
 
   const classesData = await sails.helpers.reports.classes.with(reportParams)

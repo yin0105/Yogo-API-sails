@@ -135,6 +135,14 @@ module.exports = async (req, res) => {
             header: sails.helpers.t('global.Livestream'),
           },
           {
+            key: 'classpass_com_enabled',
+            header: sails.helpers.t('global.ClasspassEnabled'),
+          },
+          {
+            key: 'cancelled',
+            header: sails.helpers.t('global.Cancelled'),
+          },
+          {
             key: 'signup_count',
             header: sails.helpers.t('global.SignUps'),
           },
@@ -240,8 +248,18 @@ module.exports = async (req, res) => {
           headerStyle: styles.headerDark, 
           width: 120 
         },
-        livestreawm: {
+        livestream: {
           displayName: sails.helpers.t('global.Livestream'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        classpass_com_enabled: {
+          displayName: sails.helpers.t('global.ClasspassEnabled'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        cancelled: {
+          displayName: sails.helpers.t('global.Cancelled'),
           headerStyle: styles.headerDark, 
           width: 120 
         },
