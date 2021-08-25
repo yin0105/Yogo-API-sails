@@ -26,6 +26,7 @@ const getClassesData = async (client, fromDate, endDate) => {
       knex.raw("r.name as room"),
       knex.raw("b.name as branch"),
       knex.raw("cs.studio_attendance_enabled as physical_attendance"),
+      knex.raw("cs.livestream_enabled as livestream"),
       
       knex.raw("u.id as teacher_id"),
       knex.raw("CONCAT(u.first_name, ' ', u.last_name) as teacher_name"));
@@ -68,7 +69,9 @@ const getClassesData = async (client, fromDate, endDate) => {
     classes[i]['livestream_signup_count'] = 0;
     classes[i]['start'] = moment(classes[i]['start'], "HH:mm:ss").format("HH:mm");
     classes[i]['end'] = moment(classes[i]['end'], "HH:mm:ss").format("HH:mm");
-    classes[i]['duration'] = moment(classes[i]['duration'], "HH:mm:ss").format("HH:mm");
+    classes[i]['duration'] = moment(classes[i]['duration'], "HH:mm:ss").format("HH:mm");    
+    classes[i]['physical_attendance'] = classes[i]['physical_attendance'] ? sails.helpers.t('global.Yes') : sails.helpers.t('global.No')
+    classes[i]['livestream'] = classes[i]['livestream'] ? sails.helpers.t('global.Yes') : sails.helpers.t('global.No')
 
     for (var j in signups) {
       if (classes[i]['id'] == signups[j]['class']) {

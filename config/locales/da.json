@@ -23,6 +23,9 @@
 	"global.End": "Ende",
   "global.Branch": "Afdeling",
   "global.PhysicalAttendance": "Fysisk fremmøde",
+  "global.Livestream": "Live stream",
+  "global.Yes": "Ja",
+	"global.No": "Ingen",
 
   "capacityText.Fully booked": "Fuldt booket",
   "capacityText.%s available seats": "%s ledige pladser",

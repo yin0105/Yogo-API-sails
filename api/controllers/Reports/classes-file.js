@@ -131,6 +131,10 @@ module.exports = async (req, res) => {
             header: sails.helpers.t('global.PhysicalAttendance'),
           },
           {
+            key: 'livestream',
+            header: sails.helpers.t('global.Livestream'),
+          },
+          {
             key: 'signup_count',
             header: sails.helpers.t('global.SignUps'),
           },
@@ -233,6 +237,11 @@ module.exports = async (req, res) => {
         },
         physical_attendance: {
           displayName: sails.helpers.t('global.PhysicalAttendance'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        livestreawm: {
+          displayName: sails.helpers.t('global.Livestream'),
           headerStyle: styles.headerDark, 
           width: 120 
         },

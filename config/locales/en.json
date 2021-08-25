@@ -23,6 +23,9 @@
 	"global.End": "End",
 	"global.Branch": "Branch",
 	"global.PhysicalAttendance": "Physical attendance",
+	"global.Livestream": "Livestream",
+	"global.Yes": "Yes",
+	"global.No": "No",
 
 	"capacityText.Fully booked": "Fully booked",
 	"capacityText.%s available seats": "%s available seats",
