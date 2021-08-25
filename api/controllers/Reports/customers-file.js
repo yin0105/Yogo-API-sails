@@ -54,6 +54,111 @@ module.exports = async (inputs, exits, format, req, res) => {
       res.attachment(fileName);
       return res.end(csvContentString, 'UTF-8');
 
+    case 'xlsx':
+      const styles = {
+        headerDark: {
+          font: {
+            color: {
+              rgb: 'FF000000'
+            },
+            sz: 14,
+            bold: true,
+          }
+        },
+        cellPink: {
+          fill: {
+            fgColor: {
+              rgb: 'FFFFCCFF'
+            }
+          }
+        },
+        cellGreen: {
+          fill: {
+            fgColor: {
+              rgb: 'FF00FF00'
+            }
+          }
+        }
+      };
+                  
+      const specification = {
+        email: { 
+          displayName: 'E-mail',
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        first_name: { 
+          displayName: 'Fornavn',
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        last_name: { 
+          displayName: 'Efternavn',
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+      }
+      
+      // const reportData = reportParams.teachers.map(teacher => {
+      //   let subItems = [];
+      //   let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0, total_classpass_signup_count = 0;
+      //   classesData.items.map(item => {          
+      //     if (item.teacher_id == teacher.id) {                        
+      //       total_classes++;
+      //       total_duration += strToMins(item.duration);
+      //       total_signup_count += item.signup_count;
+      //       total_checkedin_count += item.checkedin_count;
+      //       total_livestream_signup_count += item.livestream_signup_count;
+      //       total_classpass_signup_count += item.classpass_signup_count;
+
+      //       subItems.push(item);
+      //       // item.duration = minsToStr(strToMins(item.duration));
+      //     }
+      //   })
+      //   if (subItems.length > 0) {
+      //     subItems.push({
+      //       "id": "total: " + subItems.length + " classes",
+      //       "duration": minsToStr(total_duration),
+      //       "signup_count": total_signup_count,
+      //       "checkedin_count": total_checkedin_count,
+      //       "livestream_signup_count": total_livestream_signup_count,
+      //       "classpass_signup_count": total_classpass_signup_count,
+      //       "room": "",
+      //     })
+      //   } else {
+      //     subItems.push({
+      //       "id": "total:",
+      //       "duration": "",
+      //       "signup_count": "",
+      //       "checkedin_count": "",
+      //       "livestream_signup_count": "",
+      //       "classpass_signup_count": "",
+      //       "room": "",
+      //     })
+      //   }
+
+      //   return {
+      //     name: teacher.name, 
+      //     specification: specification, 
+      //     data: subItems,
+      //     merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
+      //   };
+      // })
+      const report = excel.buildExport(
+        {
+          name: "customers", 
+          specification: specification, 
+          data: customers,
+          merges: [],
+          // merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
+        }
+      );
+
+      console.log("report = ", report)
+      
+      res.attachment(fileName)
+      return res.end(report, 'UTF-8')
+
     /*case 'pdf':
 
       const rows = await sails.helpers.reports.buildPdfDataRows(customers.items)

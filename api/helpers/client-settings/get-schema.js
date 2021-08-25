@@ -1816,6 +1816,16 @@ YOGO
         defaultsTo: 240,
       },
 
+      signup_show_address_fields: {
+        type: 'boolean',
+        defaultsTo: false,
+      },
+
+      signup_address_fields_required: {
+        type: 'boolean',
+        defaultsTo: false,
+      },
+
       locale: {
         type: 'string',
         isIn: ['da', 'en'],

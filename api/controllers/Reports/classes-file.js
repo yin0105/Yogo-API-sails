@@ -184,18 +184,12 @@ module.exports = async (req, res) => {
     case 'xlsx':
       const styles = {
         headerDark: {
-          // fill: {
-          //   fgColor: {
-          //     rgb: 'FF000000'
-          //   }
-          // },
           font: {
             color: {
               rgb: 'FF000000'
             },
             sz: 14,
             bold: true,
-            // underline: true
           }
         },
         cellPink: {
