@@ -2,7 +2,7 @@ const knex = require('../../services/knex');
 const moment = require('moment-timezone');
 
 
-const getClassesData = async (client, fromDate, endDate) => {
+const getClassesData = async (client, fromDate, endDate, allClassTypes, classTypes) => {
   console.log("fromDate = ", fromDate)
   fromDate = fromDate.format("YYYY-MM-DD");
   endDate = endDate.format("YYYY-MM-DD");
@@ -65,7 +65,7 @@ const getClassesData = async (client, fromDate, endDate) => {
       knex.raw("COUNT(id) as livestream_signups"))
     .groupBy('class');
   
-  for (var i in classes) {
+  for (const i in classes) {
     classes[i]['date'] = moment(classes[i]['date']).format("YYYY-MM-DD");
     classes[i]['signup_count'] = 0;
     classes[i]['checkedin_count'] = 0;
@@ -78,19 +78,19 @@ const getClassesData = async (client, fromDate, endDate) => {
     classes[i]['classpass_com_enabled'] = classes[i]['classpass_com_enabled'] ? sails.helpers.t('global.Yes') : sails.helpers.t('global.No')
     classes[i]['cancelled'] = classes[i]['cancelled'] ? sails.helpers.t('global.Yes') : sails.helpers.t('global.No')
     
-    for (var j in signups) {
+    for (const j in signups) {
       if (classes[i]['id'] == signups[j]['class']) {
         classes[i]['signup_count'] = signups[j]['signups'];
         break;
       }
     }
-    for (var j in checked_ins) {
+    for (const j in checked_ins) {
       if (classes[i]['id'] == checked_ins[j]['class']) {
         classes[i]['checkedin_count'] = checked_ins[j]['checked_ins'];
         break;
       }
     } 
-    for (var j in livestream_signups) {
+    for (const j in livestream_signups) {
       if (classes[i]['id'] == livestream_signups[j]['class']) {
         classes[i]['livestream_signup_count'] = livestream_signups[j]['livestream_signups'];
         break;
@@ -98,7 +98,24 @@ const getClassesData = async (client, fromDate, endDate) => {
     }   
   }
 
-  return classes;
+  let classes_2 = [];
+
+  for (const i in classes) {
+    if (allClassTypes) {
+      classes_2.push(classes[i]);
+    } else {
+      for (const j in classTypes) {
+        if (classes[i]["class"] == classTypes[j]["name"]) {
+          classes_2.push(classes[i]);
+          break;
+        }
+      }
+
+    }
+
+  }
+
+  return classes_2;
 
 };
 
@@ -173,11 +190,11 @@ module.exports = {
     let classesDataItems = await getClassesData(
       inputs.clientId,
       // inputs.teachers,
-      // inputs.classType,
       // inputs.allTeachers,
-      // inputs.allClassTypes,
       fromDate,
       endDate,
+      inputs.allClassTypes,
+      inputs.classTypes
     );
 
     classesData = {
