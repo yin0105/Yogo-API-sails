@@ -67,8 +67,8 @@ module.exports = async (req, res) => {
       sails.helpers.t('global.Date'),
       sails.helpers.t('global.Start'),
       sails.helpers.t('global.End'),
-      sails.helpers.t('global.Class'),
       sails.helpers.t('global.Duration'),
+      sails.helpers.t('global.Class'),
       sails.helpers.t('global.SignUps'),
       sails.helpers.t('global.CheckedIn'),
       sails.helpers.t('global.LivestreamSignups'),
@@ -107,12 +107,20 @@ module.exports = async (req, res) => {
             header: sails.helpers.t('global.End'),
           },
           {
+            key: 'duration',
+            header: sails.helpers.t('global.Duration'),
+          },
+          {
             key: 'class',
             header: sails.helpers.t('global.Class'),
           },
           {
-            key: 'duration',
-            header: sails.helpers.t('global.Duration'),
+            key: 'teacher_name',
+            header: sails.helpers.t('global.Teacher'),
+          },
+          {
+            key: 'room',
+            header: sails.helpers.t('global.Room'),
           },
           {
             key: 'signup_count',
@@ -127,17 +135,9 @@ module.exports = async (req, res) => {
             header: sails.helpers.t('global.LivestreamSignups'),
           },
           {
-            key: 'room',
-            header: sails.helpers.t('global.Room'),
-          },
-          {
             key: 'teacher_id',
             header: sails.helpers.t('global.TeacherID'),
           },
-          {
-            key: 'teacher_name',
-            header: sails.helpers.t('global.TeacherName'),
-          }
           
         ],
       })
@@ -198,13 +198,23 @@ module.exports = async (req, res) => {
           headerStyle: styles.headerDark, 
           width: 120 
         },
+        duration: { 
+          displayName: sails.helpers.t('global.Duration'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
         class: {
           displayName: sails.helpers.t('global.Class'),
           headerStyle: styles.headerDark, 
           width: 120 
         },
-        duration: { 
-          displayName: sails.helpers.t('global.Duration'),
+        teacher_name: {
+          displayName: sails.helpers.t('global.Teacher'),
+          headerStyle: styles.headerDark, 
+          width: 120 
+        },
+        room: {
+          displayName: sails.helpers.t('global.Room'),
           headerStyle: styles.headerDark, 
           width: 120 
         },
@@ -223,11 +233,6 @@ module.exports = async (req, res) => {
           headerStyle: styles.headerDark, 
           width: 150 
         },
-        room: {
-          displayName: sails.helpers.t('global.Room'),
-          headerStyle: styles.headerDark, 
-          width: 120 
-        }
       }
 
       // const merges = [
@@ -270,6 +275,7 @@ module.exports = async (req, res) => {
             "room": "",
           })
         }
+        console.log("teacher name = ", teacher.name);
         return {
           name: teacher.name, 
           specification: specification, 
