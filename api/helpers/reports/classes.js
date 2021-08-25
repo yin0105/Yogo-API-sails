@@ -2,7 +2,7 @@ const knex = require('../../services/knex');
 const moment = require('moment-timezone');
 
 
-const getClassesData = async (client, fromDate, endDate, allClassTypes, classTypes) => {
+const getClassesData = async (client, fromDate, endDate, allClassTypes, classTypes, onlyPhysicalAttendance, onlyLivestream, onlyClassPassEnabled) => {
   console.log("fromDate = ", fromDate)
   fromDate = fromDate.format("YYYY-MM-DD");
   endDate = endDate.format("YYYY-MM-DD");
@@ -99,21 +99,32 @@ const getClassesData = async (client, fromDate, endDate, allClassTypes, classTyp
   }
 
   let classes_2 = [];
-
+  
   for (const i in classes) {
+    let f = false;
+    
+    // depending on the class type
     if (allClassTypes) {
-      classes_2.push(classes[i]);
+      f = true;
     } else {
       for (const j in classTypes) {
         if (classes[i]["class"] == classTypes[j]["name"]) {
-          classes_2.push(classes[i]);
+          f = true;
           break;
         }
       }
-
     }
+    if (!f) continue;
 
+    // depending on the checkbox options
+    if (onlyPhysicalAttendance && !classes[i]["studio_attendance_enabled"]) continue;
+    if (onlyLivestream && !classes[i]["livestream_enabled"]) continue;
+    if (onlyClassPassEnabled && !classes[i]["classpass_com_enabled"]) continue;
+    
+    classes_2.push(classes[i]);
   }
+
+  // depending on the class type
 
   return classes_2;
 
@@ -194,7 +205,10 @@ module.exports = {
       fromDate,
       endDate,
       inputs.allClassTypes,
-      inputs.classTypes
+      inputs.classTypes,
+      inputs.onlyPhysicalAttendance,
+      inputs.onlyLivestream,
+      inputs.onlyClassPassEnabled
     );
 
     classesData = {
