@@ -101,7 +101,8 @@ module.exports = {
         ])
         .mapValues(str => str && str.trim ? str.trim() : str)
         .value();
-      userData.client = this.req.client.id;
+      userData.client = this.req.client.id;      
+
       userData.teacher_ical_token = uuidv4();
 
       // If image does not exist, remove reference
