@@ -8,6 +8,7 @@ const currencyDkk = require('../../filters/currency_dkk');
 
 const {promisify} = require('util');
 const fs = require('fs');
+const excel = require('node-excel-export');
 
 const readFile = promisify(fs.readFile);
 
@@ -31,8 +32,6 @@ module.exports = async (inputs, exits, format, req, res) => {
         ? `Inaktive kunder ${todayIsoDate}.${format}`
         : `Alle kunder ${todayIsoDate}.${format}`
     );
-
-  console.log("format = ", format)
 
   switch (format) {
     case 'csv':
@@ -146,20 +145,20 @@ module.exports = async (inputs, exits, format, req, res) => {
       //     merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
       //   };
       // })
-      // const report = excel.buildExport(
-      //   [{
-      //     name: "customers", 
-      //     specification: specification, 
-      //     data: customers,
-      //     merges: [],
-      //     // merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
-      //   }]
-      // );
+      const report = excel.buildExport(
+        [{
+          name: "customers", 
+          specification: specification, 
+          data: customers,
+          merges: [],
+          // merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
+        }]
+      );
 
-      // console.log("report = ", report)
+      console.log("report = ", report)
       
-      // res.attachment(fileName)
-      // return res.end(report, 'UTF-8')
+      res.attachment(fileName)
+      return res.end(report, 'UTF-8')
 
     /*case 'pdf':
 
