@@ -32,6 +32,8 @@ module.exports = async (inputs, exits, format, req, res) => {
         : `Alle kunder ${todayIsoDate}.${format}`
     );
 
+  console.log("format = ", format)
+
   switch (format) {
     case 'csv':
       const csvContentString = stringify(customers, {
@@ -144,20 +146,20 @@ module.exports = async (inputs, exits, format, req, res) => {
       //     merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
       //   };
       // })
-      const report = excel.buildExport(
-        {
-          name: "customers", 
-          specification: specification, 
-          data: customers,
-          merges: [],
-          // merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
-        }
-      );
+      // const report = excel.buildExport(
+      //   [{
+      //     name: "customers", 
+      //     specification: specification, 
+      //     data: customers,
+      //     merges: [],
+      //     // merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
+      //   }]
+      // );
 
-      console.log("report = ", report)
+      // console.log("report = ", report)
       
-      res.attachment(fileName)
-      return res.end(report, 'UTF-8')
+      // res.attachment(fileName)
+      // return res.end(report, 'UTF-8')
 
     /*case 'pdf':
 

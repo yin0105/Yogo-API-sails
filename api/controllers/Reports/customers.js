@@ -4,7 +4,7 @@ module.exports = {
   inputs: {
     format: {
       type: 'string',
-      isIn: ['csv'],
+      isIn: ['csv', 'xlsx', 'pdf'],
     },
     onlyActiveCustomers: {
       type: 'boolean',
@@ -25,7 +25,7 @@ module.exports = {
 
     if (inputs.format) {
       const fileAction = require('./customers-file');
-      return await fileAction(inputs, exits, 'csv', this.req, this.res);
+      return await fileAction(inputs, exits, inputs.format, this.req, this.res);
     }
 
     if (!await sails.helpers.can2('controller.Reports.customers', this.req)) {
