@@ -63,6 +63,8 @@ module.exports = {
       allSettingsKeys,
     )
 
+    console.log("requestedSettingsKeys = ", requestedSettingsKeys)
+
     const settingsDbRows = await ClientSettings.find({
       key: requestedSettingsKeys,
       client: clientId,
