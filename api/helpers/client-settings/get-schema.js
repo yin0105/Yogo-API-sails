@@ -98,7 +98,7 @@ Kind regards,
 
       payment_service_provider: {
         type: 'string',
-        isIn: ['dibs', 'reepay'],
+        isIn: ['dibs', 'reepay', 'reepay_onboarding', 'stripe', 'stripe_onboarding'],
         defaultsTo: null,
       },
 
