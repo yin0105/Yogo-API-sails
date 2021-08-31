@@ -224,6 +224,8 @@ module.exports.routes = {
   'POST /payments/reepay/attach-card-to-membership': 'ReepayPaymentsController.attach-card-to-membership',
   'POST /payments/reepay/webhook': 'ReepayPaymentsController.webhook',
 
+  'POST /payments/stripe/onboarding': 'StripePaymentsController.onboarding',
+
 
   'GET /price-groups': 'PriceGroupsController.find',
   'GET /price-groups/:id': 'PriceGroupsController.find',

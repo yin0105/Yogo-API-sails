@@ -50,6 +50,10 @@
     'webhook': [],
   },
 
+  StripePaymentsController: {
+    'onboarding': [],
+  },
+
   IntegrationsVimeoController: {
     'auth-callback': [],
     'update-video-data-from-vimeo': [],
