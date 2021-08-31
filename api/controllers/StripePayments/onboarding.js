@@ -30,14 +30,14 @@ module.exports = {
             'Authorization': `Bearer ${secretKey}`
         }
 
-        let accountId;
-        const params = new URLSearchParams();
+        let params = new URLSearchParams();
         params.append('type', 'standard');
         // let data = querystring.stringify({type: 'standard'})
         // const res = await axios.get('https://api.stripe.com/v1/accounts/acct_1JUXmvPYjWzBI4DI', {
         //     headers: headers
         // })
 
+        // Create account
         let res = await axios.post('https://api.stripe.com/v1/accounts', params, {
             headers: headers
         })
@@ -45,10 +45,20 @@ module.exports = {
         if (!res || !res.data || !res.data.id) {
             return exits.onboardingFailed('Stripe onboarding is failed.');
         }
-        
+
         const accountId = res.data.id;
+        
+        // Create account link
+        params = new URLSearchParams();
+        params.append('type', 'account_onboarding');
+        params.append('account', accountId);
+        params.append('return_url', 'https://example.com/return');
+        params.append('refresh_url', 'https://example.com/reauth');
+        res = await axios.post('https://api.stripe.com/v1/account_links', params, {
+            headers: headers
+        })
 
-
+        const redirectURL = res.data.url;
 
 
         console.log("res = ", res)
