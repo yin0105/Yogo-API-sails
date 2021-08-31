@@ -137,6 +137,10 @@ module.exports = {
         privateApiKey: 'priv_1eab7489e56b2476867166a7acfbaa7c',
         webhookSecret: 'webhook_secret_bbfa0f2ce4ab1fb5f099eca25bfdba7a'
       }
+    },
+    stripe: {
+      publishableKey: 'pk_test_51J9AaOBOiHfVTw1ZB91mzPVpLylaEdsFBtQaxaEUYY2kt6nGTOxtYn4PMgTrpJnRF4ZESTiUYzxoNoDmhumWA22H00Na6dRdxm',
+      secretKey: 'sk_test_51J9AaOBOiHfVTw1ZIq0I5ZFSGojALwyjTL5hmN89nNVOZJJPiEF4qj5dFtsTJp5FOx3g0EhXZBBfbmxEeTelEwEX00y1wRoZrk'
     }
   },
   // ALSO UPDATE bootstrap.js WHEN ADDING REQUIRED PARAMS IN THIS FILE
