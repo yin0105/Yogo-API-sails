@@ -99,6 +99,7 @@ module.exports = {
   },
 
   fn: async (inputs, exits) => {
+    console.log("inputs = ", inputs)
 
     if (
       !inputs.user

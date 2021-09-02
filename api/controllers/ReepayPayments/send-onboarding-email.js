@@ -34,15 +34,17 @@ module.exports = {
         // send YOGO email to kontakt@yogo.dk
         messageParams.to = "kontakt@yogo.dk";
         messageParams.subject = `Please start Reepay onboarding for ${client.name}, ID ${client.id}`;        
+        messageParams.text = `Please start Reepay onboarding for ${client.name}, ID ${client.id}`;        
         messageParams.html = "<p>" + `Please start Reepay onboarding for ${client.name}, ID ${client.id}` + "</p>" 
         
-        logger.info('Sending "Reepay Onboarding" email with subject ' + messageParams.subject + ' to ' + messageParams.to);
         console.log("email: ", messageParams)
-
+ 
         await sails.helpers.email.send.with({
+            client: clientId,
             non_user_email: messageParams.to,
             subject: messageParams.subject,
             html: messageParams.html,
+            text: messageParams.text,
             emailType: 'reepay_onboarding_email',
         });
 
