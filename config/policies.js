@@ -48,6 +48,7 @@
 
   ReepayPaymentsController: {
     'webhook': [],
+    'send-onboarding-email': [],
   },
 
   StripePaymentsController: {

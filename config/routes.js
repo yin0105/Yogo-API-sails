@@ -223,6 +223,7 @@ module.exports.routes = {
   'POST /payments/reepay/settle-and-attach-card-to-zero-total-recurring-order': 'ReepayPaymentsController.settle-and-attach-card-to-zero-total-recurring-order',
   'POST /payments/reepay/attach-card-to-membership': 'ReepayPaymentsController.attach-card-to-membership',
   'POST /payments/reepay/webhook': 'ReepayPaymentsController.webhook',
+  'GET /payments/reepay/send-onboarding-email/:id': 'ReepayPaymentsController.send-onboarding-email',
 
   'POST /payments/stripe/onboarding': 'StripePaymentsController.onboarding',
   'GET /payments/stripe/onboarding-check': 'StripePaymentsController.onboarding-check',
