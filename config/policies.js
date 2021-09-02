@@ -52,6 +52,7 @@
 
   StripePaymentsController: {
     'onboarding': [],
+    'onboarding-check': [],
   },
 
   IntegrationsVimeoController: {

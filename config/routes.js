@@ -225,6 +225,7 @@ module.exports.routes = {
   'POST /payments/reepay/webhook': 'ReepayPaymentsController.webhook',
 
   'POST /payments/stripe/onboarding': 'StripePaymentsController.onboarding',
+  'GET /payments/stripe/onboarding-check': 'StripePaymentsController.onboardingCheck',
 
 
   'GET /price-groups': 'PriceGroupsController.find',

@@ -5,7 +5,10 @@ module.exports = {
     friendlyName: 'Stripe Onboarding',
   
     inputs: {
-  
+        host: {
+            type: 'string',
+            required: true
+        },
     },
   
     exits: {
@@ -18,12 +21,14 @@ module.exports = {
     },
   
     fn: async function (inputs, exits) {
+        console.log("inputs = ", inputs)
         if (!await sails.helpers.can2('controller.StripePayments.onboarding', this.req)) {
             return exits.forbidden()
         }
 
         const secretKey = sails.config.paymentProviders.stripe.secretKey
         console.log("secret key = ", secretKey)
+        console.log("host = ", inputs.host)
 
         const headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -49,8 +54,8 @@ module.exports = {
         params = new URLSearchParams();
         params.append('type', 'account_onboarding');
         params.append('account', accountId);
-        params.append('return_url', 'https://example.com/return');
-        params.append('refresh_url', 'https://example.com/reauth');
+        params.append('return_url', `${inputs.host}/admin/#/settings-payment?type=return`);
+        params.append('refresh_url', `${inputs.host}/admin/#/settings-payment?type=refresh`);
         res = await axios.post('https://api.stripe.com/v1/account_links', params, {
             headers: headers
         })
@@ -59,8 +64,9 @@ module.exports = {
 
         console.log("res = ", res)
         console.log("redirectURL = ", redirectURL)
+        console.log("account_id = ", accountId)
   
-        return exits.success(redirectURL)
+        return exits.success({account_id: accountId, url: redirectURL})
   
     },
   }
