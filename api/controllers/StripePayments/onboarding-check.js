@@ -22,7 +22,7 @@ module.exports = {
   
     fn: async function (inputs, exits) {
         console.log("inputs = ", inputs)
-        if (!await sails.helpers.can2('controller.StripePayments.onboardingCheck', this.req)) {
+        if (!await sails.helpers.can2('controller.StripePayments.onboarding-check', this.req)) {
             return exits.forbidden()
         }
 

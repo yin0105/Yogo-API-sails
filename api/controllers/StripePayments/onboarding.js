@@ -54,8 +54,8 @@ module.exports = {
         params = new URLSearchParams();
         params.append('type', 'account_onboarding');
         params.append('account', accountId);
-        params.append('return_url', `${inputs.host}/admin/#/settings-payment?type=return`);
-        params.append('refresh_url', `${inputs.host}/admin/#/settings-payment?type=refresh`);
+        params.append('return_url', `${inputs.host}/admin/#/stripe-onboarding-return`);
+        params.append('refresh_url', `${inputs.host}/admin/#/stripe-onboarding-refresh`);
         res = await axios.post('https://api.stripe.com/v1/account_links', params, {
             headers: headers
         })
