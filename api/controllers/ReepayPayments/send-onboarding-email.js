@@ -29,11 +29,11 @@ module.exports = {
 
         const clientId = this.req.client.id ? this.req.client.id: inputs.id;
         const client = await Client.findOne({id: clientId});
-        let messageParams;
+        let messageParams = {};
 
         // send YOGO email to kontakt@yogo.dk
         messageParams.to = "kontakt@yogo.dk";
-        messageParams.subject = "Reepay Onboarding";        
+        messageParams.subject = `Please start Reepay onboarding for ${client.name}, ID ${client.id}`;        
         messageParams.html = "<p>" + `Please start Reepay onboarding for ${client.name}, ID ${client.id}` + "</p>" 
         
         logger.info('Sending "Reepay Onboarding" email with subject ' + messageParams.subject + ' to ' + messageParams.to);
