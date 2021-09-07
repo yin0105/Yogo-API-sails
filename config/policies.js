@@ -54,6 +54,7 @@
   StripePaymentsController: {
     'onboarding': [],
     'onboarding-check': [],
+    // 'create-order-and-matching-session-type': [],
   },
 
   IntegrationsVimeoController: {

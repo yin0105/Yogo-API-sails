@@ -110,6 +110,7 @@ module.exports = async function (req, res, next) {
       'noshowfees',
       'products',
       'reepaypayments',
+      'stripepayments',
       'reports',
       'videofilters',
       'videogroups',
@@ -238,6 +239,7 @@ module.exports = async function (req, res, next) {
     if (controller === 'import') return next();
 
     // Admin is logged in, but the action is still now allowed
+    console.log("acl 1")
     return res.forbidden();
 
 
@@ -384,7 +386,10 @@ module.exports = async function (req, res, next) {
       const membership = await
         Membership.findOne(req.param('id'));
 
-      if (membership.user !== req.user.id || membership.archived) return res.forbidden();
+      if (membership.user !== req.user.id || membership.archived) {
+        console.log("acl 2")
+        return res.forbidden();
+      }
 
       // Customers can cancel their membership and they can restart a cancelled membership if it has not run out.
       if (
@@ -427,6 +432,7 @@ module.exports = async function (req, res, next) {
     console.log('req.user.admin: ', req.user.admin);
   }
   console.log('req.checkin: ', req.checkin);*/
+  console.log("acl 3")
   return res.forbidden();
 
 };

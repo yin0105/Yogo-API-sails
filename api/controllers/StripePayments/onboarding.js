@@ -27,8 +27,6 @@ module.exports = {
         }
 
         const secretKey = sails.config.paymentProviders.stripe.secretKey
-        console.log("secret key = ", secretKey)
-        console.log("host = ", inputs.host)
 
         const headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -61,10 +59,6 @@ module.exports = {
         })
 
         const redirectURL = res.data.url;
-
-        console.log("res = ", res)
-        console.log("redirectURL = ", redirectURL)
-        console.log("account_id = ", accountId)
   
         return exits.success({account_id: accountId, url: redirectURL})
   

@@ -14,7 +14,7 @@ module.exports = {
 
     payment_service_provider: {
       type: 'string',
-      isIn: ['dibs', 'reepay'],
+      isIn: ['dibs', 'reepay', 'reepay_onboarding', 'stripe', 'stripe_onboarding'],
     },
 
     payment_provider_subscription_id: {

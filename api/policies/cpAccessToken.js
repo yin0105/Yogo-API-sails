@@ -13,6 +13,7 @@ module.exports = function (req, res, next) {
   if (accessToken.length > 1 && accessToken[1] == yogo_access_token) {
     return next();
   } else {
+    console.log("cpAccessToken")
     return res.forbidden('You are not permitted to perform this action.');
   }
 
