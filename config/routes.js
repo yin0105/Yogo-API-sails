@@ -227,6 +227,7 @@ module.exports.routes = {
 
   'POST /payments/stripe/onboarding': 'StripePaymentsController.onboarding',
   'GET /payments/stripe/onboarding-check': 'StripePaymentsController.onboarding-check',
+  'GET /payments/stripe/get-publishable-key': 'StripePaymentsController.get-publishable-key',
 
   'POST /payments/stripe/create-order-and-charge-session': 'StripePaymentsController.create-order-and-charge-session',
   'POST /payments/stripe/create-order-and-matching-session-type': 'StripePaymentsController.create-order-and-matching-session-type',
