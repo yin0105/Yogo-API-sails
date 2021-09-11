@@ -26,6 +26,7 @@ module.exports = {
       return exits.success(false)
     }
 
+    console.log(" process => 2")
     await cronLog(
       'Found membership that needs to process payment now: ' + membershipThatNeedsToProcessPayment.id,
       membershipThatNeedsToProcessPayment.client,

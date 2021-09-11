@@ -8,6 +8,7 @@ module.exports = {
   description: 'Finds a membership that needs to try payment, either just because the paid period has passed or because renewal has failed before and it is time to try again',
 
   fn: async (inputs, exits) => {
+    console.log("that-needs");
 
     const todayIsoDate = moment.tz('Europe/copenhagen').format('YYYY-MM-DD');
 
@@ -45,6 +46,8 @@ module.exports = {
       })
       .orderBy('client');
 
+    console.log("membershipsThatNeedPayment = ", membershipsThatNeedPayment);  
+
 
     const clientSettings = {};
     const today = moment().tz('Europe/Copenhagen');
@@ -53,11 +56,13 @@ module.exports = {
 
     for (let i = 0; i < membershipsThatNeedPayment.length; i++) {
       const membership = membershipsThatNeedPayment[i];
+      console.log(1)
 
       if (membership.paid_until >= todayIsoDate) {
         // Paid_until might have changed because a membership pause ended.
         continue;
       }
+      console.log(2)
 
       const clientId = membership.client;
 
@@ -79,9 +84,12 @@ module.exports = {
         continue;
       }
 
+      console.log(3)
       if (parseInt(membership.renewal_failed) === 0) {
         return exits.success(membership);
       }
+
+      console.log(4)
 
       const renewalFailedLastTime = moment.tz(membership.renewal_failed_last_time_at, 'x', 'Europe/Copenhagen');
       const aFullDayHasPassedSinceLastPaymentAttempt = moment().diff(renewalFailedLastTime, 'minutes') >= 60 * 24;
@@ -95,6 +103,7 @@ module.exports = {
         return exits.success(membership);
       }
 
+      console.log(5)
       let nextAttemptDate = moment.tz(membership.paid_until, 'Europe/Copenhagen').add(1, 'day');
       const nextAttemptNumber = parseInt(membership.renewal_failed) + 1;
       for (let i = 2; i <= nextAttemptNumber; i++) {
@@ -109,6 +118,7 @@ module.exports = {
       }
 
     }
+    console.log(6)
 
     return exits.success(false);
 

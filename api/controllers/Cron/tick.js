@@ -13,6 +13,7 @@ module.exports = {
   Also it is important to avoid situations where the tick will try to process the same record but fail repeatedly, as this would block other tasks.`,
 
   fn: async function (inputs, exits) {
+    console.log("tick");
 
     const cronLog = sails.helpers.cron.log
     const idOrObjectIdInteger = sails.helpers.util.idOrObjectIdInteger

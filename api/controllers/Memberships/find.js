@@ -54,6 +54,7 @@ module.exports = {
   },
 
   fn: async function (inputs, exits) {
+    console.log("memberships/find")
 
     if (!await sails.helpers.can2('controller.Memberships.find', this.req, inputs)) {
       return exits.forbidden()
@@ -84,6 +85,8 @@ module.exports = {
     }
 
     let memberships = await membershipQuery;
+    console.log("memberships = ", memberships)
+    console.log("user = ",inputs.user)
 
     const manualPopulateFields = _.intersection(
       populateFields,
@@ -104,6 +107,10 @@ module.exports = {
       });
     }
 
+    console.log("inputs.id = ", inputs.id)
+    console.log("memberships = ", memberships)
+
+    console.log("return: ", inputs.id && !_.isArray(inputs.id) ? memberships[0] : memberships)
     return exits.success(
       inputs.id && !_.isArray(inputs.id) ? memberships[0] : memberships,
     );

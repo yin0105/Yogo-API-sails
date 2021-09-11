@@ -40,6 +40,8 @@ module.exports = {
       .populate('membership_campaign')
       .populate('discount_code');
 
+    console.log("membership = ", membership)
+
     const locale = await sails.helpers.clientSettings.find(membership.client, 'locale');
 
     if (membership.payment_subscriptions.length > 1) {
