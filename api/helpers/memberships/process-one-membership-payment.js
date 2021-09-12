@@ -42,6 +42,9 @@ module.exports = {
 
     })
 
+    console.log("process-one :: ", membershipWasProcessed)
+    console.log("process-one :: ", membershipWasProcessed ? membershipThatNeedsToProcessPayment.id : false)
+
 
     return exits.success(membershipWasProcessed ? membershipThatNeedsToProcessPayment.id : false)
 

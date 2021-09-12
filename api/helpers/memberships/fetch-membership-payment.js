@@ -40,7 +40,7 @@ module.exports = {
       .populate('membership_campaign')
       .populate('discount_code');
 
-    console.log("membership = ", membership)
+    // console.log("membership = ", membership)
 
     const locale = await sails.helpers.clientSettings.find(membership.client, 'locale');
 
@@ -48,6 +48,8 @@ module.exports = {
       throw 'moreThanOnePaymentSubscription';
     }
 
+    console.log("")
+    console.log("membership.payment_subscriptions.length = ", membership.payment_subscriptions.length)
     if (membership.payment_subscriptions.length === 0) {
       await sails.helpers.memberships.paymentFailedBecauseNoPaymentSubscriptions(membership);
       return exits.success(false);
@@ -102,7 +104,7 @@ module.exports = {
     if (doApplyDiscountCode) {
       orderItemName += ` ${sails.helpers.t('discountCode.discountCode')}: "${membership.discount_code.name}".`;
     }
-
+    console.log("107")
     await OrderItem.create({
       client: membership.client.id,
       order: order.id,
@@ -115,7 +117,7 @@ module.exports = {
       applied_discount_code_amount: doApplyDiscountCode ? (priceBeforeDiscountCode - price) : 0,
       membership_renewal_membership_type: membership.membership_type.id,
     }).fetch();
-
+    console.log("120")
     const pendingFees = await NoShowFeeObj.query().alias('nsf')
       .where({
         paid_with_order_id: null,
@@ -124,7 +126,7 @@ module.exports = {
         membership_id: membership.id,
       })
       .andWhere('amount', '>', 0);
-
+      console.log("129")
     let pendingFeesTotalPrice = 0;
     if (pendingFees.length) {
       for (let i = 0; i < pendingFees.length; i++) {
@@ -146,12 +148,12 @@ module.exports = {
       }
       await Order.update({id: order.id}, {total: price + pendingFeesTotalPrice});
     }
-
+    console.log("151")
     const paymentResult = await sails.helpers.order.payWithPaymentSubscription(
       order,
       membership.payment_subscriptions[0],
     )
-
+    console.log("156")
     if (paymentResult.success) {
 
       const membershipUpdateData = {
@@ -212,6 +214,8 @@ module.exports = {
 
 
       // Set system_updated
+
+      console.log("218")
 
       await Order.update({
         id: order.id,

@@ -26,13 +26,17 @@ module.exports = {
 
     let paymentResult;
 
+    console.log("order.total = =", order.total)
     if (order.total > 0) {
 
       const paymentServiceProvider = paymentSubscription.payment_service_provider;
+      console.log("paymentServiceProvider = ", paymentServiceProvider)
 
       await cronLog('About to call fetchApiPayment for order ID ' + order.id + ' using PSP ' + paymentServiceProvider);
+      console.log('About to call fetchApiPayment for order ID ' + order.id + ' using PSP ' + paymentServiceProvider);
 
       paymentResult = await sails.helpers.paymentProvider[paymentServiceProvider].fetchApiPayment(order, paymentSubscription);
+      console.log("paymentResult = ", paymentResult)
 
       await cronLog('Result from fetchApiPayment for order ID ' + order.id + ': ' + paymentResult.success);
 

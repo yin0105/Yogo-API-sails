@@ -33,6 +33,7 @@ module.exports = {
 
   fn: async (inputs, exits) => {
 
+    console.log("===  lock verify")
 
     const cronLog = sails.helpers.cron.log
 
@@ -46,10 +47,13 @@ module.exports = {
         `SELECT * FROM membership WHERE id = ${membershipId} FOR UPDATE`,
       ).usingConnection(dbConnection)
 
+      console.log("lock 1")
       if (lockRowResult.rows.length !== 1) {
         await cronLog('Membership ' + membershipId + ' not found in db')
         throw new Error('Membership not found in db')
       }
+
+      console.log("lock 2")
 
       const row = lockRowResult.rows[0]
 
@@ -60,12 +64,16 @@ module.exports = {
         return proceed(null, false)
       }
 
+      console.log("lock 3")
+
       const membershipShouldStillBeProcessed = await inputs.testIfMembershipShouldStillBeProcessedFunction(row, dbConnection)
       await cronLog('membershipShouldStillBeProcessed: ' + membershipShouldStillBeProcessed)
 
       if (!membershipShouldStillBeProcessed) {
         return proceed(null, false)
       }
+
+      console.log("lock 4")
 
       await sails.sendNativeQuery(
         `UPDATE membership SET automatic_payment_processing_started = UNIX_TIMESTAMP() * 1000 WHERE id = ${membershipId}`,
@@ -75,17 +83,22 @@ module.exports = {
 
     })
 
+    console.log("lock 5")
+
 
     if (!membershipHasBeenLocked) {
       await cronLog('Membership could not be locked for processing')
       return exits.success(false)
     }
 
+    console.log("lock 6")
     /*************************/
 
     await cronLog('About to process membership ' + membershipId)
-    const processingResult = await inputs.membershipProcessingFunction(membershipId)
+    console.log('About to process membership ' + inputs.membershipProcessingFunction)
+    const processingResult = await inputs.membershipProcessingFunction(membershipId) 
     await cronLog('Processing result for membership ' + membershipId + ': ' + processingResult)
+    console.log('Processing result for membership ' + membershipId + ': ' + processingResult)
 
     /************************/
 

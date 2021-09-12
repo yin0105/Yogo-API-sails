@@ -45,54 +45,15 @@ module.exports = {
       exits.success('E_INVALID_CART_ITEM')
     }
 
-    // if (parseFloat(order.total) === 0) {
-
-    //   const orderItems = await OrderItem.find({order: order.id})
-    //   const orderHasRecurringPaymentItems = _.find(orderItems, {item_type: 'membership_type'})
-    //   if (orderHasRecurringPaymentItems) {
-
-    //     // const recurringSession = await sails.helpers.paymentProvider.stripe.createRecurringSession(this.req.user.id)
-    //     return exits.success({
-    //       status: 'RECURRING_SESSION_CREATED',
-    //       // recurringSession: recurringSession,
-    //       order: order
-    //     })
-
-    //   } else {
-
-    //     await sails.helpers.order.processPaymentSettled(order)
-    //     const processedOrder = await Order.findOne(order.id);
-    //     return exits.success({
-    //       status: 'ORDER_SETTLED',
-    //       order: processedOrder
-    //     })
-
-    //   }
-
-    // }
-
-    // const chargeSession = await sails.helpers.paymentProvider.stripe.createChargeSession.with({
-    //   order: order
-    // })
-
-    // const paymentIntent = await stripe.paymentIntents.create({
-    //   amount: order.total,
-    //   currency: "usd"
-    // });
-
     const clientSettings = await sails.helpers.clientSettings.find.with({
       keys: ["plan_pay_as_you_grow_yogo_percentage", "payment_service_provider_stripe_account_id"],
       client: this.req.client.id,
       includeSecrets: true,
     })
-    console.log("clientSettings = ", clientSettings)
     const yogoPercent = parseFloat(clientSettings["plan_pay_as_you_grow_yogo_percentage"]);
     const accountId = clientSettings["payment_service_provider_stripe_account_id"];
     const feeAmount = parseInt((order.total - order.vat_amount) * 1.25 * yogoPercent);
     const amount = parseInt(order.total * 100)
-    console.log("account id = ", accountId)
-    console.log("feeAmount = ", feeAmount)
-    console.log("amount = ", amount)
 
     const paymentIntent = await stripe.paymentIntents.create({
       payment_method_types: ['card'],
@@ -103,8 +64,6 @@ module.exports = {
       stripeAccount: accountId,
     
     });
-
-    console.log("secret = ", paymentIntent.client_secret)
 
     return exits.success({
       status: 'CHARGE_SESSION_CREATED',
