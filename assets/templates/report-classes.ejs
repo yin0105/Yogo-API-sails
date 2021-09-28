@@ -51,30 +51,16 @@
     td {
       padding: 5px;
       vertical-align: top;
+      text-align: center;
+    }
+
+    th {
+      text-align: center;
     }
 
     table.data {
       page-break-inside: avoid;
     }
-
-    /* table.data td:nth-of-type(1),
-    table.total td:nth-of-type(1) {
-      width: 50%;
-    }
-
-    table.data td:nth-of-type(2),
-    table.total td:nth-of-type(2) {
-      width: 15%;
-    }
-
-    table.data td:nth-of-type(3),
-    table.total td:nth-of-type(3) {
-      width: 35%;
-    }
-
-    table.data tr:nth-of-type(2n) {
-      background: #f8f8f8;
-    } */
 
     td.amount,
     td.item-count {
@@ -133,18 +119,25 @@ for (let i = 0; i < reportData.length; i++) {
         const row = reportData[i].data[j]
       %>
       <tr>
-        <td>
-          <%= row.id %>
-        </td>
-        <td>
-          <%= row.date %>
-        </td>
-        <td>
-          <%= row.start %>
-        </td>
-        <td>
-          <%= row.end %>
-        </td>
+        <% if (j == reportData[i].data.length - 1) { %>
+          <td colspan="4">
+            <%= row.id %>
+          </td>
+        <% } else { %>
+          <td>
+            <%= row.id %>
+          </td>
+          <td>
+            <%= row.date %>
+          </td>
+          <td>
+            <%= row.start %>
+          </td>
+          <td>
+            <%= row.end %>
+          </td>
+        <% } %>
+        
         <td>
           <%= row.duration %>
         </td>

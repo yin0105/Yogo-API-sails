@@ -84,6 +84,9 @@ module.exports = async (req, res) => {
     ],
   ];
 
+  let subItems = [];
+  let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0, total_classpass_signup_count = 0;
+
   switch (format) {
     case 'csv':
       let reportDataCSV = [];
@@ -307,53 +310,51 @@ module.exports = async (req, res) => {
       }
       if (!bBranches) delete specification["branch"];
      
-      const reportData = reportParams.teachers.map(teacher => {
-        let subItems = [];
-        let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0, total_classpass_signup_count = 0;
-        classesData.items.map(item => {          
-          if (item.teacher_id == teacher.id) {                        
-            total_classes++;
-            total_duration += strToMins(item.duration);
-            total_signup_count += item.signup_count;
-            total_checkedin_count += item.checkedin_count;
-            total_livestream_signup_count += item.livestream_signup_count;
-            total_classpass_signup_count += item.classpass_signup_count;
+      // const reportData = reportParams.teachers.map(teacher => {
+            
+      classesData.items.map(item => {          
+        // if (item.teacher_id == teacher.id) {                        
+          total_classes++;
+          total_duration += strToMins(item.duration);
+          total_signup_count += item.signup_count;
+          total_checkedin_count += item.checkedin_count;
+          total_livestream_signup_count += item.livestream_signup_count;
+          total_classpass_signup_count += item.classpass_signup_count;
 
-            subItems.push(item);
-            // item.duration = minsToStr(strToMins(item.duration));
-          }
-        })
-        if (subItems.length > 0) {
-          subItems.push({
-            "id": "total: " + subItems.length + " classes",
-            "duration": minsToStr(total_duration),
-            "signup_count": total_signup_count,
-            "checkedin_count": total_checkedin_count,
-            "livestream_signup_count": total_livestream_signup_count,
-            "classpass_signup_count": total_classpass_signup_count,
-            "room": "",
-          })
-        } else {
-          subItems.push({
-            "id": "total:",
-            "duration": "",
-            "signup_count": "",
-            "checkedin_count": "",
-            "livestream_signup_count": "",
-            "classpass_signup_count": "",
-            "room": "",
-          })
-        }
-
-        return {
-          name: teacher.name, 
-          specification: specification, 
-          data: subItems,
-          merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
-        };
+          subItems.push(item);
+        // }
       })
+      // if (subItems.length > 0) {
+        subItems.push({
+          "id": "total: " + subItems.length + " classes",
+          "duration": minsToStr(total_duration),
+          "signup_count": total_signup_count,
+          "checkedin_count": total_checkedin_count,
+          "livestream_signup_count": total_livestream_signup_count,
+          "classpass_signup_count": total_classpass_signup_count,
+          "room": "",
+        })
+      // } else {
+      //   subItems.push({
+      //     "id": "total:",
+      //     "duration": "",
+      //     "signup_count": "",
+      //     "checkedin_count": "",
+      //     "livestream_signup_count": "",
+      //     "classpass_signup_count": "",
+      //     "room": "",
+      //   })
+      // }
+
+      const reportData =  {
+        name: 'class report', 
+        specification: specification, 
+        data: subItems,
+        merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }]
+      };
+
       const report = excel.buildExport(
-        reportData
+        [reportData]
       );
       
       res.attachment(fileName)
@@ -361,58 +362,40 @@ module.exports = async (req, res) => {
 
     case 'pdf':
 
-      // const rows = await sails.helpers.reports.buildPdfDataRows(classesData.items)
-
       let receiptTemplatePath = path.resolve(__dirname, '../../../assets/templates/report-classes.ejs')
 
       const receiptTemplateContent = await readFile(receiptTemplatePath, 'utf-8')
 
-      let reportDataPDF = reportParams.teachers.map(teacher => {
-        let subItems = [];
-        let total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0, total_classpass_signup_count = 0;
-        classesData.items.map(item => {          
-          if (item.teacher_id == teacher.id) {                        
-            total_classes++;
-            total_duration += strToMins(item.duration);
-            total_signup_count += item.signup_count;
-            total_checkedin_count += item.checkedin_count;
-            total_livestream_signup_count += item.livestream_signup_count;
-            total_classpass_signup_count += item.classpass_signup_count;
+      // subItems = [];
+      // total_classes = 0, total_duration = 0, total_signup_count = 0, total_checkedin_count = 0, total_livestream_signup_count = 0, total_classpass_signup_count = 0;
+      classesData.items.map(item => {          
+        total_classes++;
+        total_duration += strToMins(item.duration);
+        total_signup_count += item.signup_count;
+        total_checkedin_count += item.checkedin_count;
+        total_livestream_signup_count += item.livestream_signup_count;
+        total_classpass_signup_count += item.classpass_signup_count;
 
-            subItems.push(item);
-            item.duration = minsToStr(strToMins(item.duration));
-          }
-        })
-        if (subItems.length > 0) {
-          subItems.push({
-            "id": "total: " + subItems.length + " classes",
-            "duration": minsToStr(total_duration),
-            "signup_count": total_signup_count,
-            "checkedin_count": total_checkedin_count,
-            "livestream_signup_count": total_livestream_signup_count,
-            "classpass_signup_count": total_classpass_signup_count,
-            "room": "",
-          })
-        } else {
-          subItems.push({
-            "id": "total:",
-            "duration": "",
-            "signup_count": "",
-            "checkedin_count": "",
-            "livestream_signup_count": "",
-            "classpass_signup_count": "",
-            "room": "",
-          })
-        }
+        subItems.push(item);
+        item.duration = minsToStr(strToMins(item.duration));
+      })
 
-        return {
-          name: teacher.name, 
-          data: subItems,
-          merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }],
-          // margin: (960 - subItems.length * 16) +  "px"
-        };
-      });
-      // reportDataPDF[reportDataPDF.length - 1].margin = "0px";
+      subItems.push({
+        "id": "total: " + subItems.length + " classes",
+        "duration": minsToStr(total_duration),
+        "signup_count": total_signup_count,
+        "checkedin_count": total_checkedin_count,
+        "livestream_signup_count": total_livestream_signup_count,
+        "classpass_signup_count": total_classpass_signup_count,
+        "room": "",
+      })
+
+      let reportDataPDF = {
+        name: 'Classes Reports ' + moment(classesData.fromDate).format('DD.MM.YYYY') + '-' + moment(classesData.endDate).format('DD.MM.YYYY'), 
+        data: subItems,
+        merges: [{ start: { row: subItems.length + 1, column: 1 }, end: { row: subItems.length + 1, column: 4 } }],
+        // margin: (960 - subItems.length * 16) +  "px"
+      };
 
       if (!settings.classpass_com_integration_enabled) heading[0].splice(16, 1);
       if (!settings.livestream_enabled) heading[0].splice(15, 1);
@@ -425,7 +408,7 @@ module.exports = async (req, res) => {
         fromDateFormatted: moment(classesData.fromDate).format('DD.MM.YYYY'),
         endDateFormatted: moment(classesData.endDate).format('DD.MM.YYYY'),
         heading: heading,
-        reportData: reportDataPDF,
+        reportData: [reportDataPDF],
         currencyDkk: currencyDkk,
         title: sails.helpers.t('global.ClassReport'), 
         classpass_com_integration_enabled: settings.classpass_com_integration_enabled,

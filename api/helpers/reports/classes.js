@@ -28,7 +28,7 @@ const getClassesData = async (client, fromDate, endDate, allClassTypes, classTyp
     .innerJoin({u: 'user'}, 'u.id', 'ct.user_teaching_classes')
     .innerJoin({ctype: 'class_type'}, 'cs.class_type', 'ctype.id')
     .innerJoin({r: 'room'}, 'cs.room', 'r.id')
-    .innerJoin({b: 'branch'}, 'r.branch', 'b.id')
+    .leftJoin({b: 'branch'}, 'r.branch', 'b.id')
     .where("cs.date", ">=", fromDate)
     .andWhere("cs.date", "<=", endDate)
     .andWhere("cs.client", client)
@@ -44,8 +44,7 @@ const getClassesData = async (client, fromDate, endDate, allClassTypes, classTyp
       knex.raw("cs.studio_attendance_enabled as physical_attendance"),
       knex.raw("cs.livestream_enabled as livestream"),
       knex.raw("cs.classpass_com_enabled as classpass_com_enabled"),
-      knex.raw("cs.cancelled as cancelled"),
-      
+      knex.raw("cs.cancelled as cancelled"),      
       
       knex.raw("u.id as teacher_id"),
       knex.raw("CONCAT(u.first_name, ' ', u.last_name) as teacher_name"));
