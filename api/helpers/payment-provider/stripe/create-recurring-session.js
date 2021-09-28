@@ -1,35 +1,45 @@
 module.exports = {
-  friendlyName: 'Create Reepay charge session',
+  friendlyName: 'Create Stripe charge session',
 
   inputs: {
     user: {
       type: 'ref',
       required: true,
     },
+    amount: {
+      type: 'number',
+      required: true,
+    }
   },
 
   fn: async (inputs, exits) => {
 
     const userId = sails.helpers.util.idOrObjectIdInteger(inputs.user)
+    const amount = inputs.amount
 
     const user = await User.findOne(userId)
+    const secretKey = sails.config.paymentProviders.stripe.secretKey
+    const stripe = require("stripe")(secretKey)
+    console.log("secretkey = ", secretKey);
+    console.log("amount = ", amount);
 
-    const recurringSession = await sails.helpers.paymentProvider.reepay.api.checkout.with({
-        client: user.client,
-        method: 'POST',
-        endpoint: '/session/recurring',
-        body: {
-          create_customer: {
-            email: user.email,
-            handle: user.id,
-            first_name: user.first_name,
-            last_name: user.last_name,
-          },
-        },
-      },
-    )
+    const customer = await stripe.customers.create();
+    console.log("customer = ", customer);
 
-    return exits.success(recurringSession)
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: 'dkk',
+      customer: customer.id,    
+    });
+
+    console.log("paymentIntent = ", paymentIntent);
+
+    return exits.success({
+      status: 'RECURRING_SESSION_CREATED',
+      clientSecret: paymentIntent.client_secret,
+      customerId: customer.id,
+    })
+
 
   },
 }

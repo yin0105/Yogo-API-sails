@@ -1,4 +1,4 @@
-const API_ROOT = 'https://checkout-api.reepay.com/v1'
+const API_ROOT = 'https://api.stripe.com/v1'
 
 const request = require('request-promise')
 var errors = require('request-promise/errors')

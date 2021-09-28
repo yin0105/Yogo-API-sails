@@ -231,7 +231,7 @@ module.exports.routes = {
 
   'POST /payments/stripe/create-order-and-charge-session': 'StripePaymentsController.create-order-and-charge-session',
   'POST /payments/stripe/create-order-and-matching-session-type': 'StripePaymentsController.create-order-and-matching-session-type',
-  'POST /payments/stripe/create-recurring-session': 'StripePaymentsController.create-recurring-session',
+  'POST /payments/stripe/create-recurring-session/:amount': 'StripePaymentsController.create-recurring-session',
   'POST /payments/stripe/create-order-and-charge-session-for-gift-card': 'GiftCardsController.create-order-and-charge-session',
   'POST /payments/stripe/invoice/:invoiceId/process-if-paid': 'StripePaymentsController.process-invoice-if-invoice-is-paid',
   'POST /payments/stripe/settle-and-attach-card-to-zero-total-recurring-order': 'StripePaymentsController.settle-and-attach-card-to-zero-total-recurring-order',

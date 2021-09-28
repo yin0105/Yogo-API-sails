@@ -52,26 +52,61 @@ module.exports = {
     })
     const yogoPercent = parseFloat(clientSettings["plan_pay_as_you_grow_yogo_percentage"]);
     const accountId = clientSettings["payment_service_provider_stripe_account_id"];
-    const feeAmount = parseInt((order.total - order.vat_amount) * 1.25 * yogoPercent);
-    const amount = parseInt(order.total * 100)
+    const amount = parseInt(order.total * 100);
+    console.log("order.total = ", order.total);
+    console.log("amount = ", amount);
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      payment_method_types: ['card'],
-      amount: amount,
-      currency: 'dkk',
-      application_fee_amount: feeAmount,
-    }, {
-      stripeAccount: accountId,
+    console.log("order.total = ", order.total);
+    const orderItems = await OrderItem.find({order: order.id})
+    const orderHasRecurringPaymentItems = _.find(orderItems, {item_type: 'membership_type'})
     
-    });
+    if (parseFloat(order.total) === 0) {
+      
+      await sails.helpers.order.processPaymentSettled(order)
+      const processedOrder = await Order.findOne(order.id);
+      return exits.success({
+        status: 'ORDER_SETTLED',
+        order: processedOrder
+      })
 
-    return exits.success({
-      status: 'CHARGE_SESSION_CREATED',
-      clientSecret: paymentIntent.client_secret,
-      amount: amount,
-      accountId: accountId
-      // chargeSession: chargeSession
-    })
+    } else {
+       if (orderHasRecurringPaymentItems) {
+         
+        const recurringSession =  await sails.helpers.paymentProvider.stripe.createRecurringSession.with({
+          user: this.req.user,
+          amount: amount,
+        })
+        
+        return exits.success({
+          status: recurringSession.status,
+          clientSecret: recurringSession.clientSecret,
+          amount: amount,
+          accountId: accountId,
+          customerId: recurringSession.customerId,
+        });
+
+      } else {
+        const feeAmount = parseInt((order.total - order.vat_amount) * 1.25 * yogoPercent);
+    
+        const paymentIntent = await stripe.paymentIntents.create({
+          payment_method_types: ['card'],
+          amount: amount,
+          currency: 'dkk',
+          application_fee_amount: feeAmount,
+        }, {
+          stripeAccount: accountId,
+        
+        });
+    
+        return exits.success({
+          status: 'CHARGE_SESSION_CREATED',
+          clientSecret: paymentIntent.client_secret,
+          amount: amount,
+          accountId: accountId
+        })
+      }
+    }
+
 
   },
 }

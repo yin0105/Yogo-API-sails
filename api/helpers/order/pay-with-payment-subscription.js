@@ -21,7 +21,9 @@ module.exports = {
     const orderId = sails.helpers.util.idOrObjectIdInteger(inputs.order);
     const order = await Order.findOne(orderId);
 
+    console.log("inputs.paymentSubscription = ", inputs.paymentSubscription);
     const paymentSubscriptionId = sails.helpers.util.idOrObjectIdInteger(inputs.paymentSubscription);
+    console.log("paymentSubscriptionId = ", paymentSubscriptionId)
     const paymentSubscription = await PaymentSubscription.findOne(paymentSubscriptionId);
 
     let paymentResult;

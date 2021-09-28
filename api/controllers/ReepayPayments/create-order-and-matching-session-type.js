@@ -19,8 +19,6 @@ module.exports = {
       return exits.forbidden()
     }
 
-    console.log("this.req.user = ", this.req.user)
-
     const order = await sails.helpers.order.createFromCart.with({
       user: this.req.user.id,
     })
